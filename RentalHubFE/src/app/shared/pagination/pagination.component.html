@@ -1,0 +1,30 @@
+<div class="flex flex-row justify-end gap-1 mt-4">
+  <!-- Previous Button -->
+  <button
+    (click)="prevPage()"
+    [disabled]="currentPage === 1 ? true : false"
+    [ngStyle]="{ cursor: currentPage === 1 ? 'default' : 'pointer' }"
+    class="flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
+  >
+    Trước
+  </button>
+
+  <!-- Current Button -->
+  <button
+    [disabled]="true"
+    [ngStyle]="{ cursor: currentPage === totalPages ? 'default' : 'pointer' }"
+    class="flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
+  >
+    {{ currentPage }}
+  </button>
+
+  <!-- Next Button -->
+  <button
+    (click)="nextPage()"
+    [disabled]="currentPage === totalPages ? true : false"
+    [ngStyle]="{ cursor: currentPage === totalPages ? 'default' : 'pointer' }"
+    class="flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
+  >
+    Sau
+  </button>
+</div>

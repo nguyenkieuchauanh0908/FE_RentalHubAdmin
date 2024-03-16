@@ -1,0 +1,109 @@
+<div>
+  <mat-drawer-container class="example-container" autosize>
+    <mat-drawer #drawer class="example-sidenav" mode="side">
+      <div
+        (click)="drawer.toggle()"
+        *ngIf="drawer.opened"
+        class="cursor-pointer pt-3 px-2"
+      >
+        <mat-icon>menu</mat-icon>
+      </div>
+      <div class="text-white text-normal max-w-full mt-2">
+        <div
+          (click)="toMyAccount()"
+          class="inline-flex items-center justify-items-start cursor-pointer text-white bg-primary-600 hover:bg-blue-700 focus:ring-4 font-normal text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full"
+        >
+          <mat-icon class="mr-1" class="mr-1">person</mat-icon>
+          Hồ sơ cá nhân
+        </div>
+        <mat-divider></mat-divider>
+        <div
+          (click)="toMyLoginDetail()"
+          class="inline-flex items-center justify-items-start cursor-pointer text-white bg-primary-600 hover:bg-blue-700 focus:ring-4 font-normal text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full"
+        >
+          <mat-icon class="mr-1">lock</mat-icon>
+          Thông tin đăng nhập
+        </div>
+        <mat-divider></mat-divider>
+        <div
+          (click)="toManageEmployees()"
+          class="inline-flex items-center justify-items-start cursor-pointer text-white bg-primary-600 hover:bg-blue-700 focus:ring-4 font-normal text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full"
+        >
+          <mat-icon class="mr-1">people</mat-icon>
+          Quản lý nhân viên
+        </div>
+        <mat-divider></mat-divider>
+        <div
+          (click)="toCheckPost()"
+          class="inline-flex items-center justify-items-start cursor-pointer text-white bg-primary-600 hover:bg-blue-700 focus:ring-4 font-normal text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full"
+        >
+          <mat-icon class="mr-1">list</mat-icon>
+          Chờ duyệt
+        </div>
+        <mat-divider></mat-divider>
+        <div
+          (click)="toCheckedPost()"
+          class="inline-flex items-center justify-items-start cursor-pointer text-white bg-primary-600 hover:bg-blue-700 focus:ring-4 font-normal text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full"
+        >
+          <mat-icon class="mr-1">check_circle</mat-icon>
+          Được duyệt
+        </div>
+        <mat-divider></mat-divider>
+        <div
+          (click)="deniedPost()"
+          class="inline-flex items-center justify-items-start cursor-pointer text-white bg-primary-600 hover:bg-blue-700 focus:ring-4 font-normal text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full"
+        >
+          <mat-icon class="mr-1">error</mat-icon>
+          Không được duyệt
+        </div>
+        <mat-divider></mat-divider>
+        <div
+          (click)="reportedPost()"
+          class="inline-flex items-center justify-items-start cursor-pointer text-white bg-primary-600 hover:bg-blue-700 focus:ring-4 font-normal text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full"
+        >
+          <mat-icon class="mr-1">report</mat-icon>
+          Bị báo cáo
+        </div>
+        <mat-divider></mat-divider>
+        <div
+          (click)="logout()"
+          class="inline-flex items-center justify-items-start cursor-pointer text-white bg-primary-600 hover:bg-blue-700 focus:ring-4 font-normal text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full"
+        >
+          <mat-icon class="mr-1">exit_to_app</mat-icon>
+          Đăng xuất
+        </div>
+      </div>
+    </mat-drawer>
+
+    <div class="example-sidenav-content">
+      <div class="flex">
+        <div
+          (click)="drawer.toggle()"
+          *ngIf="!drawer.opened"
+          class="menu-icon-wrapper pt-3 bg-primary-600 h-full w-10 cursor-pointer z-40"
+          style="height: 100vh"
+        >
+          <mat-icon class="mx-2">menu</mat-icon>
+          <mat-icon class="m-2">person</mat-icon>
+          <mat-icon class="m-2">people</mat-icon>
+          <mat-divider class="w-full"></mat-divider>
+          <mat-icon class="m-2">lock</mat-icon>
+          <mat-divider class="w-full"></mat-divider>
+          <mat-icon class="m-2">list</mat-icon>
+          <mat-divider class="w-full"></mat-divider>
+          <mat-icon class="m-2">check_circle</mat-icon>
+          <mat-divider class="w-full"></mat-divider>
+          <mat-icon class="m-2">error</mat-icon>
+          <mat-divider class="w-full"></mat-divider>
+          <mat-icon class="m-2">report</mat-icon>
+          <mat-divider class="w-full"></mat-divider>
+          <mat-icon class="m-2">exit_to_app</mat-icon>
+        </div>
+        <app-header class="static top-0"></app-header>
+        <div class="flex-1 px-6 py-4 mt-10">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </mat-drawer-container>
+</div>

@@ -1,0 +1,316 @@
+<div class="relative">
+  <div *ngIf="isLoading" class="spinner__loading text-center">
+    <mat-spinner diameter="30"></mat-spinner>
+  </div>
+  <h2 mat-dialog-title>Duyệt bài viết</h2>
+  <mat-dialog-content>
+    <!-- Edit modal -->
+    <div class="p-4 md:p-5">
+      <form #createPostForm="ngForm" class="space-y-4">
+        <!-- Title -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Tiêu đề</label
+          >
+          <input
+            type="text"
+            id="title-input"
+            name="title"
+            [ngModel]="this.data._title"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          />
+        </div>
+        <!-- Description -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Mô tả ngắn</label
+          >
+          <textarea
+            [ngModel]="this.data._desc"
+            type="text"
+            rows="4"
+            id="desc-input"
+            name="desc"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+            placeholder="Viết mô tả ngắn về phòng trọ ở đây..."
+          ></textarea>
+        </div>
+        <!-- Content  -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Nội dung chính</label
+          >
+          <textarea
+            [ngModel]="this.data._content"
+            rows="8"
+            type="text"
+            id="content-input"
+            name="content"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+            placeholder="Viết mô tả chi tiết về phòng trọ ở đây..."
+          ></textarea>
+        </div>
+
+        <!-- Street -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Đường</label
+          >
+          <input
+            [ngModel]="this.data.roomStreet"
+            type="text"
+            id="street-input"
+            name="street"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          />
+        </div>
+
+        <!-- District -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Quận</label
+          >
+          <input
+            [ngModel]="this.data.roomDistrict"
+            type="text"
+            id="district-input"
+            name="district"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          />
+        </div>
+
+        <!-- City -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Thành phố</label
+          >
+          <input
+            value="Hồ Chí Minh"
+            type="text"
+            id="city-input"
+            name="city"
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          />
+        </div>
+
+        <!-- Area -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Diện tích (m2)</label
+          >
+          <input
+            [ngModel]="this.data.roomArea"
+            type="text"
+            id="area-input"
+            name="area"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          />
+        </div>
+
+        <!-- Renting price -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Gía thuê nhà theo tháng (VNĐ)</label
+          >
+          <input
+            [ngModel]="this.data.roomPrice"
+            type="text"
+            id="renting_price-input"
+            name="renting_price"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          />
+        </div>
+        <!-- Electric price -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Gía điện (ký)</label
+          >
+          <input
+            [ngModel]="this.data.roomElectricPrice"
+            type="text"
+            id="electric_input"
+            name="electric"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          />
+        </div>
+        <!-- Water price -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Gía nước (khối)</label
+          >
+          <input
+            [ngModel]="this.data.roomWaterPrice"
+            type="text"
+            id="water_price_input"
+            name="water_price"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          />
+        </div>
+
+        <!-- Services -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Dịch vụ</label
+          >
+          <input
+            [ngModel]="this.data.roomServices"
+            type="text"
+            id="services_input"
+            name="services"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          />
+        </div>
+
+        <!-- Utilities -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Tiện ích</label
+          >
+          <input
+            [ngModel]="this.data.roomUtilities"
+            type="text"
+            id="utilities_input"
+            name="utilities"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          />
+        </div>
+
+        <!-- Tags -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Các tag</label
+          >
+          <!-- Your chosen tags -->
+          <div
+            class="flex flex-row flex-wrap bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          >
+            <div
+              class="flex flex-row h-6 bg-indigo-100 text-indigo-800 text-xs font-medium me-2 px-2.5 py-0.5 mb-2 rounded-full dark:bg-indigo-900 dark:text-indigo-300 hover:cursor-not-allowed"
+              *ngFor="let tag of selectedTags"
+            >
+              <span class="tag">
+                {{ tag._tag }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Images -->
+        <div class="mb-6">
+          <label
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            for="multiple_files"
+            >Ảnh</label
+          >
+          <div class="bg-white-background rounded-lg">
+            <div class="flex flex-wrap mt-4">
+              <!-- Image -->
+              <div
+                *ngFor="let preview of previews; index as index"
+                class="basis-[19%] border-solid border-2 border-indigo-600 p-3 mr-1 relative hover:cursor-not-allowed h-36 w-full"
+              >
+                <img
+                  *ngIf="preview !== ''"
+                  [src]="preview"
+                  class="object-fill max-h-28 w-full"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <notifier-container></notifier-container>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Hủy</button>
+    <button
+      *ngIf="this.data._status !== 3 && this.data._status !== 4"
+      (click)="denyPost()"
+      mat-button
+      class="bg-red-700 hover:bg-red-800"
+      style="color: white; background-color: rgba(255, 0, 0, 0.8)"
+    >
+      Hủy duyệt
+    </button>
+    <button
+      *ngIf="this.data._status !== 1 && this.data._status !== 4"
+      (click)="sensor()"
+      class="bg-blue-700 hover:bg-blue-800"
+      style="color: white; background-color: #1a56db"
+      mat-button
+      type="button"
+    >
+      Duyệt
+    </button>
+    <button
+      *ngIf="this.data._status === 4"
+      (click)="removePost()"
+      mat-button
+      class="bg-red-700 hover:bg-red-800"
+      style="color: white; background-color: rgba(255, 0, 0, 0.8)"
+    >
+      Gỡ bài viết
+    </button>
+  </mat-dialog-actions>
+</div>

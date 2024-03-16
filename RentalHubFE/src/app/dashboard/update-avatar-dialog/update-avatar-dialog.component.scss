@@ -1,0 +1,9 @@
+::ng-deep .mdc-dialog__title {
+  padding: 0 24px 0px;
+}
+.spinner__loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
