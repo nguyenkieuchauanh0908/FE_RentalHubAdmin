@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard.component';
 import { FormsModule } from '@angular/forms';
 import { PostSensorComponent } from './post-sensor/post-sensor.component';
-import { DashboardRoutingModule } from './dashboard.-routing.module';
+import { DashboardRoutingModule } from './dashboard-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { PostSensorDialogComponent } from './post-sensor/post-sensor-dialog/post-sensor-dialog.component';
 import { HistoryCheckedPostsComponent } from './history-checked-posts/history-checked-posts.component';
@@ -15,6 +15,7 @@ import { ReportedPostsComponent } from './reported-posts/reported-posts.componen
 import { ManageEmployeesComponent } from './manage-employees/manage-employees.component';
 import { UpdateEmployeeLoginDetailDialogComponent } from './update-employee-login-detail-dialog/update-employee-login-detail-dialog.component';
 import { AddNewEmployeeDialogComponent } from './manage-employees/add-new-employee-dialog/add-new-employee-dialog.component';
+import { StatisticsComponent } from './statistics/statistics.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { AddNewEmployeeDialogComponent } from './manage-employees/add-new-employ
     ManageEmployeesComponent,
     UpdateEmployeeLoginDetailDialogComponent,
     AddNewEmployeeDialogComponent,
+    StatisticsComponent,
   ],
   imports: [CommonModule, FormsModule, DashboardRoutingModule, SharedModule],
   providers: [],

@@ -7,6 +7,7 @@ import { HistoryCheckedPostsComponent } from './history-checked-posts/history-ch
 import { HistoryDeniedPostsComponent } from './history-denied-posts/history-denied-posts.component';
 import { ReportedPostsComponent } from './reported-posts/reported-posts.component';
 import { ManageEmployeesComponent } from './manage-employees/manage-employees.component';
+import { StatisticsComponent } from './statistics/statistics.component';
 
 const routes: Routes = [
   {
@@ -19,17 +20,12 @@ const routes: Routes = [
         canActivate: [AuthGuard],
       },
       {
-        path: 'history-checked-posts',
+        path: 'checked-posts',
         component: HistoryCheckedPostsComponent,
         canActivate: [AuthGuard],
       },
       {
-        path: 'history-denied-posts',
-        component: HistoryDeniedPostsComponent,
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'history-denied-posts',
+        path: 'denied-posts',
         component: HistoryDeniedPostsComponent,
         canActivate: [AuthGuard],
       },
@@ -41,6 +37,11 @@ const routes: Routes = [
       {
         path: 'manage-employees',
         component: ManageEmployeesComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'statistics',
+        component: StatisticsComponent,
         canActivate: [AuthGuard],
       },
     ],

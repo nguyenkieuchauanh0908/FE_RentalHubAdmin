@@ -3,8 +3,7 @@
     <mat-drawer #drawer class="example-sidenav" mode="side">
       <div
         (click)="drawer.toggle()"
-        *ngIf="drawer.opened"
-        class="cursor-pointer pt-3 px-2"
+        [ngClass]="drawer.opened ? 'cursor-pointer pt-3 px-2' : 'invisible'"
       >
         <mat-icon>menu</mat-icon>
       </div>
@@ -19,52 +18,28 @@
         <mat-divider></mat-divider>
         <div
           (click)="toMyLoginDetail()"
-          class="inline-flex items-center justify-items-start cursor-pointer text-white bg-primary-600 hover:bg-blue-700 focus:ring-4 font-normal text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full"
+          class="inline-flex items-center justify-items-start cursor-pointer text-white bg-primary-600 hover:bg-blue-700 focus:ring-4 font-normal text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-blue-700 w-full"
         >
           <mat-icon class="mr-1">lock</mat-icon>
           Thông tin đăng nhập
         </div>
         <mat-divider></mat-divider>
-        <div
-          (click)="toManageEmployees()"
-          class="inline-flex items-center justify-items-start cursor-pointer text-white bg-primary-600 hover:bg-blue-700 focus:ring-4 font-normal text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full"
-        >
-          <mat-icon class="mr-1">people</mat-icon>
-          Quản lý nhân viên
+        <div *ngFor="let tab of tabs; last as isLast" class="p-0">
+          <div
+            (click)="checkTabAndNavigate(tab)"
+            class=""
+            [ngClass]="
+              tab.active === true
+                ? 'inline-flex items-center justify-items-start cursor-pointer text-white bg-primary-700 hover:bg-blue-700 focus:ring-4 font-normal text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-blue-700 w-full'
+                : 'inline-flex items-center justify-items-start cursor-pointer text-white bg-primary-600 hover:bg-blue-700 focus:ring-4 font-normal text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-blue-700 w-full'
+            "
+          >
+            <mat-icon class="mr-1" class="mr-1">{{ tab.icon }}</mat-icon>
+            {{ tab.title }}
+          </div>
+          <mat-divider></mat-divider>
         </div>
-        <mat-divider></mat-divider>
-        <div
-          (click)="toCheckPost()"
-          class="inline-flex items-center justify-items-start cursor-pointer text-white bg-primary-600 hover:bg-blue-700 focus:ring-4 font-normal text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full"
-        >
-          <mat-icon class="mr-1">list</mat-icon>
-          Chờ duyệt
-        </div>
-        <mat-divider></mat-divider>
-        <div
-          (click)="toCheckedPost()"
-          class="inline-flex items-center justify-items-start cursor-pointer text-white bg-primary-600 hover:bg-blue-700 focus:ring-4 font-normal text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full"
-        >
-          <mat-icon class="mr-1">check_circle</mat-icon>
-          Được duyệt
-        </div>
-        <mat-divider></mat-divider>
-        <div
-          (click)="deniedPost()"
-          class="inline-flex items-center justify-items-start cursor-pointer text-white bg-primary-600 hover:bg-blue-700 focus:ring-4 font-normal text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full"
-        >
-          <mat-icon class="mr-1">error</mat-icon>
-          Không được duyệt
-        </div>
-        <mat-divider></mat-divider>
-        <div
-          (click)="reportedPost()"
-          class="inline-flex items-center justify-items-start cursor-pointer text-white bg-primary-600 hover:bg-blue-700 focus:ring-4 font-normal text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full"
-        >
-          <mat-icon class="mr-1">report</mat-icon>
-          Bị báo cáo
-        </div>
-        <mat-divider></mat-divider>
+
         <div
           (click)="logout()"
           class="inline-flex items-center justify-items-start cursor-pointer text-white bg-primary-600 hover:bg-blue-700 focus:ring-4 font-normal text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full"
@@ -85,18 +60,17 @@
         >
           <mat-icon class="mx-2">menu</mat-icon>
           <mat-icon class="m-2">person</mat-icon>
-          <mat-icon class="m-2">people</mat-icon>
           <mat-divider class="w-full"></mat-divider>
           <mat-icon class="m-2">lock</mat-icon>
           <mat-divider class="w-full"></mat-divider>
-          <mat-icon class="m-2">list</mat-icon>
-          <mat-divider class="w-full"></mat-divider>
-          <mat-icon class="m-2">check_circle</mat-icon>
-          <mat-divider class="w-full"></mat-divider>
-          <mat-icon class="m-2">error</mat-icon>
-          <mat-divider class="w-full"></mat-divider>
-          <mat-icon class="m-2">report</mat-icon>
-          <mat-divider class="w-full"></mat-divider>
+          <div
+            *ngFor="let tab of tabs; index as i; last as isLast"
+            [ngClass]="tab.active ? 'bg-primary-700' : ''"
+          >
+            <mat-icon class="m-2">{{ tab.icon }}</mat-icon>
+
+            <mat-divider class="w-full"></mat-divider>
+          </div>
           <mat-icon class="m-2">exit_to_app</mat-icon>
         </div>
         <app-header class="static top-0"></app-header>
