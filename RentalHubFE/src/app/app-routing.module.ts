@@ -16,7 +16,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: '/dashboard/post-sensor',
+    redirectTo: '/dashboard/statistics',
     pathMatch: 'full',
   },
 ];
