@@ -111,6 +111,7 @@
           </button>
           <button
             *ngIf="this.element._active === false"
+            (click)="UnblockInspector(element._id)"
             type="button"
             class="text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >

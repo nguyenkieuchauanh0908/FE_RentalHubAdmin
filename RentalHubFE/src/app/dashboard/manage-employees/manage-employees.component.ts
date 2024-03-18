@@ -10,6 +10,7 @@ import { UpdateEmployeeLoginDetailDialogComponent } from '../update-employee-log
 import { NotifierService } from 'angular-notifier';
 import { AddNewEmployeeDialogComponent } from './add-new-employee-dialog/add-new-employee-dialog.component';
 import { MatTableDataSource } from '@angular/material/table';
+import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-manage-employees',
@@ -65,7 +66,7 @@ export class ManageEmployeesComponent {
       const dialogRef = this.dialog.open(
         UpdateEmployeeLoginDetailDialogComponent,
         {
-          width: '1000px',
+          width: '400px',
           data: employeeDetails,
         }
       );
@@ -90,39 +91,53 @@ export class ManageEmployeesComponent {
   }
 
   blockInspector(inspectId: string) {
-    this.accountService.blockInspectorById(inspectId).subscribe((res) => {
-      if (res) {
-        this.dataSource.map((employee) =>
-          employee._id === inspectId ? (employee._active = false) : ''
-        );
-        console.log(
-          '🚀 ~ ManageEmployeesComponent ~ this.accountService.unBlockInspectorById ~ this.dataSource:',
-          this.dataSource
-        );
-        this;
-        this.notifierService.notify(
-          'success',
-          'Khóa tài khoản nhân viên thành công!'
-        );
-      }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: 'Xác nhận khóa cho tài khoản này?',
+    });
+
+    const sub = dialogRef.componentInstance.confirmYes.subscribe(() => {
+      this.accountService.blockInspectorById(inspectId).subscribe((res) => {
+        if (res) {
+          this.dataSource.map((employee) =>
+            employee._id === inspectId ? (employee._active = false) : ''
+          );
+          // console.log(
+          //   '🚀 ~ ManageEmployeesComponent ~ this.accountService.unBlockInspectorById ~ this.dataSource:',
+          //   this.dataSource
+          // );
+          this;
+          this.notifierService.notify(
+            'success',
+            'Khóa tài khoản nhân viên thành công!'
+          );
+        }
+      });
     });
   }
 
   UnblockInspector(inspectId: string) {
-    this.accountService.blockInspectorById(inspectId).subscribe((res) => {
-      if (res) {
-        this.dataSource.forEach((employee) =>
-          employee._id === inspectId ? (employee._active = true) : ''
-        );
-        console.log(
-          '🚀 ~ ManageEmployeesComponent ~ this.accountService.unBlockInspectorById ~ this.dataSource:',
-          this.dataSource
-        );
-        this.notifierService.notify(
-          'success',
-          'Mở tài khoản nhân viên thành công!'
-        );
-      }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: 'Xác nhận mở khóa cho tài khoản này?',
+    });
+
+    const sub = dialogRef.componentInstance.confirmYes.subscribe((res) => {
+      this.accountService.blockInspectorById(inspectId).subscribe((res) => {
+        if (res) {
+          this.dataSource.forEach((employee) =>
+            employee._id === inspectId ? (employee._active = true) : ''
+          );
+          // console.log(
+          //   '🚀 ~ ManageEmployeesComponent ~ this.accountService.unBlockInspectorById ~ this.dataSource:',
+          //   this.dataSource
+          // );
+          this.notifierService.notify(
+            'success',
+            'Mở tài khoản nhân viên thành công!'
+          );
+        }
+      });
     });
   }
 
