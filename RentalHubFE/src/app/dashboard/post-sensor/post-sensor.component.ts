@@ -49,7 +49,7 @@ export class PostSensorComponent implements OnInit {
   ngOnInit(): void {
     this.isLoading = true;
     this.paginationService.currentPage = 1;
-    this.postService.getPostInspector(0, 1, 5).subscribe(
+    this.postService.getPostAdmin(0, 1, 5).subscribe(
       (res) => {
         this.dataSource = res.data;
         console.log(

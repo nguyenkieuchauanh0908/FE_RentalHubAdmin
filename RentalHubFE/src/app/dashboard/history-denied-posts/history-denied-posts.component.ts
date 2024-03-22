@@ -50,7 +50,7 @@ export class HistoryDeniedPostsComponent {
   ngOnInit(): void {
     this.isLoading = true;
     this.paginationService.currentPage = 1;
-    this.postService.getPostInspector(3, 1, 5).subscribe(
+    this.postService.getPostAdmin(3, 1, 5).subscribe(
       (res) => {
         this.dataSource = res.data;
         console.log(

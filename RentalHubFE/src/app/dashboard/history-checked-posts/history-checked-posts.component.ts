@@ -51,7 +51,7 @@ export class HistoryCheckedPostsComponent {
     this.isLoading = true;
     this.paginationService.currentPage = 1;
     this.currentUid = this.accountService.getCurrentUserId();
-    this.postService.getPostInspector(1, 1, 5).subscribe(
+    this.postService.getPostAdmin(1, 1, 5).subscribe(
       (res) => {
         this.isLoading = false;
         this.dataSource = res.data;

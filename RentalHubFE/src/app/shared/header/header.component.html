@@ -10,7 +10,7 @@
         <!-- Avatar and name -->
         <div
           *ngIf="isAuthenticatedUser"
-          class="flex flex-row gap-1 cursor-pointer"
+          class="flex flex-row gap-1 cursor-pointer relative left-8"
         >
           <img
             *ngIf="user?._avatar"
@@ -41,7 +41,7 @@
           [matBadge]="notificationTotals"
           aria-hidden="false"
           matBadgeColor="warn"
-          class="relative top-1.5 cursor-pointer ml-4"
+          class="relative top-1.5 cursor-pointer ml-10"
         >
           <mat-icon> notifications</mat-icon>
         </button>

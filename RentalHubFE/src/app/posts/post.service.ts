@@ -189,6 +189,18 @@ export class PostService {
       .pipe(catchError(handleError));
   }
 
+  getPostAdmin(status: number, page: number, limit: number) {
+    let queryParams = new HttpParams()
+      .append('status', status)
+      .append('page', page)
+      .append('limit', limit);
+    return this.http
+      .get<resDataDTO>(environment.baseUrl + 'posts/admin-get-post-list', {
+        params: queryParams,
+      })
+      .pipe(catchError(handleError));
+  }
+
   getReportPostList(page: number, limit: number) {
     let queryParams = new HttpParams()
       .append('page', page)
