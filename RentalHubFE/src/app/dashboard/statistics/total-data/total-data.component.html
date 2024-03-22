@@ -1,0 +1,26 @@
+<div
+  class="shadow-lg rounded-lg flex flex-col items-center justify-around w-48 h-48"
+>
+  <div
+    class="min-w-full min-h-24 flex flex-row justify-center items-center border-b-2 border-grey"
+  >
+    <mat-icon class="relative bottom-1.5 mr-3">{{ titleIcon }}</mat-icon>
+    <p class="text-black-color font-medium text-lg justify-center">
+      {{ title }}
+    </p>
+  </div>
+
+  <div
+    class="relative min-w-full h-full flex flex-row items-center justify-center"
+  >
+    <img
+      *ngIf="background"
+      src="{{ background }}"
+      alt="chart's image"
+      class="absolute object-cover max-w-full max-h-full opacity-75 hover:opacity-50"
+    />
+    <p class="relative bottom-6 font-semibold text-3xl">
+      {{ total }}
+    </p>
+  </div>
+</div>

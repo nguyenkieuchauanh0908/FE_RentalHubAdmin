@@ -1,1 +1,158 @@
-<p>statistics works!</p>
+<div><h2 class="font-extrabold">Thống kê</h2></div>
+<div class="grid grid-rows-4 grid-flow-col gap-24">
+  <!-- Thống kế về Users -->
+  <div class="grid grid-cols-12 gap-4">
+    <!-- Total users -->
+    <div class="flex justify-center col-span-3">
+      <app-total-data
+        [total]="230"
+        [title]="'Người dùng'"
+        [titleIcon]="'people'"
+        [background]="'../../../../assets/images/growth.png'"
+      ></app-total-data>
+    </div>
+    <!-- New users by month and year -->
+    <div class="flex justify-center col-span-5">
+      <ngx-charts-bar-vertical
+        [view]="view"
+        [scheme]="colorScheme"
+        [results]="single"
+        [gradient]="gradient"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="showLegend"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+        (select)="onSelect($event)"
+      >
+      </ngx-charts-bar-vertical>
+    </div>
+
+    <!-- Daily active users shown bt % -->
+    <div class="flex justify-center col-span-4"></div>
+  </div>
+
+  <!-- Thống kê về Hosts -->
+  <div class="grid grid-cols-12 gap-4">
+    <!-- Total hosts -->
+    <div class="flex justify-center col-span-3">
+      <app-total-data
+        [total]="230"
+        [title]="'Hosts'"
+        [titleIcon]="'people'"
+        [background]="'../../../../assets/images/growth.png'"
+      ></app-total-data>
+    </div>
+    <!-- New registered hosts by month/year -->
+    <div class="bg-primary-50 flex justify-center col-span-5"></div>
+    <!-- Active hosts and Deactive hosts %-->
+    <div class="flex justify-center col-span-4">
+      <ngx-charts-pie-chart
+        [view]="view"
+        [scheme]="colorScheme"
+        [results]="single"
+        [gradient]="gradient"
+        [legend]="showLegend"
+        [legendPosition]="legendPosition"
+        [labels]="showLabels"
+        [doughnut]="isDoughnut"
+        (select)="onSelect($event)"
+        (activate)="onActivate($event)"
+        (deactivate)="onDeactivate($event)"
+      >
+      </ngx-charts-pie-chart>
+    </div>
+  </div>
+
+  <!-- Thống kê về Posts -->
+  <div class="grid grid-cols-12 gap-4">
+    <!-- Total posts -->
+    <div class="flex justify-center col-span-3">
+      <app-total-data
+        [total]="230"
+        [title]="'Bài viết'"
+        [titleIcon]="'library_books'"
+        [background]="'../../../../assets/images/growth.png'"
+      ></app-total-data>
+    </div>
+    <!-- New posted posts by month/year -->
+    <div class="bg-primary-50 flex justify-center col-span-5">
+      <!-- <ngx-charts-bar-vertical
+        [view]="view"
+        [scheme]="colorScheme"
+        [results]="single"
+        [gradient]="gradient"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="showLegend"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+        (select)="onSelect($event)"
+      >
+      </ngx-charts-bar-vertical> -->
+    </div>
+    <!-- Post by status show in $ -->
+    <div class="flex justify-center col-span-4">
+      <ngx-charts-pie-chart
+        [view]="view"
+        [scheme]="colorScheme"
+        [results]="single"
+        [gradient]="gradient"
+        [legend]="showLegend"
+        [legendPosition]="legendPosition"
+        [labels]="showLabels"
+        [doughnut]="isDoughnut"
+        (select)="onSelect($event)"
+        (activate)="onActivate($event)"
+        (deactivate)="onDeactivate($event)"
+      >
+      </ngx-charts-pie-chart>
+    </div>
+  </div>
+
+  <!-- Thống kê về Employees -->
+  <div class="grid grid-cols-12 gap-4">
+    <!-- Total employees -->
+    <div class="flex justify-center col-span-3">
+      <app-total-data
+        [total]="230"
+        [title]="'Nhân viên'"
+        [titleIcon]="'people'"
+        [background]="'../../../../assets/images/growth.png'"
+      ></app-total-data>
+    </div>
+    <!-- New applyed employees -->
+    <div class="flex justify-center col-span-5">
+      <ngx-charts-line-chart
+        [view]="view"
+        [scheme]="colorScheme"
+        [legend]="legend"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxis]="xAxis"
+        [yAxis]="yAxis"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+        [timeline]="timeline"
+        [results]="multi"
+        (select)="onSelect($event)"
+        (activate)="onActivate($event)"
+        (deactivate)="onDeactivate($event)"
+      >
+      </ngx-charts-line-chart>
+    </div>
+    <!-- Average working hours of employees -->
+    <div class="flex justify-center col-span-4">
+      <app-total-data
+        [total]="7.5"
+        [title]="'Giờ làm trung bình'"
+        [titleIcon]="'av_timer'"
+        [background]="'../../../../assets/images/growth.png'"
+      ></app-total-data>
+    </div>
+  </div>
+</div>

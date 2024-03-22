@@ -10,6 +10,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { NotifierModule } from 'angular-notifier';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { TotalDataComponent } from '../dashboard/statistics/total-data/total-data.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +21,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
 
     MainLayoutComponent,
     ConfirmDialogComponent,
+    TotalDataComponent,
   ],
   imports: [
     CommonModule,
@@ -28,6 +31,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     ReactiveFormsModule,
     ScrollingModule,
     NotifierModule,
+    NgxChartsModule,
   ],
   exports: [
     CommonModule,
@@ -40,6 +44,8 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     MainLayoutComponent,
     NotifierModule,
     ReactiveFormsModule,
+    NgxChartsModule,
+    TotalDataComponent,
   ],
 })
 export class SharedModule {}

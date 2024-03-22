@@ -11,7 +11,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { NgImageSliderModule } from 'ng-image-slider';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -34,7 +33,6 @@ import { MatMenuModule } from '@angular/material/menu';
     MatListModule,
     MatDialogModule,
     MatAutocompleteModule,
-    NgImageSliderModule,
     MatSidenavModule,
     MatTableModule,
     MatProgressSpinnerModule,
@@ -56,7 +54,6 @@ import { MatMenuModule } from '@angular/material/menu';
     MatListModule,
     MatDialogModule,
     MatAutocompleteModule,
-    NgImageSliderModule,
     MatSidenavModule,
     MatTableModule,
     MatProgressSpinnerModule,

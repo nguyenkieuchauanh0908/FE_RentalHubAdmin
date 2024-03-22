@@ -16,6 +16,7 @@ import { ManageEmployeesComponent } from './manage-employees/manage-employees.co
 import { UpdateEmployeeLoginDetailDialogComponent } from './update-employee-login-detail-dialog/update-employee-login-detail-dialog.component';
 import { AddNewEmployeeDialogComponent } from './manage-employees/add-new-employee-dialog/add-new-employee-dialog.component';
 import { StatisticsComponent } from './statistics/statistics.component';
+import { TotalDataComponent } from './statistics/total-data/total-data.component';
 
 @NgModule({
   declarations: [
