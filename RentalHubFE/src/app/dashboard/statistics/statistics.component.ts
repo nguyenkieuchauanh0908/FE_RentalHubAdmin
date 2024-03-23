@@ -1,6 +1,13 @@
 import { Component } from '@angular/core';
 
-import { single, multi } from './data';
+import {
+  single,
+  multi,
+  hostPieChartDataSource,
+  postByStatusDataSource,
+  yearsDataSourceUsers,
+  yearsDataSourceEmployees,
+} from './data';
 import { Color } from '@swimlane/ngx-charts';
 
 @Component({
@@ -11,6 +18,11 @@ import { Color } from '@swimlane/ngx-charts';
 export class StatisticsComponent {
   single: any[] | undefined;
   multi: any[] | undefined;
+  hostPieChartDataSource: any[] | undefined;
+  postByStatusDataSource: any[] | undefined;
+  yearsDataSourceUsers!: [{ name: string; value: boolean }];
+  yearsDataSourceEmployees!: [{ name: string; value: boolean }];
+  checked = false;
 
   view: [number, number] = [700, 400];
 
@@ -21,9 +33,9 @@ export class StatisticsComponent {
   gradient = false;
   showLegend = true;
   showXAxisLabel = true;
-  xAxisLabel = 'Country';
+  xAxisLabel = 'Tháng';
   showYAxisLabel = true;
-  yAxisLabel = 'Population';
+  yAxisLabel = 'Người dùng mới';
 
   colorScheme: any = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'],
@@ -32,6 +44,10 @@ export class StatisticsComponent {
   constructor() {
     Object.assign(this, { single });
     Object.assign(this, { multi });
+    Object.assign(this, { hostPieChartDataSource });
+    Object.assign(this, { postByStatusDataSource });
+    Object.assign(this, { yearsDataSourceUsers });
+    Object.assign(this, { yearsDataSourceEmployees });
   }
 
   onSelect(event: any) {
@@ -63,4 +79,26 @@ export class StatisticsComponent {
   xAxis: boolean = true;
   yAxis: boolean = true;
   timeline: boolean = true;
+
+  checkYear(checked: boolean, yearStamp: string, statisticType: string) {
+    if (checked) {
+      switch (statisticType) {
+        case 'users':
+          this.yearsDataSourceUsers?.forEach((year) => {
+            if (year.name !== yearStamp) {
+              year.value = !checked;
+            }
+          });
+          break;
+        case 'employees':
+          this.yearsDataSourceEmployees?.forEach((year) => {
+            if (year.name !== yearStamp) {
+              year.value = !checked;
+            }
+          });
+          break;
+        default:
+      }
+    }
+  }
 }

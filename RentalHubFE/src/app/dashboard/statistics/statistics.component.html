@@ -13,21 +13,30 @@
     </div>
     <!-- New users by month and year -->
     <div class="flex justify-center col-span-5">
-      <ngx-charts-bar-vertical
-        [view]="view"
-        [scheme]="colorScheme"
-        [results]="single"
-        [gradient]="gradient"
-        [xAxis]="showXAxis"
-        [yAxis]="showYAxis"
-        [legend]="showLegend"
-        [showXAxisLabel]="showXAxisLabel"
-        [showYAxisLabel]="showYAxisLabel"
-        [xAxisLabel]="xAxisLabel"
-        [yAxisLabel]="yAxisLabel"
-        (select)="onSelect($event)"
-      >
-      </ngx-charts-bar-vertical>
+      <div class="flex flex-row gap-3">
+        <ngx-charts-bar-vertical
+          *ngIf="!this.yearsDataSourceUsers[0].value"
+          [view]="view"
+          [results]="single"
+          [xAxis]="showXAxis"
+          [yAxis]="showYAxis"
+          [showXAxisLabel]="showXAxisLabel"
+          [showYAxisLabel]="showYAxisLabel"
+          [xAxisLabel]="xAxisLabel"
+          [yAxisLabel]="yAxisLabel"
+          (select)="onSelect($event)"
+        >
+        </ngx-charts-bar-vertical>
+        <div class="flex flex-col shadow-lg p-1 w-32 h-36">
+          <mat-checkbox
+            *ngFor="let year of yearsDataSourceUsers"
+            class="example-margin"
+            [(ngModel)]="year.value"
+            (change)="checkYear($event.checked, year.name, 'users')"
+            >{{ year.name }}</mat-checkbox
+          >
+        </div>
+      </div>
     </div>
 
     <!-- Daily active users shown bt % -->
@@ -52,7 +61,7 @@
       <ngx-charts-pie-chart
         [view]="view"
         [scheme]="colorScheme"
-        [results]="single"
+        [results]="hostPieChartDataSource"
         [gradient]="gradient"
         [legend]="showLegend"
         [legendPosition]="legendPosition"
@@ -100,7 +109,7 @@
       <ngx-charts-pie-chart
         [view]="view"
         [scheme]="colorScheme"
-        [results]="single"
+        [results]="postByStatusDataSource"
         [gradient]="gradient"
         [legend]="showLegend"
         [legendPosition]="legendPosition"
@@ -127,23 +136,34 @@
     </div>
     <!-- New applyed employees -->
     <div class="flex justify-center col-span-5">
-      <ngx-charts-line-chart
-        [view]="view"
-        [scheme]="colorScheme"
-        [legend]="legend"
-        [showXAxisLabel]="showXAxisLabel"
-        [showYAxisLabel]="showYAxisLabel"
-        [xAxis]="xAxis"
-        [yAxis]="yAxis"
-        [xAxisLabel]="xAxisLabel"
-        [yAxisLabel]="yAxisLabel"
-        [timeline]="timeline"
-        [results]="multi"
-        (select)="onSelect($event)"
-        (activate)="onActivate($event)"
-        (deactivate)="onDeactivate($event)"
-      >
-      </ngx-charts-line-chart>
+      <div class="flex flex-row gap-3">
+        <ngx-charts-line-chart
+          *ngIf="!this.yearsDataSourceEmployees[0].value"
+          [view]="view"
+          [scheme]="colorScheme"
+          [showXAxisLabel]="showXAxisLabel"
+          [showYAxisLabel]="showYAxisLabel"
+          [xAxis]="xAxis"
+          [yAxis]="yAxis"
+          [xAxisLabel]="xAxisLabel"
+          [yAxisLabel]="yAxisLabel"
+          [timeline]="timeline"
+          [results]="multi"
+          (select)="onSelect($event)"
+          (activate)="onActivate($event)"
+          (deactivate)="onDeactivate($event)"
+        >
+        </ngx-charts-line-chart>
+        <div class="flex flex-col shadow-lg p-1 w-32 h-36">
+          <mat-checkbox
+            *ngFor="let year of yearsDataSourceEmployees"
+            class="example-margin"
+            [(ngModel)]="year.value"
+            (change)="checkYear($event.checked, year.name, 'employees')"
+            >{{ year.name }}</mat-checkbox
+          >
+        </div>
+      </div>
     </div>
     <!-- Average working hours of employees -->
     <div class="flex justify-center col-span-4">
