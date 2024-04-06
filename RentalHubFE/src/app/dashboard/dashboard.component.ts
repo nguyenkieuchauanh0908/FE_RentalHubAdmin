@@ -57,33 +57,33 @@ export class DashboardComponent implements OnInit {
       subTabs: false,
     },
     {
-      title: 'Chờ duyệt',
+      title: 'Quản lý bài viết',
       icon: 'list',
       link: 'post-sensor',
       active: false,
       subTabs: false,
     },
-    {
-      title: 'Được duyệt',
-      icon: 'check-circle',
-      link: 'checked-posts',
-      active: false,
-      subTabs: false,
-    },
-    {
-      title: 'Không được duyệt',
-      icon: 'error',
-      link: 'denied-posts',
-      active: false,
-      subTabs: false,
-    },
-    {
-      title: 'Bị báo cáo',
-      icon: 'report',
-      link: 'reported-posts',
-      active: false,
-      subTabs: false,
-    },
+    // {
+    //   title: 'Được duyệt',
+    //   icon: 'check-circle',
+    //   link: 'checked-posts',
+    //   active: false,
+    //   subTabs: false,
+    // },
+    // {
+    //   title: 'Không được duyệt',
+    //   icon: 'error',
+    //   link: 'denied-posts',
+    //   active: false,
+    //   subTabs: false,
+    // },
+    // {
+    //   title: 'Bị báo cáo',
+    //   icon: 'report',
+    //   link: 'reported-posts',
+    //   active: false,
+    //   subTabs: false,
+    // },
     // {
     //   title: 'Đăng xuất',
     //   icon: 'exit_to_app',
@@ -106,36 +106,6 @@ export class DashboardComponent implements OnInit {
       this.myProfile = user;
     });
   }
-
-  // toCheckPost() {
-  //   console.log('toCheckPost...');
-  //   this.router.navigate(['dashboard/post-sensor']);
-  // }
-
-  // toCheckedPost() {
-  //   console.log('toCheckedPost...');
-  //   this.router.navigate(['dashboard/checked-posts']);
-  // }
-
-  // deniedPost() {
-  //   console.log('deniedPost...');
-  //   this.router.navigate(['dashboard/denied-posts']);
-  // }
-
-  // reportedPost() {
-  //   console.log('reportedPost...');
-  //   this.router.navigate(['dashboard/reported-posts']);
-  // }
-
-  // toManageEmployees() {
-  //   console.log('manage employees...');
-  //   this.router.navigate(['dashboard/manage-employees']);
-  // }
-
-  // toStatistics() {
-  //   console.log('to statistics dashboard...');
-  //   this.router.navigate(['dashboard/statistics']);
-  // }
 
   toMyAccount() {
     const dialogRef = this.dialog.open(AccountEditDialogComponent, {

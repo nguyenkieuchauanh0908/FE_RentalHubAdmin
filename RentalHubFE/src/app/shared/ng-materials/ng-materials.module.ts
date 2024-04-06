@@ -19,6 +19,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips';
+
 @NgModule({
   declarations: [],
   imports: [
@@ -42,6 +44,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatBadgeModule,
     MatMenuModule,
     MatCheckboxModule,
+    MatChipsModule,
   ],
   exports: [
     MatDividerModule,
@@ -64,6 +67,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatBadgeModule,
     MatMenuModule,
     MatCheckboxModule,
+    MatChipsModule,
   ],
 })
 export class NgMaterialsModule {}

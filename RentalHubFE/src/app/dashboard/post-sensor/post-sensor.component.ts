@@ -10,6 +10,7 @@ import { PostItem } from 'src/app/posts/posts-list/post-item/post-item.model';
 import { Tags } from 'src/app/shared/tags/tag.model';
 import { PostSensorDialogComponent } from './post-sensor-dialog/post-sensor-dialog.component';
 import { PaginationService } from 'src/app/shared/pagination/pagination.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-post-sensor',
   templateUrl: './post-sensor.component.html',
@@ -39,7 +40,8 @@ export class PostSensorComponent implements OnInit {
     private accountService: AccountService,
     private postService: PostService,
     public dialog: MatDialog,
-    private paginationService: PaginationService
+    private paginationService: PaginationService,
+    private router: Router
   ) {
     if (this.currentUid) {
       this.myProfile = this.accountService.getProfile(this.currentUid);
@@ -52,10 +54,6 @@ export class PostSensorComponent implements OnInit {
     this.postService.getPostAdmin(0, 1, 5).subscribe(
       (res) => {
         this.dataSource = res.data;
-        console.log(
-          '🚀 ~ file: post-sensor.component.ts:49 ~ PostSensorComponent ~ this.postService.getPostsHistory ~  this.dataSource:',
-          this.dataSource
-        );
         this.totalPages = res.pagination.total;
         this.isLoading = false;
       },
@@ -105,5 +103,23 @@ export class PostSensorComponent implements OnInit {
           this.dataSource = [];
         }
       });
+  }
+
+  toPosts(type: string): void {
+    switch (type) {
+      case 'Chờ duyệt':
+        this.router.navigate(['/dashboard/post-sensor']);
+        break;
+      case 'Đã duyệt':
+        this.router.navigate(['/dashboard/checked-posts']);
+        break;
+      case 'Không được duyệt':
+        this.router.navigate(['/dashboard/denied-posts']);
+        break;
+      case 'Bị báo cáo':
+        this.router.navigate(['/dashboard/reported-posts']);
+        break;
+      default:
+    }
   }
 }

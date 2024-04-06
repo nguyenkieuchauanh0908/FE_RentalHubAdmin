@@ -9,6 +9,7 @@ import { PostItem } from 'src/app/posts/posts-list/post-item/post-item.model';
 import { Tags } from 'src/app/shared/tags/tag.model';
 import { PostSensorDialogComponent } from '../post-sensor/post-sensor-dialog/post-sensor-dialog.component';
 import { PaginationService } from 'src/app/shared/pagination/pagination.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-history-denied-posts',
@@ -40,7 +41,8 @@ export class HistoryDeniedPostsComponent {
     private postService: PostService,
     public dialog: MatDialog,
     private notifierService: NotifierService,
-    private paginationService: PaginationService
+    private paginationService: PaginationService,
+    private router: Router
   ) {
     if (this.currentUid) {
       this.myProfile = this.accountService.getProfile(this.currentUid);
@@ -64,6 +66,24 @@ export class HistoryDeniedPostsComponent {
         this.isLoading = false;
       }
     );
+  }
+
+  toPosts(type: string): void {
+    switch (type) {
+      case 'Chờ duyệt':
+        this.router.navigate(['/dashboard/post-sensor']);
+        break;
+      case 'Đã duyệt':
+        this.router.navigate(['/dashboard/checked-posts']);
+        break;
+      case 'Không được duyệt':
+        this.router.navigate(['/dashboard/denied-posts']);
+        break;
+      case 'Bị báo cáo':
+        this.router.navigate(['/dashboard/reported-posts']);
+        break;
+      default:
+    }
   }
 
   seePost(post: any) {
