@@ -28,25 +28,11 @@ export class DashboardComponent implements OnInit {
   myProfile: User | null | undefined;
 
   tabs: Array<Tab> = [
-    // {
-    //   title: 'Hồ sơ cá nhân',
-    //   icon: 'person',
-    //   link: 'this.toMyAccount()',
-    //   active: false,
-    //   subTabs: false,
-    // },
-    // {
-    //   title: 'Thông tin đăng nhập',
-    //   icon: 'lock',
-    //   link: 'this.toMyLoginDetail()',
-    //   active: false,
-    //   subTabs: false,
-    // },
     {
       title: 'Thống kê',
       icon: 'poll',
       link: 'statistics',
-      active: true,
+      active: false,
       subTabs: false,
     },
     {
@@ -57,40 +43,19 @@ export class DashboardComponent implements OnInit {
       subTabs: false,
     },
     {
+      title: 'Quản lý chủ trọ',
+      icon: 'verified_user',
+      link: 'manage-hosts',
+      active: false,
+      subTabs: false,
+    },
+    {
       title: 'Quản lý bài viết',
       icon: 'list',
       link: 'post-sensor',
       active: false,
       subTabs: false,
     },
-    // {
-    //   title: 'Được duyệt',
-    //   icon: 'check-circle',
-    //   link: 'checked-posts',
-    //   active: false,
-    //   subTabs: false,
-    // },
-    // {
-    //   title: 'Không được duyệt',
-    //   icon: 'error',
-    //   link: 'denied-posts',
-    //   active: false,
-    //   subTabs: false,
-    // },
-    // {
-    //   title: 'Bị báo cáo',
-    //   icon: 'report',
-    //   link: 'reported-posts',
-    //   active: false,
-    //   subTabs: false,
-    // },
-    // {
-    //   title: 'Đăng xuất',
-    //   icon: 'exit_to_app',
-    //   link: 'this.logout()',
-    //   active: false,
-    //   subTabs: false,
-    // },
   ];
 
   constructor(

@@ -4,20 +4,16 @@
   </div>
   <div class="mb-2">
     <mat-chip-listbox aria-label="post status selection">
-      <mat-chip-option color="accent" (selectionChange)="toPosts('Chờ duyệt')"
-        >Chờ duyệt</mat-chip-option
-      >
-      <mat-chip-option color="accent" (selectionChange)="toPosts('Đã duyệt')"
-        >Đã duyệt</mat-chip-option
+      <mat-chip-option
+        color="accent"
+        selected
+        (selectionChange)="changeStatusOfHosts('Waiting')"
+        >Chủ trọ Chờ duyệt</mat-chip-option
       >
       <mat-chip-option
-        color="warn"
-        selected
-        (selectionChange)="toPosts('Không được duyệt')"
-        >Không được duyệt</mat-chip-option
-      >
-      <mat-chip-option color="warn" (selectionChange)="toPosts('Bị báo cáo')"
-        >Bị báo cáo</mat-chip-option
+        color="accent"
+        (selectionChange)="changeStatusOfHosts('All')"
+        >Toàn bộ chủ trọ</mat-chip-option
       >
     </mat-chip-listbox>
   </div>
@@ -112,7 +108,7 @@
   </table>
   <!-- Pagination -->
   <app-pagination
-    *ngIf="this.dataSource"
+    *ngClass="this.dataSource"
     [currentPage]="currentPage"
     [totalPages]="totalPages"
     (toPrevPage)="changeCurrentPage($event, false, false)"

@@ -8,6 +8,7 @@ import { HistoryDeniedPostsComponent } from './history-denied-posts/history-deni
 import { ReportedPostsComponent } from './reported-posts/reported-posts.component';
 import { ManageEmployeesComponent } from './manage-employees/manage-employees.component';
 import { StatisticsComponent } from './statistics/statistics.component';
+import { ManageHostsComponent } from './manage-hosts/manage-hosts.component';
 
 const routes: Routes = [
   {
@@ -37,6 +38,11 @@ const routes: Routes = [
       {
         path: 'manage-employees',
         component: ManageEmployeesComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'manage-hosts',
+        component: ManageHostsComponent,
         canActivate: [AuthGuard],
       },
       {

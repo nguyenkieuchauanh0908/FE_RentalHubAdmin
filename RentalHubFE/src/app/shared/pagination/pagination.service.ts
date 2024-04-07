@@ -25,19 +25,14 @@ export class PaginationService {
     return this.currentPage;
   }
 
-  caculateCurrentPage(position: number) {
-    console.log('On caculating current page...');
+  navigatePage(position: number, currentPage: number) {
+    console.log('Position: ' + position);
     if (position > 0 || position < 0) {
-      this.currentPage = this.currentPage + position;
-    }
-    console.log('Current page: ' + this.currentPage);
-    return this.currentPage;
-  }
-
-  navigatePage(position: number) {
-    this.getCurrentPageIndexFromParam();
-    if (position > 0 || position < 0) {
-      this.currentPage = this.currentPage + position;
+      this.currentPage = currentPage + position;
+      console.log(
+        '🚀 ~ PaginationService ~ navigatePage ~ this.currentPage:',
+        this.currentPage
+      );
     }
     return this.currentPage;
   }

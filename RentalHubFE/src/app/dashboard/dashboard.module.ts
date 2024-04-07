@@ -17,6 +17,8 @@ import { UpdateEmployeeLoginDetailDialogComponent } from './update-employee-logi
 import { AddNewEmployeeDialogComponent } from './manage-employees/add-new-employee-dialog/add-new-employee-dialog.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 import { TotalDataComponent } from './statistics/total-data/total-data.component';
+import { ManageHostsComponent } from './manage-hosts/manage-hosts.component';
+import { HostSensorDialogComponent } from './manage-hosts/host-sensor-dialog/host-sensor-dialog.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import { TotalDataComponent } from './statistics/total-data/total-data.component
     UpdateEmployeeLoginDetailDialogComponent,
     AddNewEmployeeDialogComponent,
     StatisticsComponent,
+    ManageHostsComponent,
+    HostSensorDialogComponent,
   ],
   imports: [CommonModule, FormsModule, DashboardRoutingModule, SharedModule],
   providers: [],

@@ -1,22 +1,21 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { NotifierService } from 'angular-notifier';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AccountService } from 'src/app/accounts/accounts.service';
 import { User } from 'src/app/auth/user.model';
 import { PostService } from 'src/app/posts/post.service';
 import { PostItem } from 'src/app/posts/posts-list/post-item/post-item.model';
+import { PaginationService } from 'src/app/shared/pagination/pagination.service';
 import { Tags } from 'src/app/shared/tags/tag.model';
 import { PostSensorDialogComponent } from '../post-sensor/post-sensor-dialog/post-sensor-dialog.component';
-import { PaginationService } from 'src/app/shared/pagination/pagination.service';
-import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-history-checked-posts',
-  templateUrl: './history-checked-posts.component.html',
-  styleUrls: ['./history-checked-posts.component.scss'],
+  selector: 'app-manage-hosts',
+  templateUrl: './manage-hosts.component.html',
+  styleUrls: ['./manage-hosts.component.scss'],
 })
-export class HistoryCheckedPostsComponent {
+export class ManageHostsComponent {
   isLoading = false;
   displayedColumns: string[] = [
     'image',
@@ -40,7 +39,6 @@ export class HistoryCheckedPostsComponent {
     private accountService: AccountService,
     private postService: PostService,
     public dialog: MatDialog,
-    private notifierService: NotifierService,
     private paginationService: PaginationService,
     private router: Router
   ) {
@@ -52,16 +50,11 @@ export class HistoryCheckedPostsComponent {
   ngOnInit(): void {
     this.isLoading = true;
     this.currentPage = 1;
-    this.currentUid = this.accountService.getCurrentUserId();
-    this.postService.getPostAdmin(1, this.currentPage, 5).subscribe(
+    this.postService.getPostAdmin(0, this.currentPage, 5).subscribe(
       (res) => {
-        this.isLoading = false;
         this.dataSource = res.data;
-        console.log(
-          '🚀 ~ file: post-sensor.component.ts:49 ~ PostSensorComponent ~ this.postService.getPostsHistory ~  this.dataSource:',
-          this.dataSource
-        );
         this.totalPages = res.pagination.total;
+        this.isLoading = false;
       },
       (errMsg) => {
         this.isLoading = false;
@@ -114,39 +107,27 @@ export class HistoryCheckedPostsComponent {
     } else if (toLastPage) {
       this.currentPage = this.totalPages;
     }
-    this.postService.getPostList(
-      this.currentPage,
-      this.pageItemLimit
-      // this.filterCriteria
-    );
-    this.postService.getPostAdmin(1, this.currentPage, 5).subscribe(
+    this.postService.getPostAdmin(0, this.currentPage, 5).subscribe(
       (res) => {
-        this.isLoading = false;
         this.dataSource = res.data;
-        console.log(
-          '🚀 ~ file: post-sensor.component.ts:49 ~ PostSensorComponent ~ this.postService.getPostsHistory ~  this.dataSource:',
-          this.dataSource
-        );
         this.totalPages = res.pagination.total;
+        this.isLoading = false;
       },
       (errMsg) => {
         this.isLoading = false;
       }
     );
   }
-  toPosts(type: string): void {
+
+  changeStatusOfHosts(type: string): void {
     switch (type) {
-      case 'Chờ duyệt':
-        this.router.navigate(['/dashboard/post-sensor']);
+      case 'Waiting':
+        console.log('Change status of hosts to waiting....');
+        //Call API
         break;
-      case 'Đã duyệt':
-        this.router.navigate(['/dashboard/checked-posts']);
-        break;
-      case 'Không được duyệt':
-        this.router.navigate(['/dashboard/denied-posts']);
-        break;
-      case 'Bị báo cáo':
-        this.router.navigate(['/dashboard/reported-posts']);
+      case 'All':
+        //Call API
+        console.log('Change status of hosts to All....');
         break;
       default:
     }

@@ -44,8 +44,8 @@ export class ManageEmployeesComponent {
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.paginationService.currentPage = 1;
-    this.accountService.getAllInspectors(1, 5).subscribe(
+    this.currentPage = 1;
+    this.accountService.getAllInspectors(this.currentPage, 5).subscribe(
       (res) => {
         this.dataSource = res.data;
         console.log(
@@ -75,19 +75,38 @@ export class ManageEmployeesComponent {
     }
   }
 
-  changeCurrentPage(position: number) {
-    this.historyPosts = [];
-    this.currentPage = this.paginationService.caculateCurrentPage(position);
-    this.accountService
-      .getAllInspectors(this.currentPage, 5)
-      .subscribe((res) => {
-        if (res) {
-          this.dataSource = res.data;
-          this.totalPages = res.pagination.total;
-        } else {
-          this.dataSource = [];
-        }
-      });
+  //position can be either 1 (navigate to next page) or -1 (to previous page)
+  changeCurrentPage(
+    position: number,
+    toFirstPage: boolean,
+    toLastPage: boolean
+  ) {
+    this.isLoading = true;
+    if (position === 1 || position === -1) {
+      this.currentPage = this.paginationService.navigatePage(
+        position,
+        this.currentPage
+      );
+    }
+    if (toFirstPage) {
+      this.currentPage = 1;
+    } else if (toLastPage) {
+      this.currentPage = this.totalPages;
+    }
+    this.accountService.getAllInspectors(this.currentPage, 5).subscribe(
+      (res) => {
+        this.dataSource = res.data;
+        console.log(
+          '🚀 ~ file: post-sensor.component.ts:49 ~ PostSensorComponent ~ this.postService.getPostsHistory ~  this.dataSource:',
+          this.dataSource
+        );
+        this.totalPages = res.pagination.total;
+        this.isLoading = false;
+      },
+      (errMsg) => {
+        this.isLoading = false;
+      }
+    );
   }
 
   blockInspector(inspectId: string) {
