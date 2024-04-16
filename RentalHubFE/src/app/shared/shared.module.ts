@@ -12,6 +12,7 @@ import { NotifierModule } from 'angular-notifier';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { TotalDataComponent } from '../dashboard/statistics/total-data/total-data.component';
+import { CommentReasonDialogComponent } from './comment-reason-dialog/comment-reason-dialog.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { TotalDataComponent } from '../dashboard/statistics/total-data/total-dat
     MainLayoutComponent,
     ConfirmDialogComponent,
     TotalDataComponent,
+    CommentReasonDialogComponent,
   ],
   imports: [
     CommonModule,
