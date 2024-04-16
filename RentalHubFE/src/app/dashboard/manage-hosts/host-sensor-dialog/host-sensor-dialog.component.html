@@ -1,1 +1,227 @@
-<p>host-sensor-dialog works!</p>
+<div class="relative">
+  <div *ngIf="isLoading" class="spinner__loading text-center">
+    <mat-spinner diameter="30"></mat-spinner>
+  </div>
+  <h2 mat-dialog-title>Thông tin chủ trọ</h2>
+  <mat-dialog-content>
+    <!-- Edit modal -->
+    <div class="p-4 md:p-5">
+      <form
+        #createPostForm="ngForm"
+        class="space-y-4"
+        *ngIf="this.hostDetailIdCard"
+      >
+        <!-- idCard -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Số CMND/CCCD</label
+          >
+          <input
+            type="text"
+            id="idCard-input"
+            name="idCard"
+            [ngModel]="this.hostDetailIdCard!._idCard"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          />
+        </div>
+        <!-- Name -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Họ & tên</label
+          >
+          <input
+            type="text"
+            id="name-input"
+            name="name"
+            [ngModel]="this.hostDetailIdCard!._name"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          />
+        </div>
+
+        <!-- dob -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Ngày sinh</label
+          >
+          <input
+            type="text"
+            id="dob-input"
+            name="dob"
+            [ngModel]="this.hostDetailIdCard!._dob"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          />
+        </div>
+
+        <!-- home -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Nguyên quán</label
+          >
+          <input
+            type="text"
+            id="home-input"
+            name="home"
+            [ngModel]="this.hostDetailIdCard!._home"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          />
+        </div>
+
+        <!-- Gender -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Giới tính</label
+          >
+          <input
+            type="text"
+            id="gender-input"
+            name="gender"
+            [ngModel]="this.hostDetailIdCard!._gender"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          />
+        </div>
+
+        <!-- nationality -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Quốc tịch</label
+          >
+          <input
+            type="text"
+            id="nationality-input"
+            name="nationality"
+            [ngModel]="this.hostDetailIdCard!._nationality"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          />
+        </div>
+        <!-- features -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Đặc điểm</label
+          >
+          <input
+            type="text"
+            id="features-input"
+            name="features"
+            [ngModel]="this.hostDetailIdCard!._features"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          />
+        </div>
+
+        <!-- issueDate -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Ngày cấp</label
+          >
+          <input
+            type="text"
+            id="issueDate-input"
+            name="issueDate"
+            [ngModel]="this.hostDetailIdCard!._issueDate"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          />
+        </div>
+
+        <!-- doe -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Ngày hết hạn</label
+          >
+          <input
+            type="text"
+            id="doe-input"
+            name="doe"
+            [ngModel]="this.hostDetailIdCard!._doe"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          />
+        </div>
+
+        <!-- issueLoc -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Nơi cấp</label
+          >
+          <input
+            type="text"
+            id="issueLoc-input"
+            name="issueLoc"
+            [ngModel]="this.hostDetailIdCard!._issueLoc"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          />
+        </div>
+      </form>
+      <notifier-container></notifier-container>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Hủy</button>
+    <button
+      *ngIf="this.data.requestStatus === 0 || this.data.requestStatus === 1"
+      (click)="deny()"
+      mat-button
+      class="bg-red-700 hover:bg-red-800"
+      style="color: white; background-color: rgba(255, 0, 0, 0.8)"
+    >
+      Từ chối duyệt
+    </button>
+    <button
+      *ngIf="this.data.requestStatus === 0 || this.data.requestStatus === 2"
+      (click)="sensor()"
+      class="bg-blue-700 hover:bg-blue-800"
+      style="color: white; background-color: #1a56db"
+      mat-button
+      type="button"
+    >
+      Duyệt
+    </button>
+  </mat-dialog-actions>
+</div>

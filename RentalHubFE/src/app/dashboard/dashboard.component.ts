@@ -50,6 +50,13 @@ export class DashboardComponent implements OnInit {
       subTabs: false,
     },
     {
+      title: 'Quản lý địa chỉ trọ',
+      icon: 'location_on',
+      link: 'manage-addresses',
+      active: false,
+      subTabs: false,
+    },
+    {
       title: 'Quản lý bài viết',
       icon: 'list',
       link: 'post-sensor',

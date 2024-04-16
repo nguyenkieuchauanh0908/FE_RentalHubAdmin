@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -8,78 +8,86 @@ import { PostService } from 'src/app/posts/post.service';
 import { PostItem } from 'src/app/posts/posts-list/post-item/post-item.model';
 import { PaginationService } from 'src/app/shared/pagination/pagination.service';
 import { Tags } from 'src/app/shared/tags/tag.model';
-import { PostSensorDialogComponent } from '../post-sensor/post-sensor-dialog/post-sensor-dialog.component';
+import { PostSensorDialogComponent } from '../manage-post-sensor/post-sensor-dialog/post-sensor-dialog.component';
+import { HostService } from './host.service';
+import { HostSensorDialogComponent } from './host-sensor-dialog/host-sensor-dialog.component';
+import { Hosts } from './host.model';
 
 @Component({
   selector: 'app-manage-hosts',
   templateUrl: './manage-hosts.component.html',
   styleUrls: ['./manage-hosts.component.scss'],
 })
-export class ManageHostsComponent {
+export class ManageHostsComponent implements OnInit {
   isLoading = false;
   displayedColumns: string[] = [
-    'image',
-    'title',
-    'desc',
-    'author',
-    'lastUpdate',
+    'uId',
+    'name',
+    'dob',
+    'home',
+    'address',
+    'date',
   ];
-  dataSource!: PostItem[];
+  dataSource!: any[];
   myProfile!: User | null;
   currentUid!: string | null;
-  historyPosts: PostItem[] = new Array<PostItem>();
   totalPages: number = 1;
   currentPage: number = 1;
   pageItemLimit: number = 5;
   myProfileSub = new Subscription();
-  getTagSub = new Subscription();
-  sourceTags: Set<Tags> = new Set();
+  currentHostReqStatus: number = 0;
 
   constructor(
     private accountService: AccountService,
     private postService: PostService,
     public dialog: MatDialog,
     private paginationService: PaginationService,
-    private router: Router
+    private hostService: HostService
   ) {
+    this.isLoading = true;
+    this.currentPage = 1;
+    this.currentHostReqStatus = 0;
     if (this.currentUid) {
       this.myProfile = this.accountService.getProfile(this.currentUid);
     }
+    this.hostService
+      .getActiveHostByRequests(this.currentHostReqStatus, 1, 5)
+      .subscribe(
+        (res) => {
+          if (res.data) {
+            this.dataSource = res.data;
+            this.totalPages = res.pagination.total;
+          }
+
+          this.isLoading = false;
+        },
+        (errMsg) => {
+          this.isLoading = false;
+        }
+      );
   }
 
-  ngOnInit(): void {
-    this.isLoading = true;
-    this.currentPage = 1;
-    this.postService.getPostAdmin(0, this.currentPage, 5).subscribe(
-      (res) => {
-        this.dataSource = res.data;
-        this.totalPages = res.pagination.total;
-        this.isLoading = false;
-      },
-      (errMsg) => {
-        this.isLoading = false;
-      }
-    );
-  }
+  ngOnInit(): void {}
 
-  seePost(post: any) {
-    console.log('Seeing post detail....');
-    const dialogRef = this.dialog.open(PostSensorDialogComponent, {
-      width: '1000px',
-      data: post,
+  //Xem chi tiết hồ sơ đăng ký host
+  seeDetail(host: any) {
+    console.log('Seeing host IDCard detail....', host);
+    const dialogRef = this.dialog.open(HostSensorDialogComponent, {
+      width: '500px',
+      data: { hostId: host._uId, requestStatus: this.currentHostReqStatus },
     });
-
-    let sub = dialogRef.componentInstance.sensorResult.subscribe((postId) => {
+    //Lọc hồ sơ sau khi kiểm duyệt xong
+    let sub = dialogRef.componentInstance.sensorResult.subscribe((identId) => {
       if (this.dataSource) {
         this.dataSource = this.dataSource.filter(
-          (post: PostItem) => post._id !== postId
+          (host: Hosts) => host._id !== identId
         );
       }
     });
-    sub = dialogRef.componentInstance.denySensorResult.subscribe((postId) => {
+    sub = dialogRef.componentInstance.denySensorResult.subscribe((identId) => {
       if (this.dataSource) {
         this.dataSource = this.dataSource.filter(
-          (post: PostItem) => post._id !== postId
+          (host: Hosts) => host._id !== identId
         );
       }
     });
@@ -107,29 +115,62 @@ export class ManageHostsComponent {
     } else if (toLastPage) {
       this.currentPage = this.totalPages;
     }
-    this.postService.getPostAdmin(0, this.currentPage, 5).subscribe(
-      (res) => {
-        this.dataSource = res.data;
-        this.totalPages = res.pagination.total;
-        this.isLoading = false;
-      },
-      (errMsg) => {
-        this.isLoading = false;
-      }
-    );
+    this.hostService
+      .getActiveHostByRequests(this.currentHostReqStatus, this.currentPage, 5)
+      .subscribe(
+        (res) => {
+          if (res.data) {
+            this.dataSource = res.data;
+            this.totalPages = res.pagination.total;
+          }
+
+          this.isLoading = false;
+        },
+        (errMsg) => {
+          this.isLoading = false;
+        }
+      );
   }
 
   changeStatusOfHosts(type: string): void {
     switch (type) {
       case 'Waiting':
-        console.log('Change status of hosts to waiting....');
+        console.log('Change status of hosts to Waiting....');
+        this.currentHostReqStatus = 0;
         //Call API
         break;
-      case 'All':
+      case 'Sensored':
         //Call API
-        console.log('Change status of hosts to All....');
+        console.log('Change status of hosts to Sensored....');
+        this.currentHostReqStatus = 1;
+        break;
+      case 'Denied':
+        //Call API
+        console.log('Change status of hosts to Denied....');
+        this.currentHostReqStatus = 2;
         break;
       default:
     }
+    this.currentPage = 1;
+    this.dataSource = [];
+    this.hostService
+      .getActiveHostByRequests(this.currentHostReqStatus, 1, 5)
+      .subscribe(
+        (res) => {
+          if (res.data) {
+            this.dataSource = res.data;
+            console.log(
+              '🚀 ~ ManageHostsComponent ~ changeStatusOfHosts ~ this.dataSource:',
+              this.dataSource
+            );
+            this.totalPages = res.pagination.total;
+          }
+
+          this.isLoading = false;
+        },
+        (errMsg) => {
+          this.isLoading = false;
+        }
+      );
   }
 }
