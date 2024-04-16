@@ -20,6 +20,7 @@ import { TotalDataComponent } from './statistics/total-data/total-data.component
 import { ManageHostsComponent } from './manage-hosts/manage-hosts.component';
 import { HostSensorDialogComponent } from './manage-hosts/host-sensor-dialog/host-sensor-dialog.component';
 import { ManageAddressesComponent } from './manage-addresses/manage-addresses.component';
+import { AddressSensorDialogComponent } from './manage-addresses/address-sensor-dialog/address-sensor-dialog.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { ManageAddressesComponent } from './manage-addresses/manage-addresses.co
     ManageHostsComponent,
     HostSensorDialogComponent,
     ManageAddressesComponent,
+    AddressSensorDialogComponent,
   ],
   imports: [CommonModule, FormsModule, DashboardRoutingModule, SharedModule],
   providers: [],

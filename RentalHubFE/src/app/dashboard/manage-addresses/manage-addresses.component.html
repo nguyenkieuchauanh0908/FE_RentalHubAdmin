@@ -1,0 +1,112 @@
+<div class="relative">
+  <div *ngIf="isLoading" class="spinner__loading text-center">
+    <mat-spinner diameter="30"></mat-spinner>
+  </div>
+  <div class="mb-2">
+    <mat-chip-listbox aria-label="status selection">
+      <mat-chip-option
+        selected
+        color="accent"
+        (selectionChange)="changeStatusOfReq('Waiting')"
+        >Yêu cầu Chờ duyệt</mat-chip-option
+      >
+      <mat-chip-option
+        color="accent"
+        (selectionChange)="changeStatusOfReq('Sensored')"
+        >Yêu cầu đã duyệt</mat-chip-option
+      >
+      <mat-chip-option
+        color="warn"
+        (selectionChange)="changeStatusOfReq('Denied')"
+        >Yêu cầu bị Từ chối</mat-chip-option
+      >
+    </mat-chip-listbox>
+  </div>
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    class="mat-elevation-z8"
+    style="border-radius: 8px !important"
+  >
+    <!-- id Column -->
+    <ng-container matColumnDef="id" style="border-radius: 8px !important">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        style="border-radius: 8px !important"
+      >
+        <p class="text-center" style="border-radius: 8px !important">#</p>
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let element"
+        class="p-2"
+        (click)="seeDetail(element)"
+        style="border-radius: 8px !important"
+      >
+        <p class="line-clamp-1">{{ element._id }}</p>
+      </td>
+    </ng-container>
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef><p>Họ & tên</p></th>
+      <td mat-cell *matCellDef="let element" (click)="seeDetail(element)">
+        <p class="line-clamp-1">{{ element._fullname }}</p>
+      </td>
+    </ng-container>
+
+    <!-- Address Column -->
+    <ng-container matColumnDef="address">
+      <th mat-header-cell *matHeaderCellDef><p>Địa chỉ đăng ký</p></th>
+      <td mat-cell *matCellDef="let element" (click)="seeDetail(element)">
+        <p class="line-clamp-1">{{ element._address }}</p>
+      </td>
+    </ng-container>
+
+    <!-- Total rooms Column -->
+    <ng-container matColumnDef="total_rooms">
+      <th mat-header-cell *matHeaderCellDef>
+        <p class="text-center">Tổng số phòng</p>
+      </th>
+      <td mat-cell *matCellDef="let element" (click)="seeDetail(element)">
+        <p class="line-clamp-1 text-center">{{ element._totalRoom }}</p>
+      </td>
+    </ng-container>
+
+    <!-- Date Column -->
+    <ng-container matColumnDef="date" style="border-radius: 8px !important">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        style="border-radius: 8px !important"
+      >
+        <p style="border-radius: 8px !important">Ngày đăng ký</p>
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let element"
+        (click)="seeDetail(element)"
+        style="border-radius: 8px !important"
+      >
+        <p class="line-clamp-3">{{ element._date }}</p>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      class="cursor-pointer"
+    ></tr>
+  </table>
+  <!-- Pagination -->
+  <app-pagination
+    *ngIf="this.dataSource"
+    [currentPage]="currentPage"
+    [totalPages]="totalPages"
+    (toPrevPage)="changeCurrentPage($event, false, false)"
+    (toNextPage)="changeCurrentPage($event, false, false)"
+    (toFirstPage)="changeCurrentPage(0, $event, false)"
+    (toLastPage)="changeCurrentPage(0, false, $event)"
+  ></app-pagination>
+</div>

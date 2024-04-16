@@ -1,0 +1,123 @@
+<div class="relative">
+  <div *ngIf="isLoading" class="spinner__loading text-center">
+    <mat-spinner diameter="30"></mat-spinner>
+  </div>
+  <h2 mat-dialog-title>Chi tiết yêu cầu</h2>
+  <mat-dialog-content>
+    <!-- Edit modal -->
+    <div class="p-4 md:p-5">
+      <form
+        #createPostForm="ngForm"
+        class="space-y-4"
+        *ngIf="this.addressReqDetail"
+      >
+        <!-- Reason for denied Req -->
+        <div class="mb-6">
+          <label
+            for="reason-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Lý do bị chấp thuận/từ chối</label
+          >
+          <input
+            type="text"
+            id="reason-input"
+            name="reason"
+            [ngModel]="this.addressReqDetail!._reason"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          />
+        </div>
+
+        <!-- address -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Địa chỉ đăng ký</label
+          >
+          <input
+            type="text"
+            id="home-input"
+            name="home"
+            [ngModel]="this.addressReqDetail!._address"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          />
+        </div>
+
+        <!-- Total room -->
+        <div class="mb-6">
+          <label
+            for="base-input"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Tổng số phòng</label
+          >
+          <input
+            type="text"
+            id="gender-input"
+            name="gender"
+            [ngModel]="this.addressReqDetail!._totalRoom"
+            ngModel
+            required
+            disabled
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
+          />
+        </div>
+
+        <!-- Business license -->
+        <div class="mb-6">
+          <label
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            for="multiple_files"
+            >Giấy phép kinh doanh</label
+          >
+          <div class="bg-white-background rounded-lg">
+            <div class="flex flex-row flex-wrap mt-4 w-100">
+              <!-- Image -->
+              <div
+                *ngFor="
+                  let preview of addressReqDetail._imgLicense;
+                  index as index
+                "
+                class="xs:basis-[48%] sm:basis-[29%] md:basis-[19%] h-100 border-solid border-2 border-indigo-300 rounded-lg p-3 mr-1 mb-1 relative hover:cursor-default h-36 w-full"
+              >
+                <img
+                  *ngIf="preview !== ''"
+                  [src]="preview"
+                  class="object-fill max-h-28 w-full rounded-lg"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <notifier-container></notifier-container>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Hủy</button>
+    <button
+      *ngIf="this.data.requestStatus === 0 || this.data.requestStatus === 1"
+      (click)="deny()"
+      mat-button
+      class="bg-red-700 hover:bg-red-800"
+      style="color: white; background-color: rgba(255, 0, 0, 0.8)"
+    >
+      Từ chối duyệt
+    </button>
+    <button
+      *ngIf="this.data.requestStatus === 0 || this.data.requestStatus === 2"
+      (click)="sensor()"
+      class="bg-blue-700 hover:bg-blue-800"
+      style="color: white; background-color: #1a56db"
+      mat-button
+      type="button"
+    >
+      Duyệt
+    </button>
+  </mat-dialog-actions>
+</div>
