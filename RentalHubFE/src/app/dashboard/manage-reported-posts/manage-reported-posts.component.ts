@@ -1,22 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { NotifierService } from 'angular-notifier';
 import { Subscription } from 'rxjs';
 import { AccountService } from 'src/app/accounts/accounts.service';
 import { User } from 'src/app/auth/user.model';
 import { PostService } from 'src/app/posts/post.service';
 import { PostItem } from 'src/app/posts/posts-list/post-item/post-item.model';
-import { Tags } from 'src/app/shared/tags/tag.model';
-import { PostSensorDialogComponent } from '../post-sensor/post-sensor-dialog/post-sensor-dialog.component';
 import { PaginationService } from 'src/app/shared/pagination/pagination.service';
+import { Tags } from 'src/app/shared/tags/tag.model';
+import { PostSensorDialogComponent } from '../manage-post-sensor/post-sensor-dialog/post-sensor-dialog.component';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-history-denied-posts',
-  templateUrl: './history-denied-posts.component.html',
-  styleUrls: ['./history-denied-posts.component.scss'],
+  selector: 'app-manage-manage-reported-posts',
+  templateUrl: './manage-reported-posts.component.html',
+  styleUrls: ['./manage-reported-posts.component.scss'],
 })
-export class HistoryDeniedPostsComponent {
+export class ManageReportedPostsComponent implements OnInit {
   isLoading = false;
   displayedColumns: string[] = [
     'image',
@@ -40,7 +39,6 @@ export class HistoryDeniedPostsComponent {
     private accountService: AccountService,
     private postService: PostService,
     public dialog: MatDialog,
-    private notifierService: NotifierService,
     private paginationService: PaginationService,
     private router: Router
   ) {
@@ -52,7 +50,7 @@ export class HistoryDeniedPostsComponent {
   ngOnInit(): void {
     this.isLoading = true;
     this.currentPage = 1;
-    this.postService.getPostAdmin(3, this.currentPage, 5).subscribe(
+    this.postService.getReportPostList(1, 5).subscribe(
       (res) => {
         this.dataSource = res.data;
         console.log(
@@ -86,31 +84,49 @@ export class HistoryDeniedPostsComponent {
     }
   }
 
-  seePost(post: any) {
-    console.log('Seeing post detail....');
-    const dialogRef = this.dialog.open(PostSensorDialogComponent, {
-      width: '1000px',
-      data: post,
-    });
+  seePost(postDetail: any) {
+    let post = postDetail;
+    if (postDetail._status === 1) {
+      this.postService.getReportPostById(postDetail._id).subscribe((res) => {
+        if (res.data) {
+          post = res.data;
+          console.log(
+            '🚀 ~ ReportedPostsComponent ~ this.postService.getReportPostById ~ post:',
+            post
+          );
+          //Nếu đã lấy được thông tin của post thì open sensor dialog
+          if (post) {
+            const dialogRef = this.dialog.open(PostSensorDialogComponent, {
+              width: '1000px',
+              data: post,
+            });
 
-    let sub = dialogRef.componentInstance.sensorResult.subscribe((postId) => {
-      if (this.dataSource) {
-        this.dataSource = this.dataSource.filter(
-          (post: PostItem) => post._id !== postId
-        );
-      }
-    });
-    sub = dialogRef.componentInstance.denySensorResult.subscribe((postId) => {
-      if (this.dataSource) {
-        this.dataSource = this.dataSource.filter(
-          (post: PostItem) => post._id !== postId
-        );
-      }
-    });
+            let sub = dialogRef.componentInstance.sensorResult.subscribe(
+              (postId) => {
+                if (this.dataSource) {
+                  this.dataSource = this.dataSource.filter(
+                    (post: PostItem) => post._id !== postId
+                  );
+                }
+              }
+            );
+            sub = dialogRef.componentInstance.denySensorResult.subscribe(
+              (postId) => {
+                if (this.dataSource) {
+                  this.dataSource = this.dataSource.filter(
+                    (post: PostItem) => post._id !== postId
+                  );
+                }
+              }
+            );
 
-    dialogRef.afterClosed().subscribe((result) => {
-      sub.unsubscribe();
-    });
+            dialogRef.afterClosed().subscribe((result) => {
+              sub.unsubscribe();
+            });
+          }
+        }
+      });
+    }
   }
 
   //position can be either 1 (navigate to next page) or -1 (to previous page)
@@ -131,7 +147,7 @@ export class HistoryDeniedPostsComponent {
     } else if (toLastPage) {
       this.currentPage = this.totalPages;
     }
-    this.postService.getPostAdmin(3, this.currentPage, 5).subscribe(
+    this.postService.getReportPostList(1, 5).subscribe(
       (res) => {
         this.dataSource = res.data;
         console.log(

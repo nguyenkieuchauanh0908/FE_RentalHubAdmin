@@ -125,7 +125,6 @@ export class ManageEmployeesComponent {
           //   '🚀 ~ ManageEmployeesComponent ~ this.accountService.unBlockInspectorById ~ this.dataSource:',
           //   this.dataSource
           // );
-          this;
           this.notifierService.notify(
             'success',
             'Khóa tài khoản nhân viên thành công!'
