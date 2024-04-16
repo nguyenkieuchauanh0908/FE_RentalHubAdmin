@@ -24,7 +24,7 @@ export class StatisticsComponent {
   yearsDataSourceEmployees!: [{ name: string; value: boolean }];
   checked = false;
 
-  view: [number, number] = [700, 400];
+  view: [number, number] = [450, 300];
 
   //bar chart
   // options
@@ -48,6 +48,23 @@ export class StatisticsComponent {
     Object.assign(this, { postByStatusDataSource });
     Object.assign(this, { yearsDataSourceUsers });
     Object.assign(this, { yearsDataSourceEmployees });
+    this.view = [450, 300];
+  }
+
+  onResize(event: any) {
+    console.log(
+      '🚀 ~ StatisticsComponent ~ onResize ~ event.target.innerWidth:',
+      event.target.innerWidth
+    );
+    if (event.target.innerWidth < 768 && event.target.innerWidth > 480) {
+      this.view = [event.target.innerWidth / 1.75, 300];
+    } else if (event.target.innerWidth > 320 && event.target.innerWidth < 480) {
+      this.view = [event.target.innerWidth / 1.35, 300];
+    } else {
+      {
+        this.view = [450, 300];
+      }
+    }
   }
 
   onSelect(event: any) {

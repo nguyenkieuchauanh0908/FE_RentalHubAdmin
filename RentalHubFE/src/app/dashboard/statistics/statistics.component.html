@@ -1,9 +1,9 @@
 <div><h2 class="font-extrabold">Thống kê</h2></div>
-<div class="grid grid-rows-4 grid-flow-col gap-24">
+<div class="grid md:grid-rows-4 md:grid-flow-col md:gap-24">
   <!-- Thống kế về Users -->
-  <div class="grid grid-cols-12 gap-4">
+  <div class="grid grid-cols-12 gap-4 justify-evenly">
     <!-- Total users -->
-    <div class="flex justify-center col-span-3">
+    <div class="flex justify-center xs:col-span-12 md:col-span-3">
       <app-total-data
         [total]="230"
         [title]="'Người dùng'"
@@ -12,9 +12,19 @@
       ></app-total-data>
     </div>
     <!-- New users by month and year -->
-    <div class="flex justify-center col-span-5">
-      <div class="flex flex-row gap-3">
+    <div class="flex justify-center md:col-span-5 xs:col-span-12">
+      <div class="flex flex-row">
+        <div class="flex flex-col shadow-lg p-1 w-32 h-36">
+          <mat-checkbox
+            *ngFor="let year of yearsDataSourceUsers"
+            class="example-margin"
+            [(ngModel)]="year.value"
+            (change)="checkYear($event.checked, year.name, 'users')"
+            >{{ year.name }}</mat-checkbox
+          >
+        </div>
         <ngx-charts-bar-vertical
+          (window:resize)="onResize($event)"
           *ngIf="!this.yearsDataSourceUsers[0].value"
           [view]="view"
           [results]="single"
@@ -27,20 +37,11 @@
           (select)="onSelect($event)"
         >
         </ngx-charts-bar-vertical>
-        <div class="flex flex-col shadow-lg p-1 w-32 h-36">
-          <mat-checkbox
-            *ngFor="let year of yearsDataSourceUsers"
-            class="example-margin"
-            [(ngModel)]="year.value"
-            (change)="checkYear($event.checked, year.name, 'users')"
-            >{{ year.name }}</mat-checkbox
-          >
-        </div>
       </div>
     </div>
 
     <!-- Daily active users shown bt % -->
-    <div class="flex justify-center col-span-4"></div>
+    <div class="flex justify-center xs:col-span-12 md:col-span-4"></div>
   </div>
 
   <!-- Thống kê về Hosts -->
@@ -124,7 +125,7 @@
   </div>
 
   <!-- Thống kê về Employees -->
-  <div class="grid grid-cols-12 gap-4">
+  <div class="grid grid-cols-12 gap-4 flex-nowrap">
     <!-- Total employees -->
     <div class="flex justify-center col-span-3">
       <app-total-data
@@ -137,6 +138,15 @@
     <!-- New applyed employees -->
     <div class="flex justify-center col-span-5">
       <div class="flex flex-row gap-3">
+        <div class="flex flex-col shadow-lg p-1 w-32 h-36">
+          <mat-checkbox
+            *ngFor="let year of yearsDataSourceEmployees"
+            class="example-margin"
+            [(ngModel)]="year.value"
+            (change)="checkYear($event.checked, year.name, 'employees')"
+            >{{ year.name }}</mat-checkbox
+          >
+        </div>
         <ngx-charts-line-chart
           *ngIf="!this.yearsDataSourceEmployees[0].value"
           [view]="view"
@@ -154,15 +164,6 @@
           (deactivate)="onDeactivate($event)"
         >
         </ngx-charts-line-chart>
-        <div class="flex flex-col shadow-lg p-1 w-32 h-36">
-          <mat-checkbox
-            *ngFor="let year of yearsDataSourceEmployees"
-            class="example-margin"
-            [(ngModel)]="year.value"
-            (change)="checkYear($event.checked, year.name, 'employees')"
-            >{{ year.name }}</mat-checkbox
-          >
-        </div>
       </div>
     </div>
     <!-- Average working hours of employees -->
