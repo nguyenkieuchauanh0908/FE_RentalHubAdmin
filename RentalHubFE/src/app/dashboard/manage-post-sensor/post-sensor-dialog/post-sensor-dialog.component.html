@@ -283,9 +283,14 @@
     </div>
   </mat-dialog-content>
   <mat-dialog-actions align="end">
+    <!-- Status: 1-Đã duyệt 0-Chờ duyệt 3-Không được duyệt 4-Bị báo cáo -->
     <button mat-button mat-dialog-close>Hủy</button>
+    <!-- Từ chối những bài viết Chờ duyệt hoặc Đã duyệt (status = 1 || 0) -->
     <button
-      *ngIf="this.data._status !== 3 && this.data._status !== 4"
+      *ngIf="
+        (this.data._status == 1 || this.data._status == 0) &&
+        !this.data._contentPost
+      "
       (click)="denyPost()"
       mat-button
       class="bg-red-700 hover:bg-red-800"
@@ -293,8 +298,12 @@
     >
       Hủy duyệt
     </button>
+    <!-- Duyệt những bài viết Chờ duyệt hoặc Không được duyệt (status = 0 || 3) -->
     <button
-      *ngIf="this.data._status !== 1 && this.data._status !== 4"
+      *ngIf="
+        (this.data._status === 0 || this.data._status === 3) &&
+        !this.data._contentPost
+      "
       (click)="sensor()"
       class="bg-blue-700 hover:bg-blue-800"
       style="color: white; background-color: #1a56db"
@@ -303,14 +312,25 @@
     >
       Duyệt
     </button>
+    <!-- Từ chối những bài viết Bị báo cáo (status ) -->
     <button
-      *ngIf="this.data._status === 4"
-      (click)="removePost()"
+      *ngIf="this.data._contentPost && this.data._status === 1"
+      (click)="sensorReportPost(true)"
       mat-button
       class="bg-red-700 hover:bg-red-800"
       style="color: white; background-color: rgba(255, 0, 0, 0.8)"
     >
       Gỡ bài viết
+    </button>
+    <!-- Chấp nhận những bài viết Bị báo cáo (status ) -->
+    <button
+      *ngIf="this.data._contentPost && this.data._status === 1"
+      (click)="sensorReportPost(true)"
+      mat-button
+      class="bg-blue-700 hover:bg-blue-800"
+      style="color: white; background-color: #1a56db"
+    >
+      Duyệt
     </button>
   </mat-dialog-actions>
 </div>

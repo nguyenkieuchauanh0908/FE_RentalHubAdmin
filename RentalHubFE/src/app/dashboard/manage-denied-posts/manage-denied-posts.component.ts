@@ -94,6 +94,7 @@ export class ManageDeniedPostsComponent {
     });
 
     let sub = dialogRef.componentInstance.sensorResult.subscribe((postId) => {
+      console.log('🚀 ~ ManageDeniedPostsComponent ~ sub ~ postId:', postId);
       if (this.dataSource) {
         this.dataSource = this.dataSource.filter(
           (post: PostItem) => post._id !== postId
@@ -101,6 +102,10 @@ export class ManageDeniedPostsComponent {
       }
     });
     sub = dialogRef.componentInstance.denySensorResult.subscribe((postId) => {
+      console.log(
+        '🚀 ~ ManageDeniedPostsComponent ~ sub=dialogRef.componentInstance.denySensorResult.subscribe ~ postId:',
+        postId
+      );
       if (this.dataSource) {
         this.dataSource = this.dataSource.filter(
           (post: PostItem) => post._id !== postId

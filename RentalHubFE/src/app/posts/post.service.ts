@@ -84,10 +84,6 @@ export class PostService {
       const reader = new FileReader();
       reader.readAsDataURL(images[i]);
       body.append('_images', images[i]);
-      // console.log(
-      //   '🚀 ~ file: post.service.ts:85 ~ PostService ~ createPost ~ images[i]:',
-      //   images[i]
-      // );
     }
     if (selectedTags) {
       for (let tag of selectedTags) {
@@ -230,7 +226,15 @@ export class PostService {
       .pipe(catchError(handleError));
   }
 
-  removePost(reportId: string) {
+  sensorReportPost(reportId: string, blocked: boolean) {
+    if (blocked) {
+      return this.http
+        .patch<resDataDTO>(
+          environment.baseUrl + 'posts/sensor-post-reported/' + reportId,
+          { _status: 4 }
+        )
+        .pipe(catchError(handleError));
+    }
     return this.http
       .patch<resDataDTO>(
         environment.baseUrl + 'posts/sensor-post-reported/' + reportId,
