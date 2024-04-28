@@ -119,29 +119,51 @@ export class PostSensorDialogComponent {
     });
   }
 
-  removePost() {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
-      data: 'Xác nhận khóa bài viết?',
-    });
-    const sub = dialogRef.componentInstance.confirmYes.subscribe(() => {
-      this.isLoading = true;
-      this.postService.removePost(this.data._id).subscribe(
+  sensorReportPost(blocked: boolean) {
+    if (blocked) {
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        width: '400px',
+        data: 'Xác nhận khóa bài viết?',
+      });
+      const sub = dialogRef.componentInstance.confirmYes.subscribe(() => {
+        this.isLoading = true;
+        this.postService.sensorReportPost(this.data._id, true).subscribe(
+          (res) => {
+            if (res.data) {
+              this.isLoading = false;
+              this.sensorResult.emit(this.data._id);
+              this.notifierService.hideAll();
+              this.notifierService.notify(
+                'success',
+                'Khóa bài viết thành công!'
+              );
+            }
+          },
+          (errMsg) => {
+            this.isLoading = false;
+          }
+        );
+      });
+      dialogRef.afterClosed().subscribe(() => {
+        sub.unsubscribe();
+      });
+    } else {
+      this.postService.sensorReportPost(this.data._id, false).subscribe(
         (res) => {
           if (res.data) {
             this.isLoading = false;
             this.sensorResult.emit(this.data._id);
             this.notifierService.hideAll();
-            this.notifierService.notify('success', 'Khóa bài viết thành công!');
+            this.notifierService.notify(
+              'success',
+              'Duyệt bài viết thành công!'
+            );
           }
         },
         (errMsg) => {
           this.isLoading = false;
         }
       );
-    });
-    dialogRef.afterClosed().subscribe(() => {
-      sub.unsubscribe();
-    });
+    }
   }
 }

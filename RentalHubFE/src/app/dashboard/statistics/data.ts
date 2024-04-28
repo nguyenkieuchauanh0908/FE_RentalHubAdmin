@@ -1,46 +1,46 @@
 export var single = [
   {
-    name: 'T1',
+    name: 1,
     value: 200,
   },
   {
-    name: 'T2',
+    name: 2,
     value: 140,
   },
   {
-    name: 'T4',
+    name: 4,
     value: 1000,
   },
   {
-    name: 'T5',
+    name: 5,
     value: 1200,
   },
   {
-    name: 'T6',
+    name: 6,
     value: 1600,
   },
   {
-    name: 'T7',
+    name: 7,
     value: 1400,
   },
   {
-    name: 'T8',
+    name: 8,
     value: 1000,
   },
   {
-    name: 'T9',
+    name: 9,
     value: 900,
   },
   {
-    name: 'T10',
+    name: 10,
     value: 1600,
   },
   {
-    name: 'T11',
+    name: 11,
     value: 1400,
   },
   {
-    name: 'T12',
+    name: 12,
     value: 1200,
   },
 ];
@@ -179,7 +179,7 @@ export var postByStatusDataSource = [
 
 export var yearsDataSourceUsers = [
   {
-    name: 'All years',
+    name: 'All year',
     value: false,
   },
   {
