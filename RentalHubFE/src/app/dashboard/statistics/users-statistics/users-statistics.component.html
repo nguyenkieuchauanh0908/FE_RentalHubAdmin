@@ -1,0 +1,42 @@
+<!-- Thống kê về users -->
+<div class="grid grid-cols-12 gap-4 justify-evenly">
+  <!-- Total users -->
+  <div class="flex justify-center xs:col-span-12 md:col-span-3">
+    <app-total-data
+      [total]="this.totalUsers"
+      [title]="'Người dùng'"
+      [titleIcon]="'people'"
+      [background]="'../../../../assets/images/growth.png'"
+    ></app-total-data>
+  </div>
+  <!-- New users by month and year -->
+  <div class="flex justify-center md:col-span-5 xs:col-span-12">
+    <div class="flex flex-row">
+      <div class="flex flex-col shadow-lg p-1 w-32 h-36">
+        <mat-checkbox
+          *ngFor="let year of yearsDataSourceUsers"
+          class="example-margin"
+          [(ngModel)]="year.value"
+          (change)="checkYear($event.checked, year.name)"
+          >{{ year.name }}</mat-checkbox
+        >
+      </div>
+      <ngx-charts-bar-vertical
+        (window:resize)="onResize($event)"
+        [view]="view"
+        [results]="single"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+        (select)="onSelect($event)"
+      >
+      </ngx-charts-bar-vertical>
+    </div>
+  </div>
+
+  <!-- Daily active users shown bt % -->
+  <div class="flex justify-center xs:col-span-12 md:col-span-4"></div>
+</div>

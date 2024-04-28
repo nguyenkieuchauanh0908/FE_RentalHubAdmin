@@ -1,48 +1,7 @@
 <div><h2 class="font-extrabold">Thống kê</h2></div>
 <div class="grid md:grid-rows-4 md:grid-flow-col md:gap-24">
   <!-- Thống kế về Users -->
-  <div class="grid grid-cols-12 gap-4 justify-evenly">
-    <!-- Total users -->
-    <div class="flex justify-center xs:col-span-12 md:col-span-3">
-      <app-total-data
-        [total]="230"
-        [title]="'Người dùng'"
-        [titleIcon]="'people'"
-        [background]="'../../../../assets/images/growth.png'"
-      ></app-total-data>
-    </div>
-    <!-- New users by month and year -->
-    <div class="flex justify-center md:col-span-5 xs:col-span-12">
-      <div class="flex flex-row">
-        <div class="flex flex-col shadow-lg p-1 w-32 h-36">
-          <mat-checkbox
-            *ngFor="let year of yearsDataSourceUsers"
-            class="example-margin"
-            [(ngModel)]="year.value"
-            (change)="checkYear($event.checked, year.name, 'users')"
-            >{{ year.name }}</mat-checkbox
-          >
-        </div>
-        <ngx-charts-bar-vertical
-          (window:resize)="onResize($event)"
-          *ngIf="!this.yearsDataSourceUsers[0].value"
-          [view]="view"
-          [results]="single"
-          [xAxis]="showXAxis"
-          [yAxis]="showYAxis"
-          [showXAxisLabel]="showXAxisLabel"
-          [showYAxisLabel]="showYAxisLabel"
-          [xAxisLabel]="xAxisLabel"
-          [yAxisLabel]="yAxisLabel"
-          (select)="onSelect($event)"
-        >
-        </ngx-charts-bar-vertical>
-      </div>
-    </div>
-
-    <!-- Daily active users shown bt % -->
-    <div class="flex justify-center xs:col-span-12 md:col-span-4"></div>
-  </div>
+  <app-users-statistics></app-users-statistics>
 
   <!-- Thống kê về Hosts -->
   <div class="grid grid-cols-12 gap-4">
