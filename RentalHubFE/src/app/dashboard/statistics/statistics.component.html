@@ -36,52 +36,7 @@
   </div>
 
   <!-- Thống kê về Posts -->
-  <div class="grid grid-cols-12 gap-4">
-    <!-- Total posts -->
-    <div class="flex justify-center col-span-3">
-      <app-total-data
-        [total]="230"
-        [title]="'Bài viết'"
-        [titleIcon]="'library_books'"
-        [background]="'../../../../assets/images/growth.png'"
-      ></app-total-data>
-    </div>
-    <!-- New posted posts by month/year -->
-    <div class="bg-primary-50 flex justify-center col-span-5">
-      <!-- <ngx-charts-bar-vertical
-        [view]="view"
-        [scheme]="colorScheme"
-        [results]="single"
-        [gradient]="gradient"
-        [xAxis]="showXAxis"
-        [yAxis]="showYAxis"
-        [legend]="showLegend"
-        [showXAxisLabel]="showXAxisLabel"
-        [showYAxisLabel]="showYAxisLabel"
-        [xAxisLabel]="xAxisLabel"
-        [yAxisLabel]="yAxisLabel"
-        (select)="onSelect($event)"
-      >
-      </ngx-charts-bar-vertical> -->
-    </div>
-    <!-- Post by status show in $ -->
-    <div class="flex justify-center col-span-4">
-      <ngx-charts-pie-chart
-        [view]="view"
-        [scheme]="colorScheme"
-        [results]="postByStatusDataSource"
-        [gradient]="gradient"
-        [legend]="showLegend"
-        [legendPosition]="legendPosition"
-        [labels]="showLabels"
-        [doughnut]="isDoughnut"
-        (select)="onSelect($event)"
-        (activate)="onActivate($event)"
-        (deactivate)="onDeactivate($event)"
-      >
-      </ngx-charts-pie-chart>
-    </div>
-  </div>
+  <app-posts-statistics></app-posts-statistics>
 
   <!-- Thống kê về Employees -->
   <div class="grid grid-cols-12 gap-4 flex-nowrap">
