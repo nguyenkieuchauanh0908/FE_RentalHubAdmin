@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment';
 export class StatisticsService {
   constructor(private http: HttpClient) {}
 
+  //Users statistics
   get5RecentYearsList() {
     return this.http
       .get<resDataDTO>(environment.baseUrl + 'statistic/get-recent-years')
@@ -38,6 +39,36 @@ export class StatisticsService {
       .get<resDataDTO>(environment.baseUrl + 'statistic/count-users-year', {
         params: queryParams,
       })
+      .pipe(catchError(handleError));
+  }
+  //Posts Statistics
+  countAllPosts() {
+    return this.http
+      .get<resDataDTO>(environment.baseUrl + 'statistic/count-all-posts')
+      .pipe(catchError(handleError));
+  }
+
+  countPostsByMonth(year: string) {
+    let queryParams = new HttpParams().append('year', year);
+    return this.http
+      .get<resDataDTO>(environment.baseUrl + 'statistic/count-posts-month', {
+        params: queryParams,
+      })
+      .pipe(catchError(handleError));
+  }
+
+  countPostsByYear(year: string) {
+    let queryParams = new HttpParams().append('year', year);
+    return this.http
+      .get<resDataDTO>(environment.baseUrl + 'statistic/count-posts-year', {
+        params: queryParams,
+      })
+      .pipe(catchError(handleError));
+  }
+
+  countPostsByStatus() {
+    return this.http
+      .get<resDataDTO>(environment.baseUrl + 'statistic/count-posts-status')
       .pipe(catchError(handleError));
   }
 }

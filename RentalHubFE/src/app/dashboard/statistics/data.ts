@@ -188,7 +188,7 @@ export var yearsDataSourceUsers = [
   },
   {
     name: '2024',
-    value: false,
+    value: true,
   },
 ];
 
@@ -203,6 +203,21 @@ export var yearsDataSourceEmployees = [
   },
   {
     name: '2024',
+    value: true,
+  },
+];
+
+export var yearsDataSourcePosts = [
+  {
+    name: 'All years',
     value: false,
+  },
+  {
+    name: '2023',
+    value: false,
+  },
+  {
+    name: '2024',
+    value: true,
   },
 ];
