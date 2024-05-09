@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AccountService } from 'src/app/accounts/accounts.service';
 import { User } from 'src/app/auth/user.model';
 import { PostService } from 'src/app/posts/post.service';
-import { PostItem } from 'src/app/posts/posts-list/post-item/post-item.model';
 import { PaginationService } from 'src/app/shared/pagination/pagination.service';
-import { Tags } from 'src/app/shared/tags/tag.model';
-import { PostSensorDialogComponent } from '../manage-post-sensor/post-sensor-dialog/post-sensor-dialog.component';
 import { HostService } from './host.service';
 import { HostSensorDialogComponent } from './host-sensor-dialog/host-sensor-dialog.component';
 import { Hosts } from './host.model';
+import {
+  ExportExcelService,
+  ROW_HOST,
+} from 'src/app/shared/export-excel/export-excel.service';
+import { Utils } from 'src/app/shared/utils';
 
 @Component({
   selector: 'app-manage-hosts',
@@ -36,10 +37,13 @@ export class ManageHostsComponent implements OnInit {
   pageItemLimit: number = 5;
   myProfileSub = new Subscription();
   currentHostReqStatus: number = 0;
+  dataForExcel: ROW_HOST[] = [];
+
+  inspectorData!: ROW_HOST[];
 
   constructor(
     private accountService: AccountService,
-    private postService: PostService,
+    public exportService: ExportExcelService,
     public dialog: MatDialog,
     private paginationService: PaginationService,
     private hostService: HostService
@@ -65,6 +69,11 @@ export class ManageHostsComponent implements OnInit {
           this.isLoading = false;
         }
       );
+    this.exportService.getHostData().subscribe((res) => {
+      if (res.data) {
+        this.inspectorData = res.data;
+      }
+    });
   }
 
   ngOnInit(): void {}
@@ -172,5 +181,22 @@ export class ManageHostsComponent implements OnInit {
           this.isLoading = false;
         }
       );
+  }
+
+  export() {
+    if (this.inspectorData) {
+      this.inspectorData.forEach((row: ROW_HOST) => {
+        this.dataForExcel.push(row);
+      });
+
+      let reportData = {
+        title: 'Host Report',
+        data: this.dataForExcel,
+        headers: Object.keys(this.inspectorData[0]),
+        sheetTitle: 'Host',
+        footerRow: "Host's list until",
+      };
+      this.exportService.exportExcel(reportData);
+    }
   }
 }
