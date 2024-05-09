@@ -13,7 +13,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import {
   ExportExcelService,
-  ROW_ITEM,
+  ROW_INSPECTOR,
 } from 'src/app/shared/export-excel/export-excel.service';
 
 @Component({
@@ -35,67 +35,16 @@ export class ManageEmployeesComponent {
   getTagSub = new Subscription();
   sourceTags: Set<Tags> = new Set();
 
-  dataForExcel: ROW_ITEM[] = [];
+  dataForExcel: ROW_INSPECTOR[] = [];
 
-  empPerformance = [
-    {
-      ID: 10011,
-      NAME: 'A',
-      DEPARTMENT: 'Sales',
-      MONTH: 'Jan',
-      YEAR: 2022,
-      SALES: 132412,
-      CHANGE: 12,
-      LEADS: 35,
-    },
-    {
-      ID: 10012,
-      NAME: 'A',
-      DEPARTMENT: 'Sales',
-      MONTH: 'Feb',
-      YEAR: 2022,
-      SALES: 232324,
-      CHANGE: 2,
-      LEADS: 443,
-    },
-    {
-      ID: 10013,
-      NAME: 'A',
-      DEPARTMENT: 'Sales',
-      MONTH: 'Mar',
-      YEAR: 2022,
-      SALES: 542234,
-      CHANGE: 45,
-      LEADS: 345,
-    },
-    {
-      ID: 10014,
-      NAME: 'A',
-      DEPARTMENT: 'Sales',
-      MONTH: 'Apr',
-      YEAR: 2022,
-      SALES: 223335,
-      CHANGE: 32,
-      LEADS: 234,
-    },
-    {
-      ID: 10015,
-      NAME: 'A',
-      DEPARTMENT: 'Sales',
-      MONTH: 'May',
-      YEAR: 2022,
-      SALES: 455535,
-      CHANGE: 21,
-      LEADS: 12,
-    },
-  ];
+  inspectorData!: ROW_INSPECTOR[];
 
   constructor(
     private accountService: AccountService,
     public dialog: MatDialog,
     private paginationService: PaginationService,
     private notifierService: NotifierService,
-    public ete: ExportExcelService
+    public exportService: ExportExcelService
   ) {
     if (this.currentUid) {
       this.myProfile = this.accountService.getProfile(this.currentUid);
@@ -115,6 +64,11 @@ export class ManageEmployeesComponent {
         this.isLoading = false;
       }
     );
+    this.exportService.getInspectorData().subscribe((res) => {
+      if (res.data) {
+        this.inspectorData = res.data;
+      }
+    });
   }
 
   seeEmployeeDetails(employeeDetails: any) {
@@ -209,18 +163,21 @@ export class ManageEmployeesComponent {
   }
 
   export() {
-    console.log('Exporting file...');
-    this.empPerformance.forEach((row: ROW_ITEM) => {
-      this.dataForExcel.push(row);
-    });
+    if (this.inspectorData) {
+      this.inspectorData.forEach((row: ROW_INSPECTOR) => {
+        this.dataForExcel.push(row);
+      });
 
-    let reportData = {
-      title: 'Employee Sales Report - Jan 2022',
-      data: this.dataForExcel,
-      headers: Object.keys(this.empPerformance[0]),
-    };
+      let reportData = {
+        title: 'Inspector Report',
+        data: this.dataForExcel,
+        headers: Object.keys(this.inspectorData[0]),
+        sheetTitle: 'Inspector',
+        footerRow: "Inspector's list until",
+      };
 
-    this.ete.exportExcel(reportData);
+      this.exportService.exportExcel(reportData);
+    }
   }
 
   addNewEmployee() {
