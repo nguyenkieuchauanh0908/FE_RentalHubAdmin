@@ -149,23 +149,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    //   const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-    //     width: '400px',
-    //     data: 'Bạn có chắc muốn đăng xuất?',
-    //   });
-    //   const sub = dialogRef.componentInstance.confirmYes.subscribe(() => {
-    //     let logoutObs: Observable<resDataDTO>;
-    //     logoutObs = this.authService.logout(this.user?.RFToken);
-    //     logoutObs.subscribe();
-    //     this.router.navigate(['/posts']);
-    //   });
-    //   dialogRef.afterClosed().subscribe(() => {
-    //     sub.unsubscribe();
-    //   });
-    let logoutObs: Observable<resDataDTO>;
-    logoutObs = this.authService.logout(this.user?.RFToken);
-    logoutObs.subscribe();
-    this.router.navigate(['/posts']);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: 'Bạn có chắc muốn đăng xuất?',
+    });
+    const sub = dialogRef.componentInstance.confirmYes.subscribe(() => {
+      let logoutObs: Observable<resDataDTO>;
+      logoutObs = this.authService.logout(this.user?.RFToken);
+      logoutObs.subscribe();
+      this.router.navigate(['/auth/login']);
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      sub.unsubscribe();
+    });
   }
 
   updateAvatar() {
