@@ -1,39 +1,43 @@
-<!-- Thống kê về posts -->
+<!-- Thống kê về hosts -->
 <div class="grid grid-cols-12 gap-4 justify-evenly">
-  <!-- Total posts -->
+  <!-- Total hosts -->
   <div class="flex justify-center xs:col-span-12 md:col-span-3">
     <div class="flex flex-col gap-4">
       <app-total-data
-        [total]="this.totalPosts"
-        [title]="'Bài viết'"
-        [titleIcon]="'class'"
+        [total]="this.totalHosts"
+        [title]="'Hosts'"
+        [titleIcon]="'supervisor_account'"
         [background]="'../../../../assets/images/growth.png'"
       ></app-total-data>
       <button
         type="button"
-        (click)="toPostManage()"
+        (click)="toHostMange()"
         class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
       >
-        Quản lý bài viết
+        Quản lý hosts
       </button>
     </div>
   </div>
-  <!-- New posts by month and year -->
-  <div class="flex justify-center md:col-span-5 xs:col-span-12">
-    <div class="flex flex-row">
-      <ngx-charts-bar-vertical
-        (window:resize)="onResize($event)"
+  <!-- New hosts and users by month and year -->
+  <div class="flex justify-center col-span-5">
+    <div class="flex flex-row gap-3">
+      <ngx-charts-line-chart
+        *ngIf="!this.yearDataSourceHosts[0].value"
         [view]="view"
-        [results]="single"
-        [xAxis]="showXAxis"
-        [yAxis]="showYAxis"
+        [scheme]="colorScheme"
         [showXAxisLabel]="showXAxisLabel"
         [showYAxisLabel]="showYAxisLabel"
+        [xAxis]="xAxis"
+        [yAxis]="yAxis"
         [xAxisLabel]="xAxisLabel"
         [yAxisLabel]="yAxisLabel"
+        [timeline]="timeline"
+        [results]="multi"
         (select)="onSelect($event)"
+        (activate)="onActivate($event)"
+        (deactivate)="onDeactivate($event)"
       >
-      </ngx-charts-bar-vertical>
+      </ngx-charts-line-chart>
       <div>
         <button
           mat-icon-button
@@ -47,7 +51,7 @@
             ><div class="flex flex-col">
               <mat-checkbox
                 #menuItems
-                *ngFor="let year of yearsDataSourceEmployees"
+                *ngFor="let year of yearDataSourceHosts"
                 class="example-margin"
                 [(ngModel)]="year.value"
                 (change)="checkYear($event.checked, year.name)"
@@ -60,12 +64,12 @@
     </div>
   </div>
 
-  <!-- Daily active posts shown bt % -->
+  <!-- Hosts by status % -->
   <div class="flex justify-center xs:col-span-12 md:col-span-4">
     <ngx-charts-pie-chart
       [view]="view"
       [scheme]="colorScheme"
-      [results]="postByStatusDataSource"
+      [results]="hostsByStatus"
       [gradient]="gradient"
       [legend]="showLegend"
       [legendPosition]="legendPosition"

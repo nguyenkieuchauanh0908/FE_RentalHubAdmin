@@ -69,7 +69,6 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private accountService: AccountService,
-    private notifierService: NotifierService,
     public dialog: MatDialog
   ) {}
 

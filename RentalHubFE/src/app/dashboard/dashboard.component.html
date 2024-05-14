@@ -55,7 +55,7 @@
         <div
           (click)="drawer.toggle()"
           *ngIf="!drawer.opened"
-          class="sticky top-0 menu-icon-wrapper pt-3 bg-primary-600 h-full w-10 cursor-pointer z-40"
+          class="fixed top-0 bottom-0 menu-icon-wrapper pt-3 bg-primary-600 h-screen w-10 cursor-pointer z-40"
           style="height: 100vh"
         >
           <mat-icon class="mx-2">menu</mat-icon>
@@ -74,7 +74,7 @@
           <mat-icon class="m-2">exit_to_app</mat-icon>
         </div>
         <app-header class="static top-0"></app-header>
-        <div class="flex-1 px-6 py-4 mt-10">
+        <div class="flex-1 px-6 py-4 mt-10 ml-8">
           <router-outlet></router-outlet>
         </div>
       </div>

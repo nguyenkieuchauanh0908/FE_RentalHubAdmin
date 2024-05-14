@@ -1,93 +1,14 @@
 <div><h2 class="font-extrabold">Thống kê</h2></div>
-<div class="grid md:grid-rows-4 md:grid-flow-col md:gap-24">
+<div class="grid md:grid-rows-4 md:grid-flow-col md:gap-24 py-2">
   <!-- Thống kế về Users -->
   <app-users-statistics></app-users-statistics>
 
   <!-- Thống kê về Hosts -->
-  <div class="grid grid-cols-12 gap-4">
-    <!-- Total hosts -->
-    <div class="flex justify-center col-span-3">
-      <app-total-data
-        [total]="230"
-        [title]="'Hosts'"
-        [titleIcon]="'people'"
-        [background]="'../../../../assets/images/growth.png'"
-      ></app-total-data>
-    </div>
-    <!-- New registered hosts by month/year -->
-    <div class="bg-primary-50 flex justify-center col-span-5"></div>
-    <!-- Active hosts and Deactive hosts %-->
-    <div class="flex justify-center col-span-4">
-      <ngx-charts-pie-chart
-        [view]="view"
-        [scheme]="colorScheme"
-        [results]="hostPieChartDataSource"
-        [gradient]="gradient"
-        [legend]="showLegend"
-        [legendPosition]="legendPosition"
-        [labels]="showLabels"
-        [doughnut]="isDoughnut"
-        (select)="onSelect($event)"
-        (activate)="onActivate($event)"
-        (deactivate)="onDeactivate($event)"
-      >
-      </ngx-charts-pie-chart>
-    </div>
-  </div>
+  <app-hosts-statistics></app-hosts-statistics>
 
   <!-- Thống kê về Posts -->
   <app-posts-statistics></app-posts-statistics>
 
   <!-- Thống kê về Employees -->
-  <div class="grid grid-cols-12 gap-4 flex-nowrap">
-    <!-- Total employees -->
-    <div class="flex justify-center col-span-3">
-      <app-total-data
-        [total]="230"
-        [title]="'Nhân viên'"
-        [titleIcon]="'people'"
-        [background]="'../../../../assets/images/growth.png'"
-      ></app-total-data>
-    </div>
-    <!-- New applyed employees -->
-    <div class="flex justify-center col-span-5">
-      <div class="flex flex-row gap-3">
-        <div class="flex flex-col shadow-lg p-1 w-32 h-36">
-          <mat-checkbox
-            *ngFor="let year of yearsDataSourceEmployees"
-            class="example-margin"
-            [(ngModel)]="year.value"
-            (change)="checkYear($event.checked, year.name, 'employees')"
-            >{{ year.name }}</mat-checkbox
-          >
-        </div>
-        <ngx-charts-line-chart
-          *ngIf="!this.yearsDataSourceEmployees[0].value"
-          [view]="view"
-          [scheme]="colorScheme"
-          [showXAxisLabel]="showXAxisLabel"
-          [showYAxisLabel]="showYAxisLabel"
-          [xAxis]="xAxis"
-          [yAxis]="yAxis"
-          [xAxisLabel]="xAxisLabel"
-          [yAxisLabel]="yAxisLabel"
-          [timeline]="timeline"
-          [results]="multi"
-          (select)="onSelect($event)"
-          (activate)="onActivate($event)"
-          (deactivate)="onDeactivate($event)"
-        >
-        </ngx-charts-line-chart>
-      </div>
-    </div>
-    <!-- Average working hours of employees -->
-    <div class="flex justify-center col-span-4">
-      <app-total-data
-        [total]="7.5"
-        [title]="'Giờ làm trung bình'"
-        [titleIcon]="'av_timer'"
-        [background]="'../../../../assets/images/growth.png'"
-      ></app-total-data>
-    </div>
-  </div>
+  <app-employees-statistics></app-employees-statistics>
 </div>

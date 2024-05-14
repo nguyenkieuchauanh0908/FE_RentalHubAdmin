@@ -10,6 +10,7 @@ import { StatisticsService } from '../statistics.service';
 export class UsersStatisticsComponent {
   totalUsers!: number;
   single: any[] | undefined;
+  usersByStatus: any[] | undefined;
   yearsDataSourceUsers!: [{ name: string; value: boolean }];
   yearsDataSourceEmployees!: [{ name: string; value: boolean }];
   //bar chart
@@ -23,21 +24,28 @@ export class UsersStatisticsComponent {
   showYAxisLabel = true;
   yAxisLabel = 'Người dùng mới';
 
+  //Pie chart
+  // options
+  showLabels: boolean = true;
+  isDoughnut: boolean = false;
+  legendPosition: any = 'below';
+
   colorScheme: any = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'],
   };
   view: [number, number] = [450, 300];
 
   constructor(private statisticsService: StatisticsService) {
-    // Object.assign(this, { single });
-
     Object.assign(this, { yearsDataSourceUsers });
     this.view = [450, 300];
+    //Đếm số lượng người dùng
     this.statisticsService.countAllUsers().subscribe((res) => {
       if (res.data) {
         this.totalUsers = res.data;
       }
     });
+
+    //Đếm số lượng người dùng mới theo tháng/năm
     this.statisticsService
       .countNewUsersByMonthInYear('2024')
       .subscribe((res) => {
@@ -45,10 +53,29 @@ export class UsersStatisticsComponent {
           this.single = res.data;
         }
       });
+
+    //Đếm số lượng users theo status (Active and Inactive)
+    this.statisticsService.countUsersByStatus().subscribe((res) => {
+      if (res.data) {
+        this.usersByStatus = res.data;
+      }
+    });
   }
 
   onSelect(event: any) {
     console.log(event);
+  }
+
+  onSelectPie(data: any): void {
+    console.log('Item clicked', JSON.parse(JSON.stringify(data)));
+  }
+
+  onActivate(data: any): void {
+    console.log('Activate', JSON.parse(JSON.stringify(data)));
+  }
+
+  onDeactivate(data: any): void {
+    console.log('Deactivate', JSON.parse(JSON.stringify(data)));
   }
 
   onResize(event: any) {

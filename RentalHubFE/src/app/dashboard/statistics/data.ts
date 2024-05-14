@@ -147,6 +147,36 @@ export var multi = [
   },
 ];
 
+export var multi1 = [
+  {
+    name: 'Kiểm duyệt viên',
+    series: [
+      {
+        name: '2023',
+        value: 5,
+      },
+      {
+        name: '2024',
+        value: 56,
+      },
+    ],
+  },
+
+  {
+    name: 'Users',
+    series: [
+      {
+        name: '2023',
+        value: 5,
+      },
+      {
+        name: '2024',
+        value: 56,
+      },
+    ],
+  },
+];
+
 export var hostPieChartDataSource = [
   {
     name: 'Active',
@@ -174,6 +204,17 @@ export var postByStatusDataSource = [
   {
     name: 'Đã gỡ',
     value: 12,
+  },
+];
+
+export var hostByStatusDataSource = [
+  {
+    name: 'Active',
+    value: 10,
+  },
+  {
+    name: 'Inactive',
+    value: 150,
   },
 ];
 
@@ -208,6 +249,21 @@ export var yearsDataSourceEmployees = [
 ];
 
 export var yearsDataSourcePosts = [
+  {
+    name: 'All years',
+    value: false,
+  },
+  {
+    name: '2023',
+    value: false,
+  },
+  {
+    name: '2024',
+    value: true,
+  },
+];
+
+export var yearDataSourceHosts = [
   {
     name: 'All years',
     value: false,

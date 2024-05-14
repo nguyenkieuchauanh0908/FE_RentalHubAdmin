@@ -1,19 +1,19 @@
 import { Component } from '@angular/core';
 import { StatisticsService } from '../statistics.service';
-import { yearsDataSourcePosts } from '../data';
+import { multi, yearsDataSourceEmployees } from '../data';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-posts-statistics',
-  templateUrl: './posts-statistics.component.html',
-  styleUrls: ['./posts-statistics.component.scss'],
+  selector: 'app-employees-statistics',
+  templateUrl: './employees-statistics.component.html',
+  styleUrls: ['./employees-statistics.component.scss'],
 })
-export class PostsStatisticsComponent {
-  totalPosts!: number;
+export class EmployeesStatisticsComponent {
+  totalEmployees!: number;
   single: any[] | undefined;
-  yearsDataSourcePosts!: [{ name: string; value: boolean }];
+  multi: any[] | undefined;
   yearsDataSourceEmployees!: [{ name: string; value: boolean }];
-  postByStatusDataSource: any[] | undefined;
+  employeesByStatus: any[] | undefined;
   //bar chart
   // options
   showXAxis = true;
@@ -23,7 +23,7 @@ export class PostsStatisticsComponent {
   showXAxisLabel = true;
   xAxisLabel = 'Tháng';
   showYAxisLabel = true;
-  yAxisLabel = 'Bài viết mới';
+  yAxisLabel = 'Host mới';
 
   colorScheme: any = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'],
@@ -35,6 +35,14 @@ export class PostsStatisticsComponent {
   showLabels: boolean = true;
   isDoughnut: boolean = false;
   legendPosition: any = 'below';
+
+  //line chart
+  // options
+  legend: boolean = true;
+  animations: boolean = true;
+  xAxis: boolean = true;
+  yAxis: boolean = true;
+  timeline: boolean = true;
 
   onSelectPie(data: any): void {
     console.log('Item clicked', JSON.parse(JSON.stringify(data)));
@@ -52,23 +60,28 @@ export class PostsStatisticsComponent {
     private statisticsService: StatisticsService,
     private router: Router
   ) {
-    Object.assign(this, { yearsDataSourcePosts });
+    Object.assign(this, { yearsDataSourceEmployees });
+    Object.assign(this, { multi });
     this.view = [450, 300];
-    this.yearsDataSourcePosts[this.yearsDataSourcePosts.length - 1].value =
-      true;
-    this.statisticsService.countAllPosts().subscribe((res) => {
+    this.yearsDataSourceEmployees[
+      this.yearsDataSourceEmployees.length - 1
+    ].value = true;
+    //Lấy số lượng employees
+    this.statisticsService.countAllEmployees().subscribe((res) => {
       if (res.data) {
-        this.totalPosts = res.data;
+        this.totalEmployees = res.data;
       }
     });
+
     this.statisticsService.countPostsByMonth('2024').subscribe((res) => {
       if (res.data) {
         this.single = res.data;
       }
     });
-    this.statisticsService.countPostsByStatus().subscribe((res) => {
+    //Đếm số lượng employees theo status (Active and Inactive)
+    this.statisticsService.countEmployeessByStatus().subscribe((res) => {
       if (res.data) {
-        this.postByStatusDataSource = res.data;
+        this.employeesByStatus = res.data;
       }
     });
   }
@@ -91,28 +104,29 @@ export class PostsStatisticsComponent {
 
   checkYear(checked: boolean, yearStamp: string) {
     if (checked) {
-      this.yearsDataSourcePosts?.forEach((year) => {
+      this.yearsDataSourceEmployees?.forEach((year) => {
         if (year.name !== yearStamp) {
           year.value = !checked;
         }
       });
     }
-    this.single = [];
+    this.multi = [];
     if (yearStamp === 'All year') {
-      this.statisticsService.countPostsByYear(yearStamp).subscribe((res) => {
+      this.statisticsService.countHostsByYear(yearStamp).subscribe((res) => {
         if (res.data) {
-          this.single = res.data;
+          this.multi = res.data;
         }
       });
     } else {
-      this.statisticsService.countPostsByMonth(yearStamp).subscribe((res) => {
+      this.statisticsService.countHostsByMonth(yearStamp).subscribe((res) => {
         if (res.data) {
-          this.single = res.data;
+          this.multi = res.data;
         }
       });
     }
   }
-  toPostManage() {
-    this.router.navigate(['dashboard/manage-posts']);
+
+  toEmployeesManage() {
+    this.router.navigate(['dashboard/manage-employees']);
   }
 }

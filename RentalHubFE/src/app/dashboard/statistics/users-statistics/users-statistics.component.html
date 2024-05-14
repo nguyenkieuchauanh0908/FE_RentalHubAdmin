@@ -12,15 +12,6 @@
   <!-- New users by month and year -->
   <div class="flex justify-center md:col-span-5 xs:col-span-12">
     <div class="flex flex-row">
-      <div class="flex flex-col shadow-lg p-1 w-32 h-36">
-        <mat-checkbox
-          *ngFor="let year of yearsDataSourceUsers"
-          class="example-margin"
-          [(ngModel)]="year.value"
-          (change)="checkYear($event.checked, year.name)"
-          >{{ year.name }}</mat-checkbox
-        >
-      </div>
       <ngx-charts-bar-vertical
         (window:resize)="onResize($event)"
         [view]="view"
@@ -34,9 +25,47 @@
         (select)="onSelect($event)"
       >
       </ngx-charts-bar-vertical>
+      <div>
+        <button
+          mat-icon-button
+          [matMenuTriggerFor]="menu"
+          aria-label="menu to choose year"
+        >
+          <mat-icon color="primary">more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <a (click)="$event.stopPropagation()"
+            ><div class="flex flex-col">
+              <mat-checkbox
+                #menuItems
+                *ngFor="let year of yearsDataSourceUsers"
+                class="example-margin"
+                [(ngModel)]="year.value"
+                (change)="checkYear($event.checked, year.name)"
+                >{{ year.name }}</mat-checkbox
+              >
+            </div></a
+          >
+        </mat-menu>
+      </div>
     </div>
   </div>
 
   <!-- Daily active users shown bt % -->
-  <div class="flex justify-center xs:col-span-12 md:col-span-4"></div>
+  <div class="flex justify-center xs:col-span-12 md:col-span-4">
+    <ngx-charts-pie-chart
+      [view]="view"
+      [scheme]="colorScheme"
+      [results]="usersByStatus"
+      [gradient]="gradient"
+      [legend]="showLegend"
+      [legendPosition]="legendPosition"
+      [labels]="showLabels"
+      [doughnut]="isDoughnut"
+      (select)="onSelect($event)"
+      (activate)="onActivate($event)"
+      (deactivate)="onDeactivate($event)"
+    >
+    </ngx-charts-pie-chart>
+  </div>
 </div>

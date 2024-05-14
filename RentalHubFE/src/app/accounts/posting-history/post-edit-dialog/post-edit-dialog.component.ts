@@ -18,8 +18,6 @@ import { FormsModule } from '@angular/forms';
   imports: [SharedModule, FormsModule],
 })
 export class PostEditDialogComponent implements OnInit {
-  private getProfileSub!: Subscription;
-  private getPostHistorySub!: Subscription;
   profile!: User | null;
   currentUid!: string | null;
   myProfile!: User | null;

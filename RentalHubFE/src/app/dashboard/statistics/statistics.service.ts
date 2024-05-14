@@ -41,6 +41,12 @@ export class StatisticsService {
       })
       .pipe(catchError(handleError));
   }
+
+  countUsersByStatus() {
+    return this.http
+      .get<resDataDTO>(environment.baseUrl + 'statistic/count-host-status')
+      .pipe(catchError(handleError));
+  }
   //Posts Statistics
   countAllPosts() {
     return this.http
@@ -69,6 +75,50 @@ export class StatisticsService {
   countPostsByStatus() {
     return this.http
       .get<resDataDTO>(environment.baseUrl + 'statistic/count-posts-status')
+      .pipe(catchError(handleError));
+  }
+
+  //Host statistics
+  countAllHosts() {
+    return this.http
+      .get<resDataDTO>(environment.baseUrl + 'statistic/count-all-hosts')
+      .pipe(catchError(handleError));
+  }
+
+  countHostsByMonth(year: string) {
+    let queryParams = new HttpParams().append('year', year);
+    return this.http
+      .get<resDataDTO>(environment.baseUrl + 'statistic/count-host-month', {
+        params: queryParams,
+      })
+      .pipe(catchError(handleError));
+  }
+
+  countHostsByYear(year: string) {
+    let queryParams = new HttpParams().append('year', year);
+    return this.http
+      .get<resDataDTO>(environment.baseUrl + 'statistic/count-host-year', {
+        params: queryParams,
+      })
+      .pipe(catchError(handleError));
+  }
+
+  countHostsByStatus() {
+    return this.http
+      .get<resDataDTO>(environment.baseUrl + 'statistic/count-host-status')
+      .pipe(catchError(handleError));
+  }
+
+  //Employees statistics
+  countAllEmployees() {
+    return this.http
+      .get<resDataDTO>(environment.baseUrl + 'statistic/count-all-inspectors')
+      .pipe(catchError(handleError));
+  }
+
+  countEmployeessByStatus() {
+    return this.http
+      .get<resDataDTO>(environment.baseUrl + 'statistic/count-inspector-status')
       .pipe(catchError(handleError));
   }
 }
