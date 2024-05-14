@@ -50,8 +50,8 @@
       </div>
     </mat-drawer>
 
-    <div class="example-sidenav-content">
-      <div class="flex">
+    <div class="example-sidenav-content scrollbar-hide">
+      <div class="flex scrollbar-hide">
         <div
           (click)="drawer.toggle()"
           *ngIf="!drawer.opened"
@@ -74,7 +74,7 @@
           <mat-icon class="m-2">exit_to_app</mat-icon>
         </div>
         <app-header class="static top-0"></app-header>
-        <div class="flex-1 px-6 py-4 mt-10 ml-8">
+        <div class="flex-1 px-6 py-4 mt-10 ml-8 scrollbar-hide">
           <router-outlet></router-outlet>
         </div>
       </div>

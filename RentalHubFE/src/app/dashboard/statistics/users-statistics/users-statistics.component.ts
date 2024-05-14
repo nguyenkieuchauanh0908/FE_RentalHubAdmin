@@ -1,18 +1,19 @@
-import { Component } from '@angular/core';
-import { single, yearsDataSourceUsers } from '../data';
+import { Component, OnDestroy } from '@angular/core';
+import { yearsDataSourceUsers } from '../data';
 import { StatisticsService } from '../statistics.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-users-statistics',
   templateUrl: './users-statistics.component.html',
   styleUrls: ['./users-statistics.component.scss'],
 })
-export class UsersStatisticsComponent {
-  totalUsers!: number;
+export class UsersStatisticsComponent implements OnDestroy {
+  totalUsers: number = 0;
   single: any[] | undefined;
   usersByStatus: any[] | undefined;
   yearsDataSourceUsers!: [{ name: string; value: boolean }];
-  yearsDataSourceEmployees!: [{ name: string; value: boolean }];
+  $destroy: Subject<boolean> = new Subject<boolean>();
   //bar chart
   // options
   showXAxis = true;
@@ -39,15 +40,21 @@ export class UsersStatisticsComponent {
     Object.assign(this, { yearsDataSourceUsers });
     this.view = [450, 300];
     //Đếm số lượng người dùng
-    this.statisticsService.countAllUsers().subscribe((res) => {
-      if (res.data) {
-        this.totalUsers = res.data;
-      }
-    });
-
-    //Đếm số lượng người dùng mới theo tháng/năm
     this.statisticsService
-      .countNewUsersByMonthInYear('2024')
+      .countAllUsers()
+      .pipe(takeUntil(this.$destroy))
+      .subscribe((res) => {
+        if (res.data) {
+          this.totalUsers = res.data;
+        }
+      });
+
+    //Đếm số lượng người dùng mới theo tháng trong năm
+    this.statisticsService
+      .countNewUsersByMonthInYear(
+        this.yearsDataSourceUsers[this.yearsDataSourceUsers.length - 1].name
+      )
+      .pipe(takeUntil(this.$destroy))
       .subscribe((res) => {
         if (res.data) {
           this.single = res.data;
@@ -55,11 +62,17 @@ export class UsersStatisticsComponent {
       });
 
     //Đếm số lượng users theo status (Active and Inactive)
-    this.statisticsService.countUsersByStatus().subscribe((res) => {
-      if (res.data) {
-        this.usersByStatus = res.data;
-      }
-    });
+    this.statisticsService
+      .countUsersByStatus()
+      .pipe(takeUntil(this.$destroy))
+      .subscribe((res) => {
+        if (res.data) {
+          this.usersByStatus = res.data;
+        }
+      });
+  }
+  ngOnDestroy(): void {
+    this.$destroy.unsubscribe();
   }
 
   onSelect(event: any) {
@@ -99,15 +112,22 @@ export class UsersStatisticsComponent {
       });
     }
     this.single = [];
+
     if (yearStamp === 'All year') {
-      this.statisticsService.countNewUsersByYear(yearStamp).subscribe((res) => {
-        if (res.data) {
-          this.single = res.data;
-        }
-      });
+      this.xAxisLabel = 'Năm';
+      this.statisticsService
+        .countNewUsersByYear(yearStamp)
+        .pipe(takeUntil(this.$destroy))
+        .subscribe((res) => {
+          if (res.data) {
+            this.single = res.data;
+          }
+        });
     } else {
+      this.xAxisLabel = 'Tháng';
       this.statisticsService
         .countNewUsersByMonthInYear(yearStamp)
+        .pipe(takeUntil(this.$destroy))
         .subscribe((res) => {
           if (res.data) {
             this.single = res.data;

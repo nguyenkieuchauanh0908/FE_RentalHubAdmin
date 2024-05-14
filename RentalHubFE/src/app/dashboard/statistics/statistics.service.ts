@@ -44,7 +44,7 @@ export class StatisticsService {
 
   countUsersByStatus() {
     return this.http
-      .get<resDataDTO>(environment.baseUrl + 'statistic/count-host-status')
+      .get<resDataDTO>(environment.baseUrl + 'statistic/count-users-status')
       .pipe(catchError(handleError));
   }
   //Posts Statistics
@@ -109,6 +109,27 @@ export class StatisticsService {
       .pipe(catchError(handleError));
   }
 
+  countHostsAndUsersByMonthInAYear(year: string) {
+    let queryParams = new HttpParams().append('year', year);
+    return this.http
+      .get<resDataDTO>(
+        environment.baseUrl + 'statistic/count-host-user-month',
+        {
+          params: queryParams,
+        }
+      )
+      .pipe(catchError(handleError));
+  }
+
+  countHostsAndUsersByYears(year: string) {
+    let queryParams = new HttpParams().append('year', year);
+    return this.http
+      .get<resDataDTO>(environment.baseUrl + 'statistic/count-host-user-year', {
+        params: queryParams,
+      })
+      .pipe(catchError(handleError));
+  }
+
   //Employees statistics
   countAllEmployees() {
     return this.http
@@ -119,6 +140,31 @@ export class StatisticsService {
   countEmployeessByStatus() {
     return this.http
       .get<resDataDTO>(environment.baseUrl + 'statistic/count-inspector-status')
+      .pipe(catchError(handleError));
+  }
+
+  countEmployeesAndUsersByMonthInAYear(year: string) {
+    let queryParams = new HttpParams().append('year', year);
+    return this.http
+      .get<resDataDTO>(
+        environment.baseUrl + 'statistic/count-employee-user-month',
+        {
+          params: queryParams,
+        }
+      )
+      .pipe(catchError(handleError));
+  }
+
+  countEmployeesAndUsersByYears(year: string) {
+    console.log('countEmployeesAndUsersByYears');
+    let queryParams = new HttpParams().append('year', year);
+    return this.http
+      .get<resDataDTO>(
+        environment.baseUrl + 'statistic/count-employee-user-year',
+        {
+          params: queryParams,
+        }
+      )
       .pipe(catchError(handleError));
   }
 }

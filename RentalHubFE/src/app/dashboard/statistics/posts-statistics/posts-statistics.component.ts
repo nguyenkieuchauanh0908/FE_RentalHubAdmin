@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./posts-statistics.component.scss'],
 })
 export class PostsStatisticsComponent {
-  totalPosts!: number;
+  totalPosts: number = 0;
   single: any[] | undefined;
   yearsDataSourcePosts!: [{ name: string; value: boolean }];
   yearsDataSourceEmployees!: [{ name: string; value: boolean }];
@@ -98,13 +98,16 @@ export class PostsStatisticsComponent {
       });
     }
     this.single = [];
+
     if (yearStamp === 'All year') {
+      this.xAxisLabel = 'Năm';
       this.statisticsService.countPostsByYear(yearStamp).subscribe((res) => {
         if (res.data) {
           this.single = res.data;
         }
       });
     } else {
+      this.xAxisLabel = 'Tháng';
       this.statisticsService.countPostsByMonth(yearStamp).subscribe((res) => {
         if (res.data) {
           this.single = res.data;

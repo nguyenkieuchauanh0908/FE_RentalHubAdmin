@@ -1,19 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { StatisticsService } from '../statistics.service';
-import { multi, yearsDataSourceEmployees } from '../data';
+import { yearsDataSourceEmployees } from '../data';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-employees-statistics',
   templateUrl: './employees-statistics.component.html',
   styleUrls: ['./employees-statistics.component.scss'],
 })
-export class EmployeesStatisticsComponent {
-  totalEmployees!: number;
-  single: any[] | undefined;
+export class EmployeesStatisticsComponent implements OnDestroy {
+  totalEmployees: number = 0;
   multi: any[] | undefined;
   yearsDataSourceEmployees!: [{ name: string; value: boolean }];
   employeesByStatus: any[] | undefined;
+  $destroy: Subject<boolean> = new Subject<boolean>();
   //bar chart
   // options
   showXAxis = true;
@@ -23,7 +24,7 @@ export class EmployeesStatisticsComponent {
   showXAxisLabel = true;
   xAxisLabel = 'Tháng';
   showYAxisLabel = true;
-  yAxisLabel = 'Host mới';
+  yAxisLabel = 'Nhân viên và người dùng mới';
 
   colorScheme: any = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'],
@@ -61,29 +62,45 @@ export class EmployeesStatisticsComponent {
     private router: Router
   ) {
     Object.assign(this, { yearsDataSourceEmployees });
-    Object.assign(this, { multi });
     this.view = [450, 300];
     this.yearsDataSourceEmployees[
       this.yearsDataSourceEmployees.length - 1
     ].value = true;
     //Lấy số lượng employees
-    this.statisticsService.countAllEmployees().subscribe((res) => {
-      if (res.data) {
-        this.totalEmployees = res.data;
-      }
-    });
+    this.statisticsService
+      .countAllEmployees()
+      .pipe(takeUntil(this.$destroy))
+      .subscribe((res) => {
+        if (res.data) {
+          this.totalEmployees = res.data;
+        }
+      });
 
-    this.statisticsService.countPostsByMonth('2024').subscribe((res) => {
-      if (res.data) {
-        this.single = res.data;
-      }
-    });
     //Đếm số lượng employees theo status (Active and Inactive)
-    this.statisticsService.countEmployeessByStatus().subscribe((res) => {
-      if (res.data) {
-        this.employeesByStatus = res.data;
-      }
-    });
+    this.statisticsService
+      .countEmployeessByStatus()
+      .pipe(takeUntil(this.$destroy))
+      .subscribe((res) => {
+        if (res.data) {
+          this.employeesByStatus = res.data;
+        }
+      });
+
+    //Lấy data employees and users theo tháng trong một năm
+    this.statisticsService
+      .countHostsAndUsersByMonthInAYear(
+        this.yearsDataSourceEmployees[this.yearsDataSourceEmployees.length - 1]
+          .name
+      )
+      .pipe(takeUntil(this.$destroy))
+      .subscribe((res) => {
+        if (res.data) {
+          this.multi = res.data;
+        }
+      });
+  }
+  ngOnDestroy(): void {
+    this.$destroy.unsubscribe();
   }
 
   onSelect(event: any) {
@@ -112,17 +129,23 @@ export class EmployeesStatisticsComponent {
     }
     this.multi = [];
     if (yearStamp === 'All year') {
-      this.statisticsService.countHostsByYear(yearStamp).subscribe((res) => {
-        if (res.data) {
-          this.multi = res.data;
-        }
-      });
+      this.xAxisLabel = 'Năm';
+      this.statisticsService
+        .countEmployeesAndUsersByYears(yearStamp)
+        .subscribe((res) => {
+          if (res.data) {
+            this.multi = res.data;
+          }
+        });
     } else {
-      this.statisticsService.countHostsByMonth(yearStamp).subscribe((res) => {
-        if (res.data) {
-          this.multi = res.data;
-        }
-      });
+      this.xAxisLabel = 'Tháng';
+      this.statisticsService
+        .countEmployeesAndUsersByMonthInAYear(yearStamp)
+        .subscribe((res) => {
+          if (res.data) {
+            this.multi = res.data;
+          }
+        });
     }
   }
 
