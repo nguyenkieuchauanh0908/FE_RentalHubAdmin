@@ -47,7 +47,7 @@
             ><div class="flex flex-col">
               <mat-checkbox
                 #menuItems
-                *ngFor="let year of yearsDataSourceEmployees"
+                *ngFor="let year of yearsDataSourcePosts"
                 class="example-margin"
                 [(ngModel)]="year.value"
                 (change)="checkYear($event.checked, year.name)"

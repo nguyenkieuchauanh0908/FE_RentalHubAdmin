@@ -13,6 +13,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { TotalDataComponent } from '../dashboard/statistics/total-data/total-data.component';
 import { CommentReasonDialogComponent } from './comment-reason-dialog/comment-reason-dialog.component';
+import { DisplayNotiDialogComponent } from './display-noti-dialog/display-noti-dialog.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { CommentReasonDialogComponent } from './comment-reason-dialog/comment-re
     ConfirmDialogComponent,
     TotalDataComponent,
     CommentReasonDialogComponent,
+    DisplayNotiDialogComponent,
   ],
   imports: [
     CommonModule,

@@ -8,6 +8,7 @@ import { handleError } from '../shared/handle-errors';
 import { User } from './user.model';
 import { AccountService } from '../accounts/accounts.service';
 import { NotifierService } from 'angular-notifier';
+import { NotificationService } from '../shared/notifications/notification.service';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,8 @@ export class AuthService {
     private http: HttpClient,
     private router: Router,
     private accountService: AccountService,
-    private notifierService: NotifierService
+    private notifierService: NotifierService,
+    private notiService: NotificationService
   ) {
     this.user.subscribe((user) => {
       if (user) {
@@ -45,7 +47,7 @@ export class AuthService {
       .pipe(
         catchError(handleError),
         tap((res) => {
-          console.log('On logging-------------------------');
+          this.getNotifications();
           this.handleAuthentication(res.data);
         })
       );
@@ -87,6 +89,9 @@ export class AuthService {
       }
       console.log('expiration duration:', expirationDuration);
       this.autoLogout(expirationDuration, loadedUserData.RFToken);
+      if (expirationDuration !== 0) {
+        this.getNotifications();
+      }
     } else {
       return;
     }
@@ -120,6 +125,9 @@ export class AuthService {
           this.notifierService.hideAll();
           this.notifierService.notify('success', 'Đăng  xuất thành công!');
           this.accountService.setCurrentUser(null);
+          this.notiService.setCurrentSeenNotifications([]);
+          this.notiService.setCurrentUnseenNotifications([]);
+          this.notiService.setTotalNotifications(0);
         })
       );
   }
@@ -221,5 +229,10 @@ export class AuthService {
     const expirationDuration = user._RFExpiredTime - Date.now();
     console.log('expiration duration:', expirationDuration);
     this.autoLogout(expirationDuration, user.RFToken);
+  }
+
+  getNotifications() {
+    this.notiService.getSeenNotifications().subscribe();
+    this.notiService.getUnseenNotifications().subscribe();
   }
 }

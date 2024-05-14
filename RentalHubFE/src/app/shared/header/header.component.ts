@@ -11,6 +11,7 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 import { resDataDTO } from '../resDataDTO';
 import { MatDialog } from '@angular/material/dialog';
 import { UpdateAvatarDialogComponent } from 'src/app/dashboard/update-avatar-dialog/update-avatar-dialog.component';
+import { DisplayNotiDialogComponent } from '../display-noti-dialog/display-noti-dialog.component';
 
 @Component({
   selector: 'app-header',
@@ -30,8 +31,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   user!: User | null;
   fullName!: string;
   isAuthenticatedUser: boolean = false;
-  notificationList!: any;
+  seenNotiList!: any;
+  unseenNotificaionList!: any;
   notificationTotals!: number;
+
   $destroy: Subject<boolean> = new Subject<boolean>();
 
   constructor(
@@ -57,23 +60,30 @@ export class HeaderComponent implements OnInit, OnDestroy {
       });
 
     if (this.isAuthenticatedUser) {
-      this.notificationService.getCurrentNotifications.subscribe(
+      //Lấy các noti đã xem
+      this.notificationService.getCurrentSeenNotifications.subscribe(
         (notifications) => {
-          this.notificationList = notifications;
+          this.seenNotiList = notifications;
         }
       );
+
+      //Lấy các noti chưa xem
+      this.notificationService.getCurrentUnseenNotifications.subscribe(
+        (unseenNotifications) => {
+          this.unseenNotificaionList = unseenNotifications;
+        }
+      );
+
+      //Lấy tổng các noti chưa xem
       this.notificationService.getTotalNotifications.subscribe(
         (notificationTotal) => {
-          console.log(
-            '🚀 ~ HeaderComponent ~ .subscribe ~ notificationTotal:',
-            notificationTotal
-          );
           this.notificationTotals = notificationTotal;
         }
       );
     } else {
       this.notificationTotals = 0;
-      this.notificationService.setCurrentNotifications([]);
+      this.notificationService.setCurrentSeenNotifications([]);
+      this.notificationService.setCurrentUnseenNotifications([]);
     }
   }
 
@@ -93,8 +103,42 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  toSeeAllNotifications() {
-    this.router.navigate(['/profile/notifications/', this.user?._id]);
+  markAsReadAll() {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: 'Bạn có chắc muốn đánh dấu đã đọc tất cả thông báo?',
+    });
+    const sub = dialogRef.componentInstance.confirmYes.subscribe(() => {
+      this.notificationService
+        .markAsReadAll()
+        .pipe(takeUntil(this.$destroy))
+        .subscribe(
+          (res) => {
+            if (res.data) {
+              this.notifierService.notify(
+                'success',
+                'Đánh dấu đã đọc toàn bộ thông báo thành công'
+              );
+            }
+          },
+          (errMsg) => {
+            this.notifierService.notify(
+              'error',
+              'Đã có lỗi xảy ra, vui lòng thử lại sau'
+            );
+          }
+        );
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      sub.unsubscribe();
+    });
+  }
+
+  readNotiDetail(noti: any) {
+    const dialog = this.dialog.open(DisplayNotiDialogComponent, {
+      width: '600px',
+      data: noti,
+    });
   }
 
   onSearchByKeyword(searchForm: any) {
