@@ -7,6 +7,19 @@ import { environment } from 'src/environments/environment';
 import { catchError } from 'rxjs';
 import { handleError } from '../handle-errors';
 import { Utils } from '../utils';
+export interface ROW_USERS {
+  _id: '6576871b6d733a70bbc3170b';
+  _email: String;
+  _fname: String;
+  _lname: String;
+  _phone: String;
+  _address: String;
+  _avatar: String;
+  _active: Boolean;
+  _isHost: Boolean;
+  _role: Number;
+  _loginType: String;
+}
 
 export interface ROW_INSPECTOR {
   _id: String;
@@ -43,6 +56,12 @@ export class ExportExcelService {
   getInspectorData() {
     return this.http
       .get<resDataDTO>(environment.baseUrl + 'statistic/get-inspector-data')
+      .pipe(catchError(handleError));
+  }
+
+  getUsersData() {
+    return this.http
+      .get<resDataDTO>(environment.baseUrl + 'statistic/get-user-data')
       .pipe(catchError(handleError));
   }
 

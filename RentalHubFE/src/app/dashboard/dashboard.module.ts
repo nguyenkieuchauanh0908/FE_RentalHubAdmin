@@ -25,6 +25,7 @@ import { UsersStatisticsComponent } from './statistics/users-statistics/users-st
 import { PostsStatisticsComponent } from './statistics/posts-statistics/posts-statistics.component';
 import { HostsStatisticsComponent } from './statistics/hosts-statistics/hosts-statistics.component';
 import { EmployeesStatisticsComponent } from './statistics/employees-statistics/employees-statistics.component';
+import { ManageUsersComponent } from './manage-users/manage-users.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { EmployeesStatisticsComponent } from './statistics/employees-statistics/
     PostsStatisticsComponent,
     HostsStatisticsComponent,
     EmployeesStatisticsComponent,
+    ManageUsersComponent,
   ],
   imports: [CommonModule, FormsModule, DashboardRoutingModule, SharedModule],
   providers: [],

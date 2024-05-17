@@ -2,6 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { yearsDataSourceUsers } from '../data';
 import { StatisticsService } from '../statistics.service';
 import { Subject, takeUntil } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-users-statistics',
@@ -36,7 +37,10 @@ export class UsersStatisticsComponent implements OnDestroy {
   };
   view: [number, number] = [450, 300];
 
-  constructor(private statisticsService: StatisticsService) {
+  constructor(
+    private statisticsService: StatisticsService,
+    private router: Router
+  ) {
     Object.assign(this, { yearsDataSourceUsers });
     this.view = [450, 300];
     //Đếm số lượng người dùng
@@ -134,5 +138,8 @@ export class UsersStatisticsComponent implements OnDestroy {
           }
         });
     }
+  }
+  toUsersMange() {
+    this.router.navigate(['dashboard/manage-users']);
   }
 }

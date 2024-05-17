@@ -10,6 +10,7 @@ import { ManageEmployeesComponent } from './manage-employees/manage-employees.co
 import { StatisticsComponent } from './statistics/statistics.component';
 import { ManageHostsComponent } from './manage-hosts/manage-hosts.component';
 import { ManageAddressesComponent } from './manage-addresses/manage-addresses.component';
+import { ManageUsersComponent } from './manage-users/manage-users.component';
 
 const routes: Routes = [
   {
@@ -39,6 +40,11 @@ const routes: Routes = [
       {
         path: 'manage-employees',
         component: ManageEmployeesComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'manage-users',
+        component: ManageUsersComponent,
         canActivate: [AuthGuard],
       },
       {

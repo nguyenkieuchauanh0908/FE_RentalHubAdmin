@@ -47,6 +47,17 @@ export class AccountService {
       .pipe(catchError(handleError));
   }
 
+  getAllUsers(page: number, limit: number) {
+    let queryParams = new HttpParams()
+      .append('page', page)
+      .append('limit', limit);
+    return this.http
+      .get<resDataDTO>(environment.baseUrl + 'admin/get-users-list', {
+        params: queryParams,
+      })
+      .pipe(catchError(handleError));
+  }
+
   getInspectorById(id: string) {
     let queryParams = new HttpParams().append('inspectId', id);
     return this.http

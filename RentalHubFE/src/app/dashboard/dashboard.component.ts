@@ -43,6 +43,13 @@ export class DashboardComponent implements OnInit {
       subTabs: false,
     },
     {
+      title: 'Quản lý người dùng',
+      icon: 'people',
+      link: 'manage-users',
+      active: false,
+      subTabs: false,
+    },
+    {
       title: 'Quản lý chủ trọ',
       icon: 'verified_user',
       link: 'manage-hosts',

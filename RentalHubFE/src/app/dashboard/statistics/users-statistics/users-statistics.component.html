@@ -2,12 +2,21 @@
 <div class="grid grid-cols-12 gap-4 justify-evenly">
   <!-- Total users -->
   <div class="flex justify-center xs:col-span-12 md:col-span-3">
-    <app-total-data
-      [total]="this.totalUsers"
-      [title]="'Người dùng'"
-      [titleIcon]="'people'"
-      [background]="'../../../../assets/images/growth.png'"
-    ></app-total-data>
+    <div class="flex flex-col gap-4">
+      <app-total-data
+        [total]="this.totalUsers"
+        [title]="'Người dùng'"
+        [titleIcon]="'people'"
+        [background]="'../../../../assets/images/growth.png'"
+      ></app-total-data>
+      <button
+        type="button"
+        (click)="toUsersMange()"
+        class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+      >
+        Quản lý người dùng
+      </button>
+    </div>
   </div>
   <!-- New users by month and year -->
   <div class="flex justify-center md:col-span-5 xs:col-span-12">
