@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NotifierService } from 'angular-notifier';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { AccountService } from 'src/app/accounts/accounts.service';
 import { User } from 'src/app/auth/user.model';
 import { PostItem } from 'src/app/posts/posts-list/post-item/post-item.model';
@@ -22,9 +22,10 @@ import { UpdateEmployeeLoginDetailDialogComponent } from '../update-employee-log
 })
 export class ManageUsersComponent {
   isLoading = false;
+  $destroy: Subject<boolean> = new Subject<boolean>();
   displayedColumns: string[] = ['id', 'image', 'name', 'email', 'status'];
   dataSource!: any[];
-  myProfile!: User | null;
+  // myProfile!: User | null;
   currentUid!: string | null;
   historyPosts: PostItem[] = new Array<PostItem>();
   totalPages: number = 1;
@@ -44,15 +45,14 @@ export class ManageUsersComponent {
     private paginationService: PaginationService,
     private notifierService: NotifierService,
     public exportService: ExportExcelService
-  ) {
-    if (this.currentUid) {
-      this.myProfile = this.accountService.getProfile(this.currentUid);
-    }
-  }
+  ) {}
 
   ngOnInit(): void {
     this.isLoading = true;
     this.currentPage = 1;
+    // if (this.currentUid) {
+    //   this.myProfile = this.accountService.getProfile(this.currentUid);
+    // }
     this.accountService.getAllUsers(this.currentPage, 5).subscribe(
       (res) => {
         this.dataSource = res.data;
@@ -147,6 +147,31 @@ export class ManageUsersComponent {
   //   });
   // }
 
+  search(form: any) {
+    this.isLoading = true;
+    this.accountService
+      .findUserByEmailOrId(form.keyword)
+      .pipe(takeUntil(this.$destroy))
+      .subscribe(
+        (res) => {
+          if (res.data) {
+            this.isLoading = false;
+            this.dataSource = [];
+            this.currentPage = 1;
+            this.totalPages = 1;
+            this.dataSource.push(res.data);
+          }
+          this.isLoading = false;
+        },
+        (err) => {
+          // this.isLoading = false;
+          // this.notifierService.notify(
+          //   'error',
+          //   'Không có kết quả tìm kiếm trùng khớp!'
+          // );
+        }
+      );
+  }
   export() {
     if (this.inspectorData) {
       this.inspectorData.forEach((row: ROW_USERS) => {
@@ -163,5 +188,20 @@ export class ManageUsersComponent {
 
       this.exportService.exportExcel(reportData);
     }
+  }
+
+  reloadData() {
+    this.isLoading = true;
+    this.currentPage = 1;
+    this.accountService.getAllUsers(this.currentPage, 5).subscribe(
+      (res) => {
+        this.dataSource = res.data;
+        this.totalPages = res.pagination.total;
+        this.isLoading = false;
+      },
+      (errMsg) => {
+        this.isLoading = false;
+      }
+    );
   }
 }

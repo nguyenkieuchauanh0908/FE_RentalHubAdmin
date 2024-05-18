@@ -58,6 +58,15 @@ export class AccountService {
       .pipe(catchError(handleError));
   }
 
+  findUserByEmailOrId(keyword: string) {
+    let queryParams = new HttpParams().append('keyword', keyword);
+    return this.http
+      .get<resDataDTO>(environment.baseUrl + 'admin/get-user-keyword', {
+        params: queryParams,
+      })
+      .pipe(catchError(handleError));
+  }
+
   getInspectorById(id: string) {
     let queryParams = new HttpParams().append('inspectId', id);
     return this.http

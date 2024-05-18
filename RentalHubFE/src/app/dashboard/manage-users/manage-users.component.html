@@ -5,14 +5,61 @@
   <div class="flex justify-between">
     <h2 class="font-extrabold">Quản lý người dùng</h2>
     <div class="flex justify-around">
-      <button
-        type="button"
-        (click)="export()"
-        class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 m-4"
+      <!-- Reload data -->
+      <div
+        mat-raised-button
+        class="text-sub-text-color my-8"
+        matTooltip="Reload data"
+        [matTooltipPosition]="'above'"
+        matTooltipHideDelay="400"
+        matRipple
+        [matRippleCentered]="true"
+        [matRippleUnbounded]="true"
       >
-        <mat-icon> import_export</mat-icon>
-        Xuất file
-      </button>
+        <img
+          class="w-7 h-7 cursor-pointer"
+          src="../../../assets/images/refresh.png"
+          alt="reload data"
+          (click)="reloadData()"
+        />
+      </div>
+      <!-- Search -->
+      <div class="flex flex-col gap-1 my-4">
+        <div class="relative p-2">
+          <form
+            #searchForm="ngForm"
+            (keyup.enter)="search(searchForm.value); searchForm.reset()"
+            (ngSubmit)="search(searchForm.value); searchForm.reset()"
+          >
+            <img
+              src="../../../assets/images/search.png"
+              alt="search icon"
+              class="absolute top-1/2 left-4 -translate-y-1/2 w-6 h-6"
+            />
+            <input
+              type="text"
+              required="true"
+              ngModel
+              name="keyword"
+              id="simple-search"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-full focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Tìm kiếm..."
+              required
+            />
+          </form>
+        </div>
+      </div>
+      <!-- Export -->
+      <div class="my-5">
+        <button
+          type="button"
+          (click)="export()"
+          class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+        >
+          <mat-icon [ngStyle]="{ color: 'white' }"> import_export</mat-icon>
+          Xuất file
+        </button>
+      </div>
     </div>
   </div>
 
@@ -62,7 +109,7 @@
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>Họ & tên</th>
       <td mat-cell *matCellDef="let element">
-        {{ element?._fname }} {{ element?._lname }}
+        <p>{{ element?._fname }} {{ element?._lname }}</p>
       </td>
     </ng-container>
 
@@ -70,7 +117,7 @@
     <ng-container matColumnDef="email">
       <th mat-header-cell *matHeaderCellDef>Email</th>
       <td mat-cell *matCellDef="let element">
-        {{ element?._email }}
+        <p>{{ element?._email }}</p>
       </td>
     </ng-container>
 

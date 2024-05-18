@@ -21,6 +21,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatRippleModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [],
@@ -47,6 +48,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatCheckboxModule,
     MatChipsModule,
     MatTabsModule,
+    MatRippleModule,
   ],
   exports: [
     MatDividerModule,
@@ -71,6 +73,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatCheckboxModule,
     MatChipsModule,
     MatTabsModule,
+    MatRippleModule,
   ],
 })
 export class NgMaterialsModule {}
