@@ -14,6 +14,9 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { TotalDataComponent } from '../dashboard/statistics/total-data/total-data.component';
 import { CommentReasonDialogComponent } from './comment-reason-dialog/comment-reason-dialog.component';
 import { DisplayNotiDialogComponent } from './display-noti-dialog/display-noti-dialog.component';
+import { ChatBotComponent } from './chat-bot/chat-bot.component';
+import { ChatWithComponent } from './chat-bot/chat-with/chat-with.component';
+import { ChatUserComponent } from './chat-bot/chat-user/chat-user.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +29,9 @@ import { DisplayNotiDialogComponent } from './display-noti-dialog/display-noti-d
     TotalDataComponent,
     CommentReasonDialogComponent,
     DisplayNotiDialogComponent,
+    ChatBotComponent,
+    ChatWithComponent,
+    ChatUserComponent,
   ],
   imports: [
     CommonModule,
@@ -50,6 +56,7 @@ import { DisplayNotiDialogComponent } from './display-noti-dialog/display-noti-d
     ReactiveFormsModule,
     NgxChartsModule,
     TotalDataComponent,
+    ChatBotComponent,
   ],
 })
 export class SharedModule {}

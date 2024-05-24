@@ -9,6 +9,7 @@ import { User } from './user.model';
 import { AccountService } from '../accounts/accounts.service';
 import { NotifierService } from 'angular-notifier';
 import { NotificationService } from '../shared/notifications/notification.service';
+import { ChatBotService } from '../shared/chat-bot/chat-bot.service';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +29,8 @@ export class AuthService {
     private router: Router,
     private accountService: AccountService,
     private notifierService: NotifierService,
-    private notiService: NotificationService
+    private notiService: NotificationService,
+    private chatBotService: ChatBotService
   ) {
     this.user.subscribe((user) => {
       if (user) {
@@ -38,7 +40,6 @@ export class AuthService {
   }
 
   login(email: string, pw: string) {
-    console.log('Is logging...................');
     return this.http
       .post<resDataDTO>(environment.baseUrl + 'admin/login-admin', {
         _email: email,
@@ -47,8 +48,9 @@ export class AuthService {
       .pipe(
         catchError(handleError),
         tap((res) => {
-          this.getNotifications();
           this.handleAuthentication(res.data);
+          this.getNotifications();
+          this.chatBotService.initiateSocket();
         })
       );
   }
@@ -91,6 +93,7 @@ export class AuthService {
       this.autoLogout(expirationDuration, loadedUserData.RFToken);
       if (expirationDuration !== 0) {
         this.getNotifications();
+        this.chatBotService.initiateSocket();
       }
     } else {
       return;
@@ -122,12 +125,24 @@ export class AuthService {
       .pipe(
         catchError(handleError),
         tap((res) => {
+          //Ẩn các thông báo và xóa thông tin user
           this.notifierService.hideAll();
           this.notifierService.notify('success', 'Đăng  xuất thành công!');
           this.accountService.setCurrentUser(null);
+
+          //Xóa thông báo
           this.notiService.setCurrentSeenNotifications([]);
           this.notiService.setCurrentUnseenNotifications([]);
           this.notiService.setTotalNotifications(0);
+
+          //Xóa thông tin chatbot
+          this.chatBotService.disconnectToSocket();
+          this.chatBotService.setOnlineUsers(null);
+          this.chatBotService.setSeeContactList(true);
+          this.chatBotService.setCurrentChat(null);
+          this.chatBotService.setCurrentRecipient(null);
+          this.chatBotService.setMessages(null);
+          this.chatBotService.setNewMessage(null);
         })
       );
   }

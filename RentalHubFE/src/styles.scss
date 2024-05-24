@@ -15,7 +15,23 @@ body {
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
-
+  .element-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .user-online {
+    display: inline-block;
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+    background: rgb(0, 219, 0);
+    position: absolute;
+    top: 8px;
+    right: 1px;
+    z-index: 2;
+  }
   /* For IE, Edge and Firefox */
   .scrollbar-hide {
     -ms-overflow-style: none; /* IE and Edge */

@@ -1,0 +1,78 @@
+<!-- Chatbox Container -->
+<div *ngIf="isAuthenticated">
+  <!-- Chatbox icon -->
+
+  <div
+    [matBadge]="this.totalUnreadMsgs"
+    matBadgeColor="warn"
+    [matBadgePosition]="'before'"
+    class="fixed bottom-4 right-4 z-40 w-16 h-16 bg-white-background rounded-full p-2 cursor-pointer"
+  >
+    <img
+      *ngIf="isAuthenticated"
+      [matMenuTriggerFor]="chatBot"
+      #chatBotTrigger="matMenuTrigger"
+      class="tooltip-block"
+      aria-hidden="false"
+      class="fixed bottom-4 right-4 z-40 w-16 h-16 bg-white-background rounded-full p-2 cursor-pointer"
+      src="../../../assets/images/icons8-paper-plane-94.png"
+      alt="send message here"
+    />
+  </div>
+
+  <!-- Chatbox -->
+  <mat-menu
+    class="chatbot"
+    #chatBot="matMenu"
+    yPosition="above"
+    xPosition="after"
+    class="w-128 h-[480px] max-h-[480px] min-w-[320px] overflow-scroll scroll-smooth scrollbar-hide bg-white-background rounded-lg"
+  >
+    <a
+      (click)="$event.stopPropagation()"
+      [ngClass]="isLoading ? 'opacity-70' : ''"
+    >
+      <div *ngIf="isLoading" class="spinner__loading">
+        <mat-spinner diameter="30"></mat-spinner>
+      </div>
+      <!-- Chatbot -->
+      <div *ngIf="!this.seeContactList; else contactList" class="h-[480px]">
+        <app-chat-with></app-chat-with>
+      </div>
+      <!-- Contact list -->
+      <ng-template
+        #contactList
+        class="fixed bottom-4 left-4 z-40 max-w-xs max-h-[480px] overflow-scroll scroll-smooth scrollbar-hide bg-white-background rounded-lg"
+      >
+        <!-- Contact list Header -->
+        <div
+          class="flex align-middle items-center sticky top-0 bg-gray-100 p-2.5 z-40"
+        >
+          <span class="text-black-color text-base font-medium">Chats</span>
+        </div>
+        <!-- Contact list search-->
+        <div class="flex flex-col gap-1 sticky top-10 z-40 bg-white-background">
+          <div class="relative p-2">
+            <mat-icon class="absolute top-1/2 left-4 -translate-y-1/2"
+              >search</mat-icon
+            >
+            <input
+              type="text"
+              id="simple-search"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-full focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Tìm kiếm..."
+              required
+            />
+          </div>
+        </div>
+        <!-- Contact list -->
+        <div class="bg-white-background">
+          <!-- Chat n -->
+          <div *ngFor="let chat of this.currentChats" (click)="toChatBot(chat)">
+            <app-chat-user [chat]="chat"></app-chat-user>
+          </div>
+        </div>
+      </ng-template>
+    </a>
+  </mat-menu>
+</div>

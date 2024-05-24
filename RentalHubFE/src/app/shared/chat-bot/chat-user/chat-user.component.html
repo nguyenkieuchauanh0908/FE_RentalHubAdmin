@@ -1,0 +1,41 @@
+<div
+  *ngIf="this.recipienInfo"
+  class="flex flex-row gap-2 p-2 hover:cursor-pointer hover:bg-gray-100"
+>
+  <!-- Avatar -->
+  <div class="relative row-span-2">
+    <img
+      src="{{ this.recipienInfo!._avatar }}"
+      alt="User's avatar"
+      class="w-9 h-9 rounded-full"
+    />
+    <span [ngClass]="this.isOnline ? 'user-online' : ''"></span>
+  </div>
+  <!-- Chat sumary -->
+  <div class="row-span-10 w-full flex flex-col">
+    <div class="flex flex-row justify-between line-clamp-1">
+      <span class="font-normal text-sm">{{ this.recipienInfo!._name }}</span>
+      <span
+        class="relative top-1 text-xs font-normal text-gray-500 dark:text-gray-400 line-clamp-1"
+      >
+        {{ this.chat.updatedAt.toLocaleDateString() }}
+      </span>
+    </div>
+
+    <div class="flex flex-row justify-between">
+      <p
+        class="text-xs font-normal text-gray-500 dark:text-gray-400 line-clamp-1"
+      >
+        {{ this.chat.lsmessage }}
+      </p>
+      <div class="flex flex-row flex-nowrap justify-around">
+        <p
+          *ngIf="this.chat.totalUnRead > 0"
+          class="bg-red-700 text-xs text-center text-white-text-color font-medium rounded-full w-4 h-4 mr-2"
+        >
+          {{ this.chat.totalUnRead }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
