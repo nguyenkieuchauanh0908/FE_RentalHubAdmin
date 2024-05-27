@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NotifierService } from 'angular-notifier';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { AccountService } from 'src/app/accounts/accounts.service';
 import { PostEditDialogComponent } from 'src/app/accounts/posting-history/post-edit-dialog/post-edit-dialog.component';
 import { User } from 'src/app/auth/user.model';
@@ -16,8 +16,9 @@ import { Router } from '@angular/router';
   templateUrl: './manage-post-sensor.component.html',
   styleUrls: ['./manage-post-sensor.component.scss'],
 })
-export class ManagePostSensorComponent implements OnInit {
+export class ManagePostSensorComponent implements OnInit, OnDestroy {
   isLoading = false;
+  $destroy: Subject<boolean> = new Subject<boolean>();
   displayedColumns: string[] = [
     'image',
     'title',
@@ -26,6 +27,8 @@ export class ManagePostSensorComponent implements OnInit {
     'lastUpdate',
   ];
   dataSource!: PostItem[];
+  onSearching: boolean = false;
+  searchKeyword: string | null = null;
   myProfile!: User | null;
   currentUid!: string | null;
   historyPosts: PostItem[] = new Array<PostItem>();
@@ -41,26 +44,61 @@ export class ManagePostSensorComponent implements OnInit {
     private postService: PostService,
     public dialog: MatDialog,
     private paginationService: PaginationService,
-    private router: Router
-  ) {
-    if (this.currentUid) {
-      this.myProfile = this.accountService.getProfile(this.currentUid);
-    }
+    private router: Router,
+    private notifierService: NotifierService
+  ) {}
+  ngOnDestroy(): void {
+    this.$destroy.unsubscribe();
   }
 
   ngOnInit(): void {
     this.isLoading = true;
     this.currentPage = 1;
-    this.postService.getPostAdmin(0, 1, 5).subscribe(
-      (res) => {
-        this.dataSource = res.data;
-        this.totalPages = res.pagination.total;
-        this.isLoading = false;
-      },
-      (errMsg) => {
-        this.isLoading = false;
-      }
-    );
+    if (this.currentUid) {
+      this.myProfile = this.accountService.getProfile(this.currentUid);
+    }
+    if (!this.onSearching) {
+      this.postService
+        .getPostAdmin(0, this.currentPage, this.pageItemLimit)
+        .pipe(takeUntil(this.$destroy))
+        .subscribe(
+          (res) => {
+            this.dataSource = res.data;
+            this.totalPages = res.pagination.total;
+            this.isLoading = false;
+          },
+          (errMsg) => {
+            this.isLoading = false;
+          }
+        );
+    } else {
+      this.postService
+        .findPostByIdAndStatus(
+          this.searchKeyword!,
+          '0',
+          this.currentPage,
+          this.pageItemLimit
+        )
+        .pipe(takeUntil(this.$destroy))
+        .subscribe(
+          (res) => {
+            if (res.data) {
+              this.isLoading = false;
+              this.dataSource = [];
+              this.totalPages = res.pagination.total;
+              this.dataSource = res.data;
+            }
+            this.isLoading = false;
+          },
+          (err) => {
+            this.isLoading = false;
+            this.notifierService.notify(
+              'error',
+              'Không có kết quả tìm kiếm trùng khớp!'
+            );
+          }
+        );
+    }
   }
 
   seePost(post: any) {
@@ -94,7 +132,8 @@ export class ManagePostSensorComponent implements OnInit {
   changeCurrentPage(
     position: number,
     toFirstPage: boolean,
-    toLastPage: boolean
+    toLastPage: boolean,
+    onSearching: boolean
   ) {
     this.isLoading = true;
     if (position === 1 || position === -1) {
@@ -108,21 +147,48 @@ export class ManagePostSensorComponent implements OnInit {
     } else if (toLastPage) {
       this.currentPage = this.totalPages;
     }
-    this.postService.getPostList(
-      this.currentPage,
-      this.pageItemLimit
-      // this.filterCriteria
-    );
-    this.postService.getPostAdmin(0, 1, 5).subscribe(
-      (res) => {
-        this.dataSource = res.data;
-        this.totalPages = res.pagination.total;
-        this.isLoading = false;
-      },
-      (errMsg) => {
-        this.isLoading = false;
-      }
-    );
+    if (onSearching) {
+      this.postService
+        .getPostAdmin(0, this.currentPage, this.pageItemLimit)
+        .pipe(takeUntil(this.$destroy))
+        .subscribe(
+          (res) => {
+            this.dataSource = res.data;
+            this.totalPages = res.pagination.total;
+            this.isLoading = false;
+          },
+          (errMsg) => {
+            this.isLoading = false;
+          }
+        );
+    } else {
+      this.postService
+        .findPostByIdAndStatus(
+          this.searchKeyword!,
+          '0',
+          this.currentPage,
+          this.pageItemLimit
+        )
+        .pipe(takeUntil(this.$destroy))
+        .subscribe(
+          (res) => {
+            if (res.data) {
+              this.isLoading = false;
+              this.dataSource = [];
+              this.totalPages = res.pagination.total;
+              this.dataSource = res.data;
+            }
+            this.isLoading = false;
+          },
+          (err) => {
+            this.isLoading = false;
+            this.notifierService.notify(
+              'error',
+              'Không có kết quả tìm kiếm trùng khớp!'
+            );
+          }
+        );
+    }
   }
 
   toPosts(type: string): void {
@@ -140,6 +206,56 @@ export class ManagePostSensorComponent implements OnInit {
         this.router.navigate(['/dashboard/reported-posts']);
         break;
       default:
+    }
+  }
+
+  reloadData() {
+    this.isLoading = true;
+    this.searchKeyword = null;
+    this.onSearching = false;
+    this.currentPage = 1;
+    this.postService
+      .getPostAdmin(0, this.currentPage, this.pageItemLimit)
+      .pipe(takeUntil(this.$destroy))
+      .subscribe(
+        (res) => {
+          this.dataSource = res.data;
+          this.totalPages = res.pagination.total;
+          this.isLoading = false;
+        },
+        (errMsg) => {
+          this.isLoading = false;
+        }
+      );
+  }
+
+  search(form: any) {
+    this.isLoading = true;
+    this.onSearching = true;
+    if (form.keyword) {
+      this.searchKeyword = form.keyword;
+      this.postService
+        .findPostByIdAndStatus(this.searchKeyword!, '0', 1, this.pageItemLimit)
+        .pipe(takeUntil(this.$destroy))
+        .subscribe(
+          (res) => {
+            if (res.data) {
+              this.isLoading = false;
+              this.dataSource = [];
+              this.currentPage = 1;
+              this.totalPages = res.pagination.total;
+              this.dataSource = res.data;
+            }
+            this.isLoading = false;
+          },
+          (err) => {
+            this.isLoading = false;
+            this.notifierService.notify(
+              'error',
+              'Không có kết quả tìm kiếm trùng khớp!'
+            );
+          }
+        );
     }
   }
 }

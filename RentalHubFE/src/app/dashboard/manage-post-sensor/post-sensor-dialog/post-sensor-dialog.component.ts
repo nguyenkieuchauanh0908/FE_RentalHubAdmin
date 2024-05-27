@@ -14,8 +14,6 @@ import { Tags } from 'src/app/shared/tags/tag.model';
   styleUrls: ['./post-sensor-dialog.component.scss'],
 })
 export class PostSensorDialogComponent {
-  private getProfileSub!: Subscription;
-  private getPostHistorySub!: Subscription;
   isLoading = false;
   profile!: User | null;
   currentUid!: string | null;
@@ -51,9 +49,7 @@ export class PostSensorDialogComponent {
     private notifierService: NotifierService,
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
-    console.log('🚀 ~ PostSensorDialogComponent ~ data:', this.data);
-  }
+  ) {}
 
   ngOnInit(): void {
     this.postService.setCurrentChosenTags([]);

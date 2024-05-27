@@ -339,6 +339,26 @@ export class PostService {
       );
   }
 
+  findPostByIdAndStatus(
+    id: string,
+    status: string | null,
+    page: number,
+    limit: number
+  ) {
+    let queryParams = new HttpParams()
+      .append('keyword', id)
+      .append('page', page)
+      .append('limit', limit);
+    if (status) {
+      queryParams = queryParams.append('status', status);
+    }
+    return this.http
+      .get<resDataDTO>(environment.baseUrl + 'posts/admin-get-post-keyword', {
+        params: queryParams,
+      })
+      .pipe(catchError(handleError));
+  }
+
   createTag(tag: string) {
     return this.http
       .post<resDataDTO>(environment.baseUrl + 'posts/create-tag', {

@@ -2,7 +2,7 @@
   <div *ngIf="isLoading" class="spinner__loading text-center">
     <mat-spinner diameter="30"></mat-spinner>
   </div>
-  <div class="mb-2">
+  <div class="mb-2 flex flex-row flex-nowrap justify-between">
     <mat-chip-listbox aria-label="post status selection">
       <mat-chip-option color="accent" (selectionChange)="toPosts('Chờ duyệt')"
         >Chờ duyệt</mat-chip-option
@@ -20,6 +20,51 @@
         >Bị báo cáo</mat-chip-option
       >
     </mat-chip-listbox>
+    <div class="flex justify-around -my-4">
+      <!-- Reload data -->
+      <div
+        mat-raised-button
+        class="text-sub-text-color my-8"
+        matTooltip="Reload data"
+        [matTooltipPosition]="'above'"
+        matTooltipHideDelay="400"
+        matRipple
+        [matRippleCentered]="true"
+        [matRippleUnbounded]="true"
+      >
+        <img
+          class="w-7 h-7 cursor-pointer"
+          src="../../../assets/images/refresh.png"
+          alt="reload data"
+          (click)="reloadData()"
+        />
+      </div>
+      <!-- Search -->
+      <div class="flex flex-col gap-1 my-4">
+        <div class="relative p-2">
+          <form
+            #searchForm="ngForm"
+            (keyup.enter)="search(searchForm.value); searchForm.reset()"
+          >
+            <img
+              src="../../../assets/images/search.png"
+              alt="search icon"
+              class="absolute top-1/2 left-4 -translate-y-1/2 w-6 h-6"
+            />
+            <input
+              type="text"
+              required="true"
+              ngModel
+              name="keyword"
+              id="simple-search"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-full focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Tìm kiếm..."
+              required
+            />
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
   <table
     mat-table
@@ -115,10 +160,10 @@
     *ngIf="this.dataSource"
     [currentPage]="currentPage"
     [totalPages]="totalPages"
-    (toPrevPage)="changeCurrentPage($event, false, false)"
-    (toNextPage)="changeCurrentPage($event, false, false)"
-    (toFirstPage)="changeCurrentPage(0, $event, false)"
-    (toLastPage)="changeCurrentPage(0, false, $event)"
+    (toPrevPage)="changeCurrentPage($event, false, false, this.onSearching)"
+    (toNextPage)="changeCurrentPage($event, false, false, this.onSearching)"
+    (toFirstPage)="changeCurrentPage(0, $event, false, this.onSearching)"
+    (toLastPage)="changeCurrentPage(0, false, $event, this.onSearching)"
   ></app-pagination>
 </div>
 <notifier-container></notifier-container>

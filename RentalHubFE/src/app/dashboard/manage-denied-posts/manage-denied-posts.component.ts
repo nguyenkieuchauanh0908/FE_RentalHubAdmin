@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NotifierService } from 'angular-notifier';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { AccountService } from 'src/app/accounts/accounts.service';
 import { User } from 'src/app/auth/user.model';
 import { PostService } from 'src/app/posts/post.service';
@@ -16,8 +16,9 @@ import { Router } from '@angular/router';
   templateUrl: './manage-denied-posts.component.html',
   styleUrls: ['./manage-denied-posts.component.scss'],
 })
-export class ManageDeniedPostsComponent {
+export class ManageDeniedPostsComponent implements OnInit, OnDestroy {
   isLoading = false;
+  $destroy: Subject<boolean> = new Subject<boolean>();
   displayedColumns: string[] = [
     'image',
     'title',
@@ -26,46 +27,70 @@ export class ManageDeniedPostsComponent {
     'lastUpdate',
   ];
   dataSource!: PostItem[];
+  onSearching: boolean = false;
+  searchKeyword: string | null = null;
   myProfile!: User | null;
-  currentUid!: string | null;
-  historyPosts: PostItem[] = new Array<PostItem>();
   totalPages: number = 1;
   currentPage: number = 1;
   pageItemLimit: number = 5;
-  myProfileSub = new Subscription();
-  getTagSub = new Subscription();
-  sourceTags: Set<Tags> = new Set();
 
   constructor(
-    private accountService: AccountService,
     private postService: PostService,
     public dialog: MatDialog,
     private notifierService: NotifierService,
     private paginationService: PaginationService,
     private router: Router
-  ) {
-    if (this.currentUid) {
-      this.myProfile = this.accountService.getProfile(this.currentUid);
-    }
+  ) {}
+  ngOnDestroy(): void {
+    this.$destroy.unsubscribe();
   }
 
   ngOnInit(): void {
     this.isLoading = true;
     this.currentPage = 1;
-    this.postService.getPostAdmin(3, this.currentPage, 5).subscribe(
-      (res) => {
-        this.dataSource = res.data;
-        console.log(
-          '🚀 ~ file: post-sensor.component.ts:49 ~ PostSensorComponent ~ this.postService.getPostsHistory ~  this.dataSource:',
-          this.dataSource
+    if (!this.onSearching) {
+      this.postService
+        .getPostAdmin(3, this.currentPage, this.pageItemLimit)
+        .pipe(takeUntil(this.$destroy))
+        .subscribe(
+          (res) => {
+            this.dataSource = res.data;
+            this.totalPages = res.pagination.total;
+            this.isLoading = false;
+          },
+          (errMsg) => {
+            this.isLoading = false;
+          }
         );
-        this.totalPages = res.pagination.total;
-        this.isLoading = false;
-      },
-      (errMsg) => {
-        this.isLoading = false;
-      }
-    );
+    } else {
+      this.postService
+        .findPostByIdAndStatus(
+          this.searchKeyword!,
+          '3',
+          this.currentPage,
+          this.pageItemLimit
+        )
+        .pipe(takeUntil(this.$destroy))
+        .subscribe(
+          (res) => {
+            if (res.data) {
+              this.isLoading = false;
+              this.onSearching = true;
+              this.dataSource = [];
+              this.totalPages = res.pagination.total;
+              this.dataSource = res.data;
+            }
+            this.isLoading = false;
+          },
+          (err) => {
+            this.isLoading = false;
+            this.notifierService.notify(
+              'error',
+              'Không có kết quả tìm kiếm trùng khớp!'
+            );
+          }
+        );
+    }
   }
 
   toPosts(type: string): void {
@@ -94,7 +119,6 @@ export class ManageDeniedPostsComponent {
     });
 
     let sub = dialogRef.componentInstance.sensorResult.subscribe((postId) => {
-      console.log('🚀 ~ ManageDeniedPostsComponent ~ sub ~ postId:', postId);
       if (this.dataSource) {
         this.dataSource = this.dataSource.filter(
           (post: PostItem) => post._id !== postId
@@ -102,10 +126,6 @@ export class ManageDeniedPostsComponent {
       }
     });
     sub = dialogRef.componentInstance.denySensorResult.subscribe((postId) => {
-      console.log(
-        '🚀 ~ ManageDeniedPostsComponent ~ sub=dialogRef.componentInstance.denySensorResult.subscribe ~ postId:',
-        postId
-      );
       if (this.dataSource) {
         this.dataSource = this.dataSource.filter(
           (post: PostItem) => post._id !== postId
@@ -122,33 +142,118 @@ export class ManageDeniedPostsComponent {
   changeCurrentPage(
     position: number,
     toFirstPage: boolean,
-    toLastPage: boolean
+    toLastPage: boolean,
+    onSearching: boolean
   ) {
     this.isLoading = true;
+    //Nếu tiến lên hoặc lùi lại một trang
     if (position === 1 || position === -1) {
       this.currentPage = this.paginationService.navigatePage(
         position,
         this.currentPage
       );
     }
+    //Nếu nhấn đi tới trang đầu hoặc trang cuối
     if (toFirstPage) {
       this.currentPage = 1;
     } else if (toLastPage) {
       this.currentPage = this.totalPages;
     }
-    this.postService.getPostAdmin(3, this.currentPage, 5).subscribe(
-      (res) => {
-        this.dataSource = res.data;
-        console.log(
-          '🚀 ~ file: post-sensor.component.ts:49 ~ PostSensorComponent ~ this.postService.getPostsHistory ~  this.dataSource:',
-          this.dataSource
+
+    //Call API để get item tương ứng với currentPage
+    if (!onSearching) {
+      this.postService
+        .getPostAdmin(3, this.currentPage, 5)
+        .pipe(takeUntil(this.$destroy))
+        .subscribe(
+          (res) => {
+            this.dataSource = res.data;
+            this.totalPages = res.pagination.total;
+            this.isLoading = false;
+          },
+          (errMsg) => {
+            this.isLoading = false;
+          }
         );
-        this.totalPages = res.pagination.total;
-        this.isLoading = false;
-      },
-      (errMsg) => {
-        this.isLoading = false;
-      }
-    );
+    } else {
+      this.postService
+        .findPostByIdAndStatus(
+          this.searchKeyword!,
+          '3',
+          this.currentPage,
+          this.pageItemLimit
+        )
+        .pipe(takeUntil(this.$destroy))
+        .subscribe(
+          (res) => {
+            if (res.data) {
+              this.isLoading = false;
+              this.onSearching = true;
+              this.dataSource = [];
+              this.totalPages = res.pagination.total;
+              this.dataSource = res.data;
+            }
+            this.isLoading = false;
+          },
+          (err) => {
+            this.isLoading = false;
+            this.notifierService.notify(
+              'error',
+              'Không có kết quả tìm kiếm trùng khớp!'
+            );
+          }
+        );
+    }
+  }
+
+  reloadData() {
+    this.isLoading = true;
+    this.searchKeyword = null;
+    this.onSearching = false;
+    this.currentPage = 1;
+    this.postService
+      .getPostAdmin(3, this.currentPage, this.pageItemLimit)
+      .pipe(takeUntil(this.$destroy))
+      .subscribe(
+        (res) => {
+          this.dataSource = res.data;
+          this.totalPages = res.pagination.total;
+          this.isLoading = false;
+        },
+        (errMsg) => {
+          this.isLoading = false;
+        }
+      );
+  }
+
+  search(form: any) {
+    this.isLoading = true;
+    this.onSearching = true;
+    if (form.keyword) {
+      this.searchKeyword = form.keyword;
+      this.postService
+        .findPostByIdAndStatus(this.searchKeyword!, '3', 1, this.pageItemLimit)
+        .pipe(takeUntil(this.$destroy))
+        .subscribe(
+          (res) => {
+            if (res.data) {
+              this.isLoading = false;
+              this.onSearching = true;
+              this.dataSource = [];
+              this.currentPage = 1;
+              this.totalPages = res.pagination.total;
+              this.dataSource = res.data;
+            }
+            this.isLoading = false;
+          },
+          (err) => {
+            this.isLoading = false;
+            this.notifierService.notify(
+              'error',
+              'Không có kết quả tìm kiếm trùng khớp!'
+            );
+          }
+        );
+    }
   }
 }
