@@ -4,7 +4,7 @@
   </div>
   <div class="flex justify-between">
     <h2 class="font-extrabold">Quản lý người dùng</h2>
-    <div class="flex justify-around">
+    <div class="flex justify-around" *ngIf="this.dataSource">
       <!-- Reload data -->
       <div
         mat-raised-button
@@ -29,7 +29,6 @@
           <form
             #searchForm="ngForm"
             (keyup.enter)="search(searchForm.value); searchForm.reset()"
-            (ngSubmit)="search(searchForm.value); searchForm.reset()"
           >
             <img
               src="../../../assets/images/search.png"
@@ -64,6 +63,7 @@
   </div>
 
   <table
+    *ngIf="this.dataSource; else noData"
     mat-table
     [dataSource]="dataSource"
     class="mat-elevation-z8"
@@ -158,6 +158,12 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
+
+  <ng-template #noData>
+    <div class="text-center">
+      <p>Không có người dùng nào!</p>
+    </div>
+  </ng-template>
   <!-- Pagination -->
   <app-pagination
     *ngIf="this.dataSource"

@@ -22,7 +22,7 @@
         >Bị báo cáo</mat-chip-option
       >
     </mat-chip-listbox>
-    <div class="flex justify-around -my-4">
+    <div class="flex justify-around -my-4" *ngIf="this.dataSource">
       <!-- Reload data -->
       <div
         mat-raised-button
@@ -69,6 +69,7 @@
     </div>
   </div>
   <table
+    *ngIf="this.dataSource; else noData"
     mat-table
     [dataSource]="dataSource"
     class="mat-elevation-z8"
@@ -157,6 +158,11 @@
       class="cursor-pointer"
     ></tr>
   </table>
+  <ng-template #noData>
+    <div class="text-center">
+      <p>Không có bài viết nào bị báo cáo!</p>
+    </div>
+  </ng-template>
   <!-- Pagination -->
   <app-pagination
     *ngIf="this.dataSource"

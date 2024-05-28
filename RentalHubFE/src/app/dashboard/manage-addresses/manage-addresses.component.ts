@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { AccountService } from 'src/app/accounts/accounts.service';
 import { User } from 'src/app/auth/user.model';
 import { PaginationService } from 'src/app/shared/pagination/pagination.service';
@@ -13,16 +13,14 @@ import { AddressService } from './address.service';
   templateUrl: './manage-addresses.component.html',
   styleUrls: ['./manage-addresses.component.scss'],
 })
-export class ManageAddressesComponent {
+export class ManageAddressesComponent implements OnInit, OnDestroy {
   isLoading = false;
+  $destroy: Subject<boolean> = new Subject<boolean>();
   displayedColumns: string[] = ['id', 'name', 'address', 'total_rooms', 'date'];
-  dataSource!: any[];
-  myProfile!: User | null;
-  currentUid!: string | null;
+  dataSource!: any[] | null;
   totalPages: number = 1;
   currentPage: number = 1;
   pageItemLimit: number = 5;
-  myProfileSub = new Subscription();
   currentAddressReqStatus: number = 0; //Chờ duyệt
 
   constructor(
@@ -30,13 +28,16 @@ export class ManageAddressesComponent {
     public dialog: MatDialog,
     private paginationService: PaginationService,
     private addressService: AddressService
-  ) {
+  ) {}
+  ngOnDestroy(): void {
+    this.$destroy.unsubscribe();
+  }
+
+  ngOnInit(): void {
     this.isLoading = true;
     this.currentPage = 1;
     this.currentAddressReqStatus = 0;
-    if (this.currentUid) {
-      this.myProfile = this.accountService.getProfile(this.currentUid);
-    }
+
     this.addressService
       .getAddressesRequests(this.currentAddressReqStatus, 1, 5)
       .subscribe(
@@ -53,8 +54,6 @@ export class ManageAddressesComponent {
         }
       );
   }
-
-  ngOnInit(): void {}
 
   //Xem chi tiết hồ sơ đăng ký địa chỉ
   seeDetail(addressReq: any) {
@@ -139,7 +138,7 @@ export class ManageAddressesComponent {
       default:
     }
     this.currentPage = 1;
-    this.dataSource = [];
+    this.dataSource = null;
     this.addressService
       .getAddressesRequests(this.currentAddressReqStatus, 1, 5)
       .subscribe(

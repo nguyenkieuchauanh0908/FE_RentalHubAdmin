@@ -67,6 +67,15 @@ export class AccountService {
       .pipe(catchError(handleError));
   }
 
+  findEmployeeByEmailOrId(keyword: string) {
+    let queryParams = new HttpParams().append('keyword', keyword);
+
+    return this.http
+      .get<resDataDTO>(environment.baseUrl + 'admin/get-employee-keyword', {
+        params: queryParams,
+      })
+      .pipe(catchError(handleError));
+  }
   getInspectorById(id: string) {
     let queryParams = new HttpParams().append('inspectId', id);
     return this.http

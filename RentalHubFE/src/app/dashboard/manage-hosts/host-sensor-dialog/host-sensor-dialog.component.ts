@@ -39,12 +39,16 @@ export class HostSensorDialogComponent {
       (res) => {
         if (res.data) {
           this.hostDetailIdCard = res.data;
+          console.log(
+            '🚀 ~ HostSensorDialogComponent ~ ngOnInit ~ this.hostDetailIdCard:',
+            this.hostDetailIdCard
+          );
         }
       },
       (errMsg) => {
-        console.log(
-          '🚀 ~ HostSensorDialogComponent ~ ngOnInit ~ errMsg:',
-          errMsg
+        this.notifierService.notify(
+          'error',
+          'Đã có lỗi xảy ra, vui lòng thử lại sau!'
         );
       }
     );

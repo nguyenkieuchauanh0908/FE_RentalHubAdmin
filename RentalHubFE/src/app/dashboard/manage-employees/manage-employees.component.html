@@ -2,29 +2,77 @@
   <div *ngIf="isLoading" class="spinner__loading text-center">
     <mat-spinner diameter="30"></mat-spinner>
   </div>
-  <div class="flex justify-between">
-    <h2 class="font-extrabold">Quản lý nhân viên</h2>
-    <div class="flex justify-around">
-      <button
-        type="button"
-        (click)="addNewEmployee()"
-        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 m-4"
+  <div class="flex justify-between" *ngIf="this.dataSource">
+    <h2 class="font-extrabold">Quản lý Nhân viên</h2>
+    <div class="flex justify-around" *ngIf="this.dataSource">
+      <!-- Reload data -->
+      <div
+        mat-raised-button
+        class="text-sub-text-color my-8"
+        matTooltip="Reload data"
+        [matTooltipPosition]="'above'"
+        matTooltipHideDelay="400"
+        matRipple
+        [matRippleCentered]="true"
+        [matRippleUnbounded]="true"
       >
-        <mat-icon>add</mat-icon>
-        Thêm nhân viên
-      </button>
-      <button
-        type="button"
-        (click)="export()"
-        class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 m-4"
-      >
-        <mat-icon> import_export</mat-icon>
-        Xuất file
-      </button>
+        <img
+          class="w-7 h-7 cursor-pointer"
+          src="../../../assets/images/refresh.png"
+          alt="reload data"
+          (click)="reloadData()"
+        />
+      </div>
+      <!-- Search -->
+      <div class="flex flex-col gap-1 my-4">
+        <div class="relative p-2">
+          <form
+            #searchForm="ngForm"
+            (keyup.enter)="search(searchForm.value); searchForm.reset()"
+          >
+            <img
+              src="../../../assets/images/search.png"
+              alt="search icon"
+              class="absolute top-1/2 left-4 -translate-y-1/2 w-6 h-6"
+            />
+            <input
+              type="text"
+              required="true"
+              ngModel
+              name="keyword"
+              id="simple-search"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-full focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Tìm kiếm..."
+              required
+            />
+          </form>
+        </div>
+      </div>
+      <!-- Add new worker and Export -->
+      <div class="my-1">
+        <button
+          type="button"
+          (click)="addNewEmployee()"
+          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 m-4"
+        >
+          <mat-icon>add</mat-icon>
+          Thêm nhân viên
+        </button>
+
+        <button
+          type="button"
+          (click)="export()"
+          class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+        >
+          <mat-icon [ngStyle]="{ color: 'white' }"> import_export</mat-icon>
+          Xuất file
+        </button>
+      </div>
     </div>
   </div>
 
   <table
+    *ngIf="this.dataSource; else noData"
     mat-table
     [dataSource]="dataSource"
     class="mat-elevation-z8"
@@ -138,6 +186,11 @@
       class="cursor-pointer"
     ></tr>
   </table>
+  <ng-template #noData>
+    <div class="text-center">
+      <p>Không có nhân viên nào!</p>
+    </div>
+  </ng-template>
   <!-- Pagination -->
   <app-pagination
     *ngIf="this.dataSource"

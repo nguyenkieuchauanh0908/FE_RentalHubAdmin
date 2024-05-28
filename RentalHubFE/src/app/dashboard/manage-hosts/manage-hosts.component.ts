@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { AccountService } from 'src/app/accounts/accounts.service';
 import { User } from 'src/app/auth/user.model';
 import { PostService } from 'src/app/posts/post.service';
@@ -13,14 +13,16 @@ import {
   ROW_HOST,
 } from 'src/app/shared/export-excel/export-excel.service';
 import { Utils } from 'src/app/shared/utils';
+import { NotifierService } from 'angular-notifier';
 
 @Component({
   selector: 'app-manage-hosts',
   templateUrl: './manage-hosts.component.html',
   styleUrls: ['./manage-hosts.component.scss'],
 })
-export class ManageHostsComponent implements OnInit {
+export class ManageHostsComponent implements OnInit, OnDestroy {
   isLoading = false;
+  $destroy: Subject<boolean> = new Subject<boolean>();
   displayedColumns: string[] = [
     'uId',
     'name',
@@ -29,7 +31,7 @@ export class ManageHostsComponent implements OnInit {
     'address',
     'date',
   ];
-  dataSource!: any[];
+  dataSource!: any[] | null;
   myProfile!: User | null;
   currentUid!: string | null;
   totalPages: number = 1;
@@ -46,7 +48,8 @@ export class ManageHostsComponent implements OnInit {
     public exportService: ExportExcelService,
     public dialog: MatDialog,
     private paginationService: PaginationService,
-    private hostService: HostService
+    private hostService: HostService,
+    private notifierService: NotifierService
   ) {
     this.isLoading = true;
     this.currentPage = 1;
@@ -55,7 +58,7 @@ export class ManageHostsComponent implements OnInit {
       this.myProfile = this.accountService.getProfile(this.currentUid);
     }
     this.hostService
-      .getActiveHostByRequests(this.currentHostReqStatus, 1, 5)
+      .getActiveHostByRequests(this.currentHostReqStatus, this.currentPage, 5)
       .subscribe(
         (res) => {
           if (res.data) {
@@ -74,6 +77,9 @@ export class ManageHostsComponent implements OnInit {
         this.inspectorData = res.data;
       }
     });
+  }
+  ngOnDestroy(): void {
+    this.$destroy.unsubscribe();
   }
 
   ngOnInit(): void {}
@@ -145,6 +151,7 @@ export class ManageHostsComponent implements OnInit {
     switch (type) {
       case 'Waiting':
         console.log('Change status of hosts to Waiting....');
+
         this.currentHostReqStatus = 0;
         //Call API
         break;
@@ -161,17 +168,21 @@ export class ManageHostsComponent implements OnInit {
       default:
     }
     this.currentPage = 1;
-    this.dataSource = [];
+    this.dataSource = null;
+    // console.log(
+    //   '🚀 ~ ManageHostsComponent ~ changeStatusOfHosts ~ this.dataSource:',
+    //   this.dataSource
+    // );
     this.hostService
-      .getActiveHostByRequests(this.currentHostReqStatus, 1, 5)
+      .getActiveHostByRequests(
+        this.currentHostReqStatus,
+        this.currentPage,
+        this.pageItemLimit
+      )
       .subscribe(
         (res) => {
           if (res.data) {
             this.dataSource = res.data;
-            console.log(
-              '🚀 ~ ManageHostsComponent ~ changeStatusOfHosts ~ this.dataSource:',
-              this.dataSource
-            );
             this.totalPages = res.pagination.total;
           }
 
@@ -198,5 +209,56 @@ export class ManageHostsComponent implements OnInit {
       };
       this.exportService.exportExcel(reportData);
     }
+  }
+
+  reloadData() {
+    this.isLoading = true;
+    this.currentPage = 1;
+    this.hostService
+      .getActiveHostByRequests(
+        this.currentHostReqStatus,
+        this.currentPage,
+        this.pageItemLimit
+      )
+      .subscribe(
+        (res) => {
+          this.dataSource = res.data;
+          this.totalPages = res.pagination.total;
+          this.isLoading = false;
+        },
+        (errMsg) => {
+          this.isLoading = false;
+        }
+      );
+  }
+
+  search(form: any) {
+    this.isLoading = true;
+    let sensor: boolean = false;
+    if (this.currentHostReqStatus === 1) {
+      sensor = true;
+    }
+    this.hostService
+      .findHostByIdentId(form.keyword, sensor)
+      .pipe(takeUntil(this.$destroy))
+      .subscribe(
+        (res) => {
+          if (res.data) {
+            this.isLoading = false;
+            this.dataSource = [];
+            this.currentPage = 1;
+            this.totalPages = 1;
+            this.dataSource.push(res.data);
+          }
+          this.isLoading = false;
+        },
+        (err) => {
+          this.isLoading = false;
+          this.notifierService.notify(
+            'error',
+            'Không có kết quả tìm kiếm trùng khớp!'
+          );
+        }
+      );
   }
 }

@@ -100,53 +100,6 @@ export class ManageUsersComponent {
     );
   }
 
-  // blockInspector(inspectId: string) {
-  //   const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-  //     width: '400px',
-  //     data: 'Xác nhận khóa cho tài khoản này?',
-  //   });
-
-  //   const sub = dialogRef.componentInstance.confirmYes.subscribe(() => {
-  //     this.accountService.blockInspectorById(inspectId).subscribe((res) => {
-  //       if (res) {
-  //         this.dataSource.map((employee) =>
-  //           employee._id === inspectId ? (employee._active = false) : ''
-  //         );
-
-  //         this.notifierService.notify(
-  //           'success',
-  //           'Khóa tài khoản nhân viên thành công!'
-  //         );
-  //       }
-  //     });
-  //   });
-  // }
-
-  // UnblockInspector(inspectId: string) {
-  //   const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-  //     width: '400px',
-  //     data: 'Xác nhận mở khóa cho tài khoản này?',
-  //   });
-
-  //   const sub = dialogRef.componentInstance.confirmYes.subscribe((res) => {
-  //     this.accountService.blockInspectorById(inspectId).subscribe((res) => {
-  //       if (res) {
-  //         this.dataSource.forEach((employee) =>
-  //           employee._id === inspectId ? (employee._active = true) : ''
-  //         );
-  //         // console.log(
-  //         //   '🚀 ~ ManageEmployeesComponent ~ this.accountService.unBlockInspectorById ~ this.dataSource:',
-  //         //   this.dataSource
-  //         // );
-  //         this.notifierService.notify(
-  //           'success',
-  //           'Mở tài khoản nhân viên thành công!'
-  //         );
-  //       }
-  //     });
-  //   });
-  // }
-
   search(form: any) {
     this.isLoading = true;
     this.accountService
@@ -164,13 +117,28 @@ export class ManageUsersComponent {
           this.isLoading = false;
         },
         (err) => {
-          // this.isLoading = false;
-          // this.notifierService.notify(
-          //   'error',
-          //   'Không có kết quả tìm kiếm trùng khớp!'
-          // );
+          this.isLoading = false;
+          this.notifierService.notify(
+            'error',
+            'Không có kết quả tìm kiếm trùng khớp!'
+          );
         }
       );
+  }
+
+  reloadData() {
+    this.isLoading = true;
+    this.currentPage = 1;
+    this.accountService.getAllUsers(this.currentPage, 5).subscribe(
+      (res) => {
+        this.dataSource = res.data;
+        this.totalPages = res.pagination.total;
+        this.isLoading = false;
+      },
+      (errMsg) => {
+        this.isLoading = false;
+      }
+    );
   }
   export() {
     if (this.inspectorData) {
@@ -188,20 +156,5 @@ export class ManageUsersComponent {
 
       this.exportService.exportExcel(reportData);
     }
-  }
-
-  reloadData() {
-    this.isLoading = true;
-    this.currentPage = 1;
-    this.accountService.getAllUsers(this.currentPage, 5).subscribe(
-      (res) => {
-        this.dataSource = res.data;
-        this.totalPages = res.pagination.total;
-        this.isLoading = false;
-      },
-      (errMsg) => {
-        this.isLoading = false;
-      }
-    );
   }
 }

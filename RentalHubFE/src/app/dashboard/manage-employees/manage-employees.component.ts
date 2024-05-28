@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { AccountService } from 'src/app/accounts/accounts.service';
 import { User } from 'src/app/auth/user.model';
 import { PostItem } from 'src/app/posts/posts-list/post-item/post-item.model';
@@ -34,7 +34,7 @@ export class ManageEmployeesComponent {
   myProfileSub = new Subscription();
   getTagSub = new Subscription();
   sourceTags: Set<Tags> = new Set();
-
+  $destroy: Subject<boolean> = new Subject<boolean>();
   dataForExcel: ROW_INSPECTOR[] = [];
 
   inspectorData!: ROW_INSPECTOR[];
@@ -85,36 +85,6 @@ export class ManageEmployeesComponent {
     }
   }
 
-  //position can be either 1 (navigate to next page) or -1 (to previous page)
-  changeCurrentPage(
-    position: number,
-    toFirstPage: boolean,
-    toLastPage: boolean
-  ) {
-    this.isLoading = true;
-    if (position === 1 || position === -1) {
-      this.currentPage = this.paginationService.navigatePage(
-        position,
-        this.currentPage
-      );
-    }
-    if (toFirstPage) {
-      this.currentPage = 1;
-    } else if (toLastPage) {
-      this.currentPage = this.totalPages;
-    }
-    this.accountService.getAllInspectors(this.currentPage, 5).subscribe(
-      (res) => {
-        this.dataSource = res.data;
-        this.totalPages = res.pagination.total;
-        this.isLoading = false;
-      },
-      (errMsg) => {
-        this.isLoading = false;
-      }
-    );
-  }
-
   blockInspector(inspectId: string) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
@@ -149,10 +119,6 @@ export class ManageEmployeesComponent {
           this.dataSource.forEach((employee) =>
             employee._id === inspectId ? (employee._active = true) : ''
           );
-          // console.log(
-          //   '🚀 ~ ManageEmployeesComponent ~ this.accountService.unBlockInspectorById ~ this.dataSource:',
-          //   this.dataSource
-          // );
           this.notifierService.notify(
             'success',
             'Mở tài khoản nhân viên thành công!'
@@ -201,6 +167,77 @@ export class ManageEmployeesComponent {
         }
       }
     );
-    // sub.unsubscribe();
+  }
+
+  search(form: any) {
+    this.isLoading = true;
+    this.accountService
+      .findEmployeeByEmailOrId(form.keyword)
+      .pipe(takeUntil(this.$destroy))
+      .subscribe(
+        (res) => {
+          if (res.data) {
+            this.isLoading = false;
+            this.dataSource = [];
+            this.currentPage = 1;
+            this.totalPages = 1;
+            this.dataSource.push(res.data);
+          }
+          this.isLoading = false;
+        },
+        (err) => {
+          this.isLoading = false;
+          this.notifierService.notify(
+            'error',
+            'Không có kết quả tìm kiếm trùng khớp!'
+          );
+        }
+      );
+  }
+  reloadData() {
+    this.isLoading = true;
+    this.currentPage = 1;
+    this.accountService
+      .getAllInspectors(this.currentPage, this.pageItemLimit)
+      .subscribe(
+        (res) => {
+          this.dataSource = res.data;
+          this.totalPages = res.pagination.total;
+          this.isLoading = false;
+        },
+        (errMsg) => {
+          this.isLoading = false;
+        }
+      );
+  }
+
+  //position can be either 1 (navigate to next page) or -1 (to previous page)
+  changeCurrentPage(
+    position: number,
+    toFirstPage: boolean,
+    toLastPage: boolean
+  ) {
+    this.isLoading = true;
+    if (position === 1 || position === -1) {
+      this.currentPage = this.paginationService.navigatePage(
+        position,
+        this.currentPage
+      );
+    }
+    if (toFirstPage) {
+      this.currentPage = 1;
+    } else if (toLastPage) {
+      this.currentPage = this.totalPages;
+    }
+    this.accountService.getAllInspectors(this.currentPage, 5).subscribe(
+      (res) => {
+        this.dataSource = res.data;
+        this.totalPages = res.pagination.total;
+        this.isLoading = false;
+      },
+      (errMsg) => {
+        this.isLoading = false;
+      }
+    );
   }
 }

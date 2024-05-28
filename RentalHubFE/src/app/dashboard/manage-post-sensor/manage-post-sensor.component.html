@@ -3,6 +3,7 @@
     <mat-spinner diameter="30"></mat-spinner>
   </div>
   <div class="mb-2 flex flex-row flex-nowrap justify-between">
+    <!-- Tabs -->
     <mat-chip-listbox aria-label="post status selection">
       <mat-chip-option
         color="accent"
@@ -22,7 +23,7 @@
         >Bị báo cáo</mat-chip-option
       >
     </mat-chip-listbox>
-    <div class="flex justify-around -my-4">
+    <div *ngIf="this.dataSource" class="flex justify-around -my-4">
       <!-- Reload data -->
       <div
         mat-raised-button
@@ -69,6 +70,7 @@
     </div>
   </div>
   <table
+    *ngIf="this.dataSource; else noData"
     mat-table
     [dataSource]="dataSource"
     class="mat-elevation-z8"
@@ -157,6 +159,11 @@
       class="cursor-pointer"
     ></tr>
   </table>
+  <ng-template #noData>
+    <div class="text-center">
+      <p>Không có bài viết nào cần duyệt!</p>
+    </div>
+  </ng-template>
   <!-- Pagination -->
   <app-pagination
     *ngIf="this.dataSource"
