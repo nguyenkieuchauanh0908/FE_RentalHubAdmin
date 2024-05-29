@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { AccountService } from 'src/app/accounts/accounts.service';
 import { User } from 'src/app/auth/user.model';
 import { PaginationService } from 'src/app/shared/pagination/pagination.service';
 import { Hosts } from '../manage-hosts/host.model';
 import { AddressSensorDialogComponent } from './address-sensor-dialog/address-sensor-dialog.component';
 import { AddressService } from './address.service';
+import { NotifierService } from 'angular-notifier';
 
 @Component({
   selector: 'app-manage-addresses',
@@ -25,6 +26,7 @@ export class ManageAddressesComponent implements OnInit, OnDestroy {
 
   constructor(
     private accountService: AccountService,
+    private notifierService: NotifierService,
     public dialog: MatDialog,
     private paginationService: PaginationService,
     private addressService: AddressService
@@ -145,10 +147,6 @@ export class ManageAddressesComponent implements OnInit, OnDestroy {
         (res) => {
           if (res.data) {
             this.dataSource = res.data;
-            console.log(
-              '🚀 ~ ManageHostsComponent ~ changeStatusOfHosts ~ this.dataSource:',
-              this.dataSource
-            );
             this.totalPages = res.pagination.total;
           }
 
@@ -156,6 +154,59 @@ export class ManageAddressesComponent implements OnInit, OnDestroy {
         },
         (errMsg) => {
           this.isLoading = false;
+        }
+      );
+  }
+  reloadData() {
+    this.isLoading = true;
+    this.currentPage = 1;
+    this.addressService
+      .getAddressesRequests(
+        this.currentAddressReqStatus,
+        this.currentPage,
+        this.pageItemLimit
+      )
+      .subscribe(
+        (res) => {
+          if (res.data) {
+            this.dataSource = res.data;
+            this.totalPages = res.pagination.total;
+          }
+
+          this.isLoading = false;
+        },
+        (errMsg) => {
+          this.isLoading = false;
+        }
+      );
+  }
+
+  search(form: any) {
+    this.isLoading = true;
+    let active: boolean = false;
+    if (this.currentAddressReqStatus === 1) {
+      active = true;
+    }
+    this.addressService
+      .searchAddressesById(form.keyword, active, 1, this.pageItemLimit)
+      .pipe(takeUntil(this.$destroy))
+      .subscribe(
+        (res) => {
+          if (res.data) {
+            this.isLoading = false;
+            this.dataSource = [];
+            this.currentPage = 1;
+            this.totalPages = 1;
+            this.dataSource = res.data;
+          }
+          this.isLoading = false;
+        },
+        (err) => {
+          this.isLoading = false;
+          this.notifierService.notify(
+            'error',
+            'Không có kết quả tìm kiếm trùng khớp!'
+          );
         }
       );
   }

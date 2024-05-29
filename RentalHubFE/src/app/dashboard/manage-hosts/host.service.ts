@@ -31,7 +31,6 @@ export class HostService {
   }
 
   sensorHostRequest(identId: string, status: number, reason: string) {
-    // console.log('🚀 ~ HostService ~ sensorHostRequest ~ reason:', reason);
     return this.http
       .patch<resDataDTO>(environment.baseUrl + 'admin/sensor-active-host', {
         id: identId,

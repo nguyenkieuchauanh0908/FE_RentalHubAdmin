@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError } from 'rxjs';
+import { catchError, tap } from 'rxjs';
 import { handleError } from 'src/app/shared/handle-errors';
 import { resDataDTO } from 'src/app/shared/resDataDTO';
 import { environment } from 'src/environments/environment';
@@ -41,11 +41,7 @@ export class AddressService {
   }
 
   sensorAddressRequest(addressId: string, status: number, reason: string) {
-    console.log(
-      '🚀 ~ AddressService ~ sensorAddressRequest ~ addressId:',
-      addressId
-    );
-    console.log('🚀 ~ AddressService ~ sensorAddressRequest ~ reason:', reason);
+    // console.log('🚀 ~ AddressService ~ sensorAddressRequest ~ reason:', reason);
 
     return this.http
       .patch<resDataDTO>(
@@ -56,6 +52,24 @@ export class AddressService {
           reason: reason,
         }
       )
+      .pipe(catchError(handleError));
+  }
+
+  searchAddressesById(
+    addressId: string,
+    active: boolean,
+    page: number,
+    limit: number
+  ) {
+    let queryParams = new HttpParams()
+      .append('keyword', addressId)
+      .append('active', active)
+      .append('page', page)
+      .append('limit', limit);
+    return this.http
+      .get<resDataDTO>(environment.baseUrl + 'admin/search-address', {
+        params: queryParams,
+      })
       .pipe(catchError(handleError));
   }
 }
