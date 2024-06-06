@@ -84,56 +84,20 @@
           ></textarea>
         </div>
 
-        <!-- Street -->
+        <!-- Address -->
         <div class="mb-6">
           <label
             for="base-input"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >Đường</label
+            >Địa chỉ</label
           >
           <input
-            [ngModel]="this.data.roomStreet"
+            [ngModel]="this.data.roomAddress"
             type="text"
             id="street-input"
             name="street"
             ngModel
             required
-            disabled
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
-          />
-        </div>
-
-        <!-- District -->
-        <div class="mb-6">
-          <label
-            for="base-input"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >Quận</label
-          >
-          <input
-            [ngModel]="this.data.roomDistrict"
-            type="text"
-            id="district-input"
-            name="district"
-            ngModel
-            required
-            disabled
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
-          />
-        </div>
-
-        <!-- City -->
-        <div class="mb-6">
-          <label
-            for="base-input"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >Thành phố</label
-          >
-          <input
-            value="Hồ Chí Minh"
-            type="text"
-            id="city-input"
-            name="city"
             disabled
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed"
           />
