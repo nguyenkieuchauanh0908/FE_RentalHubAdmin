@@ -52,6 +52,7 @@ export class ChatWithComponent implements OnInit, OnDestroy, AfterViewChecked {
   ngOnDestroy(): void {
     // this.$destroy.unsubscribe();
     // this.chatBotService.disconnectToSocket();
+    this.chatBotService.destroy();
   }
   ngOnInit(): void {
     this.isLoading = true;
