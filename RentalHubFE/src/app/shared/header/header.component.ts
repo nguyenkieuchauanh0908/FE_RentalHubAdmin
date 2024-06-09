@@ -45,15 +45,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private authService: AuthService,
     private dialog: MatDialog
-  ) {
+  ) {}
+
+  ngOnInit() {
     this.accountService.getCurrentUser
       .pipe(takeUntil(this.$destroy))
       .subscribe((user) => {
         console.log('On rendering headers...');
-        console.log(user);
         this.isAuthenticatedUser = !!user;
         console.log('User is authenticated: ', this.isAuthenticatedUser);
         this.user = user;
+        this.notificationService.onReceivingNewNotificationToUpdate();
         if (this.user?._fname && this.user?._lname) {
           this.fullName = this.user?._fname + ' ' + this.user._lname;
         }
@@ -86,8 +88,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.notificationService.setCurrentUnseenNotifications([]);
     }
   }
-
-  ngOnInit() {}
 
   toMyPosting() {
     let uId = this.user?._id;
