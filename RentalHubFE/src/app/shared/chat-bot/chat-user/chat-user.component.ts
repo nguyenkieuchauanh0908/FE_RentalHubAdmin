@@ -1,12 +1,12 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
-import { AccountService } from 'src/app/accounts/accounts.service';
 import {
+  ChatBotService,
   RecipientType,
   UserChatsType,
-  ChatBotService,
   UserOnlineType,
 } from '../chat-bot.service';
+import { Subject, take, takeUntil } from 'rxjs';
+import { AccountService } from 'src/app/accounts/accounts.service';
 
 @Component({
   selector: 'app-chat-user',
