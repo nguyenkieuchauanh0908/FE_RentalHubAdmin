@@ -189,7 +189,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.$destroy.next(true);
+    this.$destroy.next(false);
+    this.$destroy.unsubscribe();
+    this.notificationService.destroy();
   }
 
   logout() {
