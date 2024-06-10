@@ -17,13 +17,13 @@ import { DisplayNotiDialogComponent } from './display-noti-dialog/display-noti-d
 import { ChatBotComponent } from './chat-bot/chat-bot.component';
 import { ChatWithComponent } from './chat-bot/chat-with/chat-with.component';
 import { ChatUserComponent } from './chat-bot/chat-user/chat-user.component';
+import { SendForgetPwEmailComponent } from './send-forget-pw-email/send-forget-pw-email.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
     PaginationComponent,
-
     MainLayoutComponent,
     ConfirmDialogComponent,
     TotalDataComponent,
@@ -32,6 +32,7 @@ import { ChatUserComponent } from './chat-bot/chat-user/chat-user.component';
     ChatBotComponent,
     ChatWithComponent,
     ChatUserComponent,
+    SendForgetPwEmailComponent,
   ],
   imports: [
     CommonModule,

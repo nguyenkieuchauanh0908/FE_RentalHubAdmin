@@ -72,34 +72,20 @@
         </div>
         <div
           *ngIf="pw.invalid && (pw.dirty || pw.touched)"
-          class="p-4 mb-4 mt-2 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+          class="p-4 mt-2 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
           role="alert"
         >
           <div *ngIf="pw.errors?.['required']">Vui lòng nhập mật khẩu!</div>
         </div>
       </div>
-      <!-- <div class="flex items-center justify-between">
-        <div class="flex items-start">
-          <div class="flex items-center h-5">
-            <input
-              id="remember"
-              aria-describedby="remember"
-              type="checkbox"
-              class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-            />
-          </div>
-          <div class="ml-3 text-sm">
-            <label for="remember" class="text-gray-500 dark:text-gray-300"
-              >Ghi nhớ tài khoản</label
-            >
-          </div>
-        </div>
+      <!-- Forget Pw -->
+      <p class="text-right mt-2">
         <a
-          href="#"
-          class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
+          (click)="onForgetPasswordClick()"
+          class="text-sm text-right font-medium text-primary-600 hover:underline dark:text-primary-500 cursor-pointer"
           >Quên mật khẩu?</a
         >
-      </div> -->
+      </p>
 
       <!-- Submit btn -->
       <button
@@ -109,14 +95,6 @@
       >
         Đăng nhập
       </button>
-      <!-- <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-        Chưa có tài khoản?
-        <a
-          [routerLink]="['/auth/signup']"
-          class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-          >Đăng ký ngay</a
-        >
-      </p> -->
       <notifier-container></notifier-container>
     </form>
   </div>
