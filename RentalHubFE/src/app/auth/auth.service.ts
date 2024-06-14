@@ -51,6 +51,7 @@ export class AuthService {
           this.handleAuthentication(res.data);
           this.getNotifications();
           this.chatBotService.initiateSocket();
+          this.chatBotService.fetchMyChats(res.data._id).subscribe();
         })
       );
   }
@@ -79,10 +80,8 @@ export class AuthService {
         user?._ACToken,
         user?._ACExpiredTime
       );
-      this.accountService.setCurrentUser(loadedUserData);
       if (loadedUserData.ACToken && loadedUserData.RFToken) {
         this.accountService.setCurrentUser(loadedUserData);
-
         expirationDuration = loadedUserData._RFExpiredTime - Date.now();
       }
       if (!loadedUserData.ACToken && loadedUserData.RFToken) {

@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatMenuTrigger } from '@angular/material/menu';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 import { AccountService } from 'src/app/accounts/accounts.service';
+import { ChatBotService, UserChatsType } from './chat-bot.service';
+import { AuthService } from 'src/app/auth/auth.service';
 import { User } from 'src/app/auth/user.model';
-import { UserChatsType, ChatBotService } from './chat-bot.service';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-chat-bot',
@@ -88,12 +89,13 @@ export class ChatBotComponent implements OnInit, OnDestroy {
           });
 
           //Lấy unreaded msg của các chat nếu có
-          this.chatBotService.onGettingUnreadMessage();
+          // this.chatBotService.onGettingUnreadMessage();
         }
       });
   }
   ngOnDestroy(): void {
     this.$destroy.unsubscribe();
+    this.chatBotService.$destroy.unsubscribe();
   }
 
   toChatBot(chat: UserChatsType) {
