@@ -41,6 +41,7 @@ export class ForumService {
       return this.http
         .patch<resDataDTO>(
           environment.baseUrl + 'social/sensor-reported-request',
+          {},
           {
             params: queryParams,
           }
