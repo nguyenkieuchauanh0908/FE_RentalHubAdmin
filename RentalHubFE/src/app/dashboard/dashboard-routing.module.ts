@@ -11,6 +11,7 @@ import { StatisticsComponent } from './statistics/statistics.component';
 import { ManageHostsComponent } from './manage-hosts/manage-hosts.component';
 import { ManageAddressesComponent } from './manage-addresses/manage-addresses.component';
 import { ManageUsersComponent } from './manage-users/manage-users.component';
+import { ManageForumComponent } from './manage-forum/manage-forum.component';
 
 const routes: Routes = [
   {
@@ -55,6 +56,11 @@ const routes: Routes = [
       {
         path: 'manage-addresses',
         component: ManageAddressesComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'manage-forum',
+        component: ManageForumComponent,
         canActivate: [AuthGuard],
       },
       {

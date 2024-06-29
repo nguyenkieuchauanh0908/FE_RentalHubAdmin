@@ -64,7 +64,7 @@ export class ChatWithComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {}
 
   ngOnDestroy(): void {
-    // this.$destroy.next(false);
+    // this.$destroy.next(true);
     this.$destroy.unsubscribe();
     this.chatBotService.destroy();
     this.scrollSubscription?.unsubscribe();

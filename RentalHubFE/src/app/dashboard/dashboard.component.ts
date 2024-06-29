@@ -70,6 +70,13 @@ export class DashboardComponent implements OnInit {
       active: false,
       subTabs: false,
     },
+    {
+      title: 'Quản lý diễn đàn',
+      icon: 'forum',
+      link: 'manage-forum',
+      active: false,
+      subTabs: false,
+    },
   ];
 
   constructor(

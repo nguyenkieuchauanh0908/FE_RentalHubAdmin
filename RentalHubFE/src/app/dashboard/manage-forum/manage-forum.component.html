@@ -1,0 +1,182 @@
+<div class="relative">
+  <div *ngIf="isLoading" class="spinner__loading text-center">
+    <mat-spinner diameter="30"></mat-spinner>
+  </div>
+  <div class="mb-2 flex flex-row flex-nowrap justify-between">
+    <!-- Tabs -->
+    <mat-chip-listbox aria-label="post status selection">
+      <!-- <mat-chip-option
+        color="accent"
+        selected
+        (selectionChange)="toPosts('Chờ duyệt')"
+        >Chờ duyệt</mat-chip-option
+      >
+      <mat-chip-option color="accent" (selectionChange)="toPosts('Đã duyệt')"
+        >Đã duyệt</mat-chip-option
+      >
+      <mat-chip-option
+        color="warn"
+        (selectionChange)="toPosts('Không được duyệt')"
+        >Không được duyệt</mat-chip-option
+      > -->
+      <mat-chip-option color="warn" (selectionChange)="toPosts('Bị báo cáo')"
+        >Bị báo cáo</mat-chip-option
+      >
+    </mat-chip-listbox>
+    <div *ngIf="this.dataSource" class="flex justify-around -my-4">
+      <!-- Reload data -->
+      <div
+        mat-raised-button
+        class="text-sub-text-color my-8"
+        matTooltip="Reload data"
+        [matTooltipPosition]="'above'"
+        matTooltipHideDelay="400"
+        matRipple
+        [matRippleCentered]="true"
+        [matRippleUnbounded]="true"
+      >
+        <img
+          class="w-7 h-7 cursor-pointer"
+          src="../../../assets/images/refresh.png"
+          alt="reload data"
+          (click)="reloadData()"
+        />
+      </div>
+      <!-- Search -->
+      <div class="flex flex-col gap-1 my-4">
+        <div class="relative p-2">
+          <form
+            #searchForm="ngForm"
+            (keyup.enter)="search(searchForm.value); searchForm.reset()"
+          >
+            <img
+              src="../../../assets/images/search.png"
+              alt="search icon"
+              class="absolute top-1/2 left-4 -translate-y-1/2 w-6 h-6"
+            />
+            <input
+              type="text"
+              required="true"
+              ngModel
+              name="keyword"
+              id="simple-search"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-full focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Tìm kiếm..."
+              required
+            />
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <table
+    *ngIf="this.dataSource; else noData"
+    mat-table
+    [dataSource]="dataSource"
+    class="mat-elevation-z8"
+    style="border-radius: 8px !important"
+  >
+    <!-- Image Column -->
+    <ng-container matColumnDef="image" style="border-radius: 8px !important">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        style="border-radius: 8px !important"
+      >
+        <p class="text-center" style="border-radius: 8px !important">#</p>
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let element"
+        (click)="seePost(element)"
+        class="p-2"
+      >
+        <!-- <div class="max-w-16 max-h-16 p-2"> -->
+        <img
+          src="{{ element._image }}"
+          alt="room image"
+          style="width: 24px; height: 18px"
+          class="rounded-sm"
+        />
+        <!-- </div> -->
+      </td>
+    </ng-container>
+    <!-- Title Column -->
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef><p>Tiêu đề</p></th>
+      <td mat-cell *matCellDef="let element" (click)="seePost(element)">
+        <p class="line-clamp-3">{{ element._title }}</p>
+      </td>
+    </ng-container>
+
+    <!-- Reasons Column -->
+    <ng-container matColumnDef="reasons">
+      <th mat-header-cell *matHeaderCellDef><p>Lý do bị báo cáo</p></th>
+      <td mat-cell *matCellDef="let element" (click)="seePost(element)">
+        <p class="line-clamp-1">{{ element._reason.toString() }}</p>
+      </td>
+    </ng-container>
+
+    <!-- Author Column -->
+    <ng-container matColumnDef="author">
+      <th mat-header-cell *matHeaderCellDef><p>Tác giả</p></th>
+      <td mat-cell *matCellDef="let element" (click)="seePost(element)">
+        <div class="flex flex-row">
+          <img
+            class="w-8 h-8 rounded-full"
+            src="{{ element._auAvatar }}"
+            alt="avatar"
+          />
+          <span class="relative top-1 ml-1 line-clamp-1">
+            {{ element._auName }}
+          </span>
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- Email Column -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef><p>Email</p></th>
+      <td mat-cell *matCellDef="let element" (click)="seePost(element)">
+        <div class="flex flex-row">
+          <span class="relative top-1 ml-1 line-clamp-1">
+            {{ element._auEmail }}
+          </span>
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- ReportersNumber Column -->
+    <ng-container matColumnDef="reportersNumber">
+      <th mat-header-cell *matHeaderCellDef><p>Số lượng báo cáo</p></th>
+      <td mat-cell *matCellDef="let element" (click)="seePost(element)">
+        <p class="relative text-center top-1 ml-1 line-clamp-1">
+          {{ element._uRequest.length }}
+        </p>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      class="cursor-pointer"
+    ></tr>
+  </table>
+  <ng-template #noData>
+    <div class="text-center">
+      <p>Không có bài viết nào cần duyệt!</p>
+    </div>
+  </ng-template>
+  <!-- Pagination -->
+  <app-pagination
+    *ngIf="this.dataSource"
+    [currentPage]="currentPage"
+    [totalPages]="totalPages"
+    (toPrevPage)="changeCurrentPage($event, false, false, this.onSearching)"
+    (toNextPage)="changeCurrentPage($event, false, false, this.onSearching)"
+    (toFirstPage)="changeCurrentPage(0, $event, false, this.onSearching)"
+    (toLastPage)="changeCurrentPage(0, false, $event, this.onSearching)"
+  ></app-pagination>
+</div>
+<notifier-container></notifier-container>
