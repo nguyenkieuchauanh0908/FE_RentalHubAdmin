@@ -27,6 +27,7 @@ import { HostsStatisticsComponent } from './statistics/hosts-statistics/hosts-st
 import { EmployeesStatisticsComponent } from './statistics/employees-statistics/employees-statistics.component';
 import { ManageUsersComponent } from './manage-users/manage-users.component';
 import { ManageForumComponent } from './manage-forum/manage-forum.component';
+import { ForumPostSensorDialogComponent } from './manage-forum/forum-post-sensor-dialog/forum-post-sensor-dialog.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { ManageForumComponent } from './manage-forum/manage-forum.component';
     EmployeesStatisticsComponent,
     ManageUsersComponent,
     ManageForumComponent,
+    ForumPostSensorDialogComponent,
   ],
   imports: [CommonModule, FormsModule, DashboardRoutingModule, SharedModule],
   providers: [],

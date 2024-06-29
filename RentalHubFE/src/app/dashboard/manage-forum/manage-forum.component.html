@@ -19,7 +19,10 @@
         (selectionChange)="toPosts('Không được duyệt')"
         >Không được duyệt</mat-chip-option
       > -->
-      <mat-chip-option color="warn" (selectionChange)="toPosts('Bị báo cáo')"
+      <mat-chip-option
+        selected
+        color="warn"
+        (selectionChange)="toPosts('Bị báo cáo')"
         >Bị báo cáo</mat-chip-option
       >
     </mat-chip-listbox>

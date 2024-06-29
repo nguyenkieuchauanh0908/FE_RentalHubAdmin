@@ -6,11 +6,11 @@ import { Subject, Subscription, takeUntil } from 'rxjs';
 import { AccountService } from 'src/app/accounts/accounts.service';
 import { User } from 'src/app/auth/user.model';
 import { PostService } from 'src/app/posts/post.service';
-import { PostItem } from 'src/app/posts/posts-list/post-item/post-item.model';
 import { PaginationService } from 'src/app/shared/pagination/pagination.service';
 import { Tags } from 'src/app/shared/tags/tag.model';
 import { PostSensorDialogComponent } from '../manage-post-sensor/post-sensor-dialog/post-sensor-dialog.component';
 import { ForumService } from './forum.service';
+import { ForumPostSensorDialogComponent } from './forum-post-sensor-dialog/forum-post-sensor-dialog.component';
 
 @Component({
   selector: 'app-manage-forum',
@@ -28,12 +28,12 @@ export class ManageForumComponent implements OnInit, OnDestroy {
     'email',
     'reportersNumber',
   ];
-  dataSource!: PostItem[];
+  dataSource!: any[];
   onSearching: boolean = false;
   searchKeyword: string | null = null;
   myProfile!: User | null;
   currentUid!: string | null;
-  historyPosts: PostItem[] = new Array<PostItem>();
+  historyPosts: any[] = new Array<any>();
   totalPages: number = 1;
   currentPage: number = 1;
   pageItemLimit: number = 5;
@@ -106,28 +106,32 @@ export class ManageForumComponent implements OnInit, OnDestroy {
   }
 
   seePost(post: any) {
-    // console.log('Seeing post detail....');
-    // const dialogRef = this.dialog.open(PostSensorDialogComponent, {
-    //   width: '1000px',
-    //   data: post,
-    // });
-    // let sub = dialogRef.componentInstance.sensorResult.subscribe((postId) => {
-    //   if (this.dataSource) {
-    //     this.dataSource = this.dataSource.filter(
-    //       (post: PostItem) => post._id !== postId
-    //     );
-    //   }
-    // });
-    // sub = dialogRef.componentInstance.denySensorResult.subscribe((postId) => {
-    //   if (this.dataSource) {
-    //     this.dataSource = this.dataSource.filter(
-    //       (post: PostItem) => post._id !== postId
-    //     );
-    //   }
-    // });
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   sub.unsubscribe();
-    // });
+    console.log('Seeing post detail....');
+    const dialogRef = this.dialog.open(ForumPostSensorDialogComponent, {
+      width: '1000px',
+      data: {
+        _reportId: post._id,
+        _title: post._title,
+        _content: post._content,
+        _image: post._image,
+      },
+    });
+    let sub = dialogRef.componentInstance.postLocked.subscribe((reportId) => {
+      console.log('🚀 ~ ManageForumComponent ~ sub ~ reportId:', reportId);
+      if (this.dataSource) {
+        this.dataSource = this.dataSource.filter(
+          (reportReq: any) => reportReq._id !== reportId
+        );
+      }
+    });
+    console.log(
+      '🚀 ~ ManageForumComponent ~ sub ~ this.dataSource:',
+      this.dataSource
+    );
+
+    dialogRef.afterClosed().subscribe((result) => {
+      sub.unsubscribe();
+    });
   }
 
   //position can be either 1 (navigate to next page) or -1 (to previous page)

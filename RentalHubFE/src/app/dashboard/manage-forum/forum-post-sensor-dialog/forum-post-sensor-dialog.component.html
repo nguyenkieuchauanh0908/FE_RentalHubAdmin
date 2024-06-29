@@ -1,0 +1,66 @@
+<div class="relative">
+  <div *ngIf="isLoading" class="spinner__loading text-center">
+    <mat-spinner diameter="30"></mat-spinner>
+  </div>
+  <h2 mat-dialog-title>{{ this.title }}</h2>
+  <mat-dialog-content>
+    <div class="p-6 pb-12">
+      <!-- Loading spinner -->
+      <div *ngIf="isLoading" class="spinner__loading">
+        <mat-spinner diameter="30"></mat-spinner>
+      </div>
+      <div *ngIf="this.post">
+        <!-- Post content -->
+        <div class="flex flex-col text-justify mb-4">
+          <span *ngIf="this.post._title" class="font-medium mt-2">
+            {{ this.post._title }}
+          </span>
+          <div
+            #socialContentToDisplay
+            [ngClass]="seeMore ? 'line-clamp-none' : 'line-clamp-4'"
+          ></div>
+          <span
+            *ngIf="!seeMore"
+            class="font-medium text-blue-500 cursor-pointer"
+            (click)="seeMoreContentClick()"
+          >
+            Xem thêm
+          </span>
+          <span
+            *ngIf="seeMore"
+            class="font-medium text-blue-500 cursor-pointer"
+            (click)="seeMoreContentClick()"
+          >
+            Ẩn bớt
+          </span>
+          <div *ngIf="this.post._image">
+            <img
+              src="{{ this.post._image }}"
+              class="max-w-full max-h-96 rounded-md block ml-auto mr-auto w-1/2"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <!--Cancle -->
+    <button mat-button mat-dialog-close>Hủy</button>
+    <!-- Hủy duyệt -->
+    <button
+      mat-button
+      (click)="lockPost(0)"
+      style="color: white; background-color: rgba(255, 0, 0, 0.8)"
+    >
+      Hủy duyệt
+    </button>
+    <!-- Lưu -->
+    <button
+      mat-button
+      (click)="lockPost(2)"
+      style="color: white; background-color: #1a56db"
+    >
+      Khóa
+    </button>
+  </mat-dialog-actions>
+</div>

@@ -18,6 +18,7 @@ import { ChatBotComponent } from './chat-bot/chat-bot.component';
 import { ChatWithComponent } from './chat-bot/chat-with/chat-with.component';
 import { ChatUserComponent } from './chat-bot/chat-user/chat-user.component';
 import { SendForgetPwEmailComponent } from './send-forget-pw-email/send-forget-pw-email.component';
+import { RichTextEditorModule } from '@syncfusion/ej2-angular-richtexteditor';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { SendForgetPwEmailComponent } from './send-forget-pw-email/send-forget-p
     ScrollingModule,
     NotifierModule,
     NgxChartsModule,
+    RichTextEditorModule,
   ],
   exports: [
     CommonModule,
@@ -58,6 +60,7 @@ import { SendForgetPwEmailComponent } from './send-forget-pw-email/send-forget-p
     NgxChartsModule,
     TotalDataComponent,
     ChatBotComponent,
+    RichTextEditorModule,
   ],
 })
 export class SharedModule {}

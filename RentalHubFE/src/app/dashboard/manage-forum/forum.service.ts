@@ -24,4 +24,28 @@ export class ForumService {
       )
       .pipe(catchError(handleError));
   }
+
+  lockReportedPost(reportId: string, status: number) {
+    let queryParams = new HttpParams().append('reportedId', reportId);
+    if (status === 2) {
+      return this.http
+        .patch<resDataDTO>(
+          environment.baseUrl + 'social/sensor-reported-request',
+          { status: status },
+          {
+            params: queryParams,
+          }
+        )
+        .pipe(catchError(handleError));
+    } else {
+      return this.http
+        .patch<resDataDTO>(
+          environment.baseUrl + 'social/sensor-reported-request',
+          {
+            params: queryParams,
+          }
+        )
+        .pipe(catchError(handleError));
+    }
+  }
 }
