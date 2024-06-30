@@ -1,7 +1,16 @@
-import { Component, EventEmitter, Inject } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NotifierService } from 'angular-notifier';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { User } from 'src/app/auth/user.model';
 import { PostService } from 'src/app/posts/post.service';
 import { PostItem } from 'src/app/posts/posts-list/post-item/post-item.model';
@@ -13,7 +22,13 @@ import { Tags } from 'src/app/shared/tags/tag.model';
   templateUrl: './post-sensor-dialog.component.html',
   styleUrls: ['./post-sensor-dialog.component.scss'],
 })
-export class PostSensorDialogComponent {
+export class PostSensorDialogComponent
+  implements OnInit, OnDestroy, AfterViewInit
+{
+  @ViewChild('contentToDisplay') contentToDisplay: ElementRef | undefined;
+  $destroy: Subject<boolean> = new Subject();
+  seeMore: boolean = false;
+  post: any | null = null;
   isLoading = false;
   profile!: User | null;
   currentUid!: string | null;
@@ -49,7 +64,16 @@ export class PostSensorDialogComponent {
     private notifierService: NotifierService,
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) {
+    this.post = data;
+  }
+  ngOnDestroy(): void {
+    this.$destroy.next(true);
+    this.$destroy.unsubscribe();
+  }
+  ngAfterViewInit(): void {
+    setTimeout(() => this.attachingInnerHtmlContent(), 100);
+  }
 
   ngOnInit(): void {
     this.postService.setCurrentChosenTags([]);
@@ -58,6 +82,15 @@ export class PostSensorDialogComponent {
     this.postService.getCurrentChosenTags.subscribe((tags) => {
       this.selectedTags = tags;
     });
+  }
+
+  attachingInnerHtmlContent() {
+    if (this.contentToDisplay) {
+      this.contentToDisplay.nativeElement.innerHTML = this.post._content;
+    } else {
+      console.log('contentToDisplay is not ready yet');
+      setTimeout(() => this.attachingInnerHtmlContent(), 100);
+    }
   }
 
   denyPost() {
@@ -161,5 +194,9 @@ export class PostSensorDialogComponent {
         }
       );
     }
+  }
+
+  seeMoreContentClick() {
+    this.seeMore = !this.seeMore;
   }
 }

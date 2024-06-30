@@ -108,7 +108,7 @@ export class ManageReportedPostsComponent implements OnInit, OnDestroy {
 
   seePost(postDetail: any) {
     let post = postDetail;
-    if (postDetail._status === 1) {
+    if (postDetail._status === 3) {
       this.postService.getReportPostById(postDetail._id).subscribe((res) => {
         if (res.data) {
           post = res.data;
