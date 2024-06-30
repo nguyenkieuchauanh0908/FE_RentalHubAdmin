@@ -86,7 +86,11 @@ export class PostSensorDialogComponent
 
   attachingInnerHtmlContent() {
     if (this.contentToDisplay) {
-      this.contentToDisplay.nativeElement.innerHTML = this.post._content;
+      if (this.post._contentPost) {
+        this.contentToDisplay.nativeElement.innerHTML = this.post._contentPost;
+      } else {
+        this.contentToDisplay.nativeElement.innerHTML = this.post._content;
+      }
     } else {
       console.log('contentToDisplay is not ready yet');
       setTimeout(() => this.attachingInnerHtmlContent(), 100);
