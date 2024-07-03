@@ -116,6 +116,7 @@ export class ManageForumComponent implements OnInit, OnDestroy {
         _title: post._title,
         _content: post._content,
         _image: post._image,
+        _reason: post._reason,
       },
     });
     let sub = dialogRef.componentInstance.postLocked.subscribe((reportId) => {

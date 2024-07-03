@@ -4,7 +4,7 @@
   </div>
   <h2 mat-dialog-title>{{ this.title }}</h2>
   <mat-dialog-content>
-    <div class="p-6 pb-12">
+    <div class="px-6 pb-12 mt-4">
       <!-- Loading spinner -->
       <div *ngIf="isLoading" class="spinner__loading">
         <mat-spinner diameter="30"></mat-spinner>
@@ -12,6 +12,16 @@
       <div *ngIf="this.post">
         <!-- Post content -->
         <div class="flex flex-col text-justify mb-4">
+          <!-- Reasons -->
+          <div *ngIf="this.post._reason" class="flex flex-row flex-wrap">
+            <p class="font-normal text-sm">Lý do bị báo cáo</p>
+            <div
+              class="flex flex-row h-6 bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 mb-2 rounded-full dark:bg-red-900 dark:text-red-300"
+              *ngFor="let reason of post._reason"
+            >
+              <span class="tag">{{ reason }} </span>
+            </div>
+          </div>
           <span *ngIf="this.post._title" class="font-medium mt-2">
             {{ this.post._title }}
           </span>
