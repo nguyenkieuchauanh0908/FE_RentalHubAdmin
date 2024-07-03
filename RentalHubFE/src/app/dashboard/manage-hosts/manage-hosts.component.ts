@@ -87,6 +87,7 @@ export class ManageHostsComponent implements OnInit, OnDestroy {
   //Xem chi tiết hồ sơ đăng ký host
   seeDetail(host: any) {
     console.log('Seeing host IDCard detail....', host);
+    window.scrollTo(0, 0); // Scrolls the page to the top
     const dialogRef = this.dialog.open(HostSensorDialogComponent, {
       width: '500px',
       data: { hostId: host._uId, requestStatus: this.currentHostReqStatus },

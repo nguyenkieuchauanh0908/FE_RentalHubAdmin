@@ -73,6 +73,7 @@ export class ManageEmployeesComponent {
 
   seeEmployeeDetails(employeeDetails: any) {
     if (employeeDetails._active === true) {
+      window.scrollTo(0, 0); // Scrolls the page to the top
       const dialogRef = this.dialog.open(
         UpdateEmployeeLoginDetailDialogComponent,
         {
@@ -86,6 +87,7 @@ export class ManageEmployeesComponent {
   }
 
   blockInspector(inspectId: string) {
+    window.scrollTo(0, 0); // Scrolls the page to the top
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
       data: 'Xác nhận khóa cho tài khoản này?',
@@ -108,6 +110,7 @@ export class ManageEmployeesComponent {
   }
 
   UnblockInspector(inspectId: string) {
+    window.scrollTo(0, 0); // Scrolls the page to the top
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
       data: 'Xác nhận mở khóa cho tài khoản này?',
@@ -148,6 +151,7 @@ export class ManageEmployeesComponent {
 
   addNewEmployee() {
     console.log('Seeing post detail....');
+    window.scrollTo(0, 0); // Scrolls the page to the top
     const dialogRef = this.dialog.open(AddNewEmployeeDialogComponent, {
       width: '400px',
     });

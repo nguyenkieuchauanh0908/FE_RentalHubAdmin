@@ -74,6 +74,7 @@ export class LoginComponent implements OnInit {
   }
 
   onForgetPasswordClick() {
+    window.scrollTo(0, 0); // Scrolls the page to the top
     const dialogRef = this.dialog.open(SendForgetPwEmailComponent, {
       data: { title: 'Quên mật khẩu', inputLabel: 'Email' },
       width: '400px',

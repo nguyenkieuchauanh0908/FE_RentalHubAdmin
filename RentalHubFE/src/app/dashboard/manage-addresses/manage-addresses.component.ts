@@ -60,6 +60,7 @@ export class ManageAddressesComponent implements OnInit, OnDestroy {
   //Xem chi tiết hồ sơ đăng ký địa chỉ
   seeDetail(addressReq: any) {
     console.log('Seeing addressReq detail....', addressReq);
+    window.scrollTo(0, 0); // Scrolls the page to the top
     const dialogRef = this.dialog.open(AddressSensorDialogComponent, {
       width: '800px',
       data: {

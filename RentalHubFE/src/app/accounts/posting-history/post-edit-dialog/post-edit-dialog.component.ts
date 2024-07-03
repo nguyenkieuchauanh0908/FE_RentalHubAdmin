@@ -185,6 +185,7 @@ export class PostEditDialogComponent implements OnInit {
   }
 
   toHidePostDialog() {
+    window.scrollTo(0, 0); // Scrolls the page to the top
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
       data: 'Bạn có chắc muốn gỡ bài viết này không?',

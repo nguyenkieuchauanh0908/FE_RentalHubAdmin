@@ -103,6 +103,7 @@ export class ManagePostSensorComponent implements OnInit, OnDestroy {
 
   seePost(post: any) {
     console.log('Seeing post detail....');
+    window.scrollTo(0, 0); // Scrolls the page to the top
     const dialogRef = this.dialog.open(PostSensorDialogComponent, {
       width: '1000px',
       data: post,

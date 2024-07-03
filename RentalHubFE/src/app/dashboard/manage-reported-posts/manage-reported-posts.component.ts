@@ -108,12 +108,13 @@ export class ManageReportedPostsComponent implements OnInit, OnDestroy {
 
   seePost(postDetail: any) {
     let post = postDetail;
-    if (postDetail._status === 3) {
+    if (postDetail._status === 1) {
       this.postService.getReportPostById(postDetail._id).subscribe((res) => {
         if (res.data) {
           post = res.data;
           //Nếu đã lấy được thông tin của post thì open sensor dialog
           if (post) {
+            window.scrollTo(0, 0); // Scrolls the page to the top
             const dialogRef = this.dialog.open(PostSensorDialogComponent, {
               width: '1000px',
               data: post,

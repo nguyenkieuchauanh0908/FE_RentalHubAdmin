@@ -9,159 +9,172 @@
       *ngIf="post"
       class="xs:flex xs:flex-col xs:col-span-12 lg:grid lg:col-span-9 bg-white-background py-4 px-8 mt-8 mb-8 rounded-lg"
     >
-      <div class="flex flex-col">
-        <!-- General Information -->
-        <div class="mb-8">
-          <!-- Title, time, like, report -->
-          <div class="row flex justify-between mb-0 flex-wrap">
-            <div class="flex flex-row justify-between flex-wrap">
-              <p class="text-lg font-medium mb-0 mr-1">
-                {{ post._title }}
-              </p>
-              <p
-                class="relative top-1 text-sm font-normal italic mb-0"
-                style="margin-left: 6px"
-              >
-                &#40;Ngày cập nhật gần nhất: {{ post._postingDateLocal }} &#41;
-              </p>
-            </div>
-          </div>
-          <!-- Price, Area -->
-          <div
-            class="row flex flex-row flex-wrap gap-4 items-center justify-between text-sm text-sub-text-color"
-          >
-            <p>
-              Giá:
-              <span class="text-text-price-color font-medium"
-                >{{ post.roomPrice.toLocaleString() }}đ</span
-              >
-            </p>
+      <!-- Reasons -->
+      <div
+        *ngIf="this.post._content && this.post._contentPost"
+        class="flex flex-row flex-wrap"
+      >
+        <p class="font-normal text-sm">Lý do bị báo cáo</p>
+        <div
+          class="flex flex-row h-6 bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 mb-2 rounded-full dark:bg-red-900 dark:text-red-300"
+          *ngFor="let reason of post._content"
+        >
+          <span class="tag">{{ reason }} </span>
+        </div>
+      </div>
 
-            <p>
-              Giá điện:
-              <span class="text-text-price-color font-medium"
-                >{{ post.roomElectricPrice.toLocaleString() }}đ</span
-              >
+      <!-- General Information -->
+      <div class="mb-8">
+        <!-- Title, time, like, report -->
+        <div class="row flex justify-between mb-0 flex-wrap">
+          <div class="flex flex-row justify-between flex-wrap">
+            <p class="text-lg font-medium mb-0 mr-1">
+              {{ post._title }}
             </p>
-
-            <p>
-              Giá nước:
-              <span class="text-text-price-color font-medium"
-                >{{ post.roomWaterPrice.toLocaleString() }}đ</span
-              >
-            </p>
-            <p>
-              Diện tích:
-              <span class="font-medium">{{ post.roomArea }}m<sup>2</sup></span>
-            </p>
-          </div>
-
-          <!-- Address -->
-          <div
-            class="row flex flex-row gap-4 items-center justify-between text-sm text-sub-text-color"
-          >
-            <p>
-              Địa chỉ phòng trọ:
-              <span class="font-medium">{{ post.roomAddress }}</span>
-            </p>
-          </div>
-
-          <!-- Tags -->
-          <div *ngIf="post._tags">
-            <p class="text-base font-medium">Thẻ bài viết</p>
-            <div class="flex flex-row flex-wrap">
-              <div
-                class="flex flex-row h-6 bg-indigo-100 text-indigo-800 text-xs font-medium me-2 px-2.5 py-0.5 mb-2 rounded-full dark:bg-indigo-900 dark:text-indigo-300"
-                *ngFor="let tag of post._tags"
-              >
-                <span class="tag">
-                  {{ tag._tag }}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Dịch vụ -->
-          <div>
-            <p class="text-base font-medium">Dịch vụ đi kèm</p>
-            <div
-              class="flex flex-row flex-wrap"
-              *ngIf="post.roomServices.length > 0; else noServicesBlock"
+            <p
+              class="relative top-1 text-sm font-normal italic mb-0"
+              style="margin-left: 6px"
             >
-              <div
-                class="flex flex-row h-6 bg-indigo-100 text-indigo-800 text-xs font-medium me-2 px-2.5 py-0.5 mb-2 rounded-full dark:bg-indigo-900 dark:text-indigo-300"
-                *ngFor="let tag of post.roomServices"
-              >
-                <span class="tag">
-                  {{ tag }}
-                </span>
-              </div>
-            </div>
-            <ng-template #noServicesBlock>
-              <p>Không có dịch vụ đi kèm.</p>
-            </ng-template>
-          </div>
-
-          <!-- Tiện ích -->
-          <div>
-            <p class="text-base font-medium">Tiện ích đi kèm</p>
-            <div
-              class="flex flex-row flex-wrap"
-              *ngIf="post.roomUtilities.length > 0; else noUltilitiesBlock"
-            >
-              <div
-                class="flex flex-row h-6 bg-indigo-100 text-indigo-800 text-xs font-medium me-2 px-2.5 py-0.5 mb-2 rounded-full dark:bg-indigo-900 dark:text-indigo-300"
-                *ngFor="let tag of post.roomUtilities"
-              >
-                <span class="tag">
-                  {{ tag }}
-                </span>
-              </div>
-            </div>
-            <ng-template #noUltilitiesBlock>
-              <p>Không có tiện ích đi kèm.</p>
-            </ng-template>
-          </div>
-
-          <!-- Thông tin liên hệ -->
-          <div>
-            <p class="text-base font-medium">Thông tin liên hệ</p>
-            <p>
-              Chủ trọ:
-              <span>{{ post.authorFName }} {{ post.authorLName }}</span>
-            </p>
-            <p>
-              Số điện thoại: <span>{{ post.phoneNumber }}</span>
+              &#40;Ngày cập nhật gần nhất: {{ post._postingDateLocal }} &#41;
             </p>
           </div>
         </div>
-
-        <!-- Image slider -->
-        <app-slider [sliderItems]="post._images"></app-slider>
-
-        <!-- Main content -->
+        <!-- Price, Area -->
         <div
-          #contentToDisplay
-          class="mt-4"
-          [ngClass]="seeMore ? 'line-clamp-none' : 'line-clamp-4'"
-        ></div>
-        <span
-          *ngIf="!seeMore"
-          class="font-medium text-blue-500 cursor-pointer"
-          (click)="seeMoreContentClick()"
+          class="row flex flex-row flex-wrap gap-4 items-center justify-between text-sm text-sub-text-color"
         >
-          Xem thêm
-        </span>
-        <span
-          *ngIf="seeMore"
-          class="font-medium text-blue-500 cursor-pointer"
-          (click)="seeMoreContentClick()"
-        >
-          Ẩn bớt
-        </span>
+          <p>
+            Giá:
+            <span class="text-text-price-color font-medium"
+              >{{ post.roomPrice.toLocaleString() }}đ</span
+            >
+          </p>
 
-        <!-- Map -->
-        <!-- <div class="relative">
+          <p>
+            Giá điện:
+            <span class="text-text-price-color font-medium"
+              >{{ post.roomElectricPrice.toLocaleString() }}đ</span
+            >
+          </p>
+
+          <p>
+            Giá nước:
+            <span class="text-text-price-color font-medium"
+              >{{ post.roomWaterPrice.toLocaleString() }}đ</span
+            >
+          </p>
+          <p>
+            Diện tích:
+            <span class="font-medium">{{ post.roomArea }}m<sup>2</sup></span>
+          </p>
+        </div>
+
+        <!-- Address -->
+        <div
+          class="row flex flex-row gap-4 items-center justify-between text-sm text-sub-text-color"
+        >
+          <p>
+            Địa chỉ phòng trọ:
+            <span class="font-medium">{{ post.roomAddress }}</span>
+          </p>
+        </div>
+
+        <!-- Tags -->
+        <div *ngIf="post._tags">
+          <p class="text-base font-medium">Thẻ bài viết</p>
+          <div class="flex flex-row flex-wrap">
+            <div
+              class="flex flex-row h-6 bg-indigo-100 text-indigo-800 text-xs font-medium me-2 px-2.5 py-0.5 mb-2 rounded-full dark:bg-indigo-900 dark:text-indigo-300"
+              *ngFor="let tag of post._tags"
+            >
+              <span class="tag">
+                {{ tag._tag }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dịch vụ -->
+        <div>
+          <p class="text-base font-medium">Dịch vụ đi kèm</p>
+          <div
+            class="flex flex-row flex-wrap"
+            *ngIf="post.roomServices.length > 0; else noServicesBlock"
+          >
+            <div
+              class="flex flex-row h-6 bg-indigo-100 text-indigo-800 text-xs font-medium me-2 px-2.5 py-0.5 mb-2 rounded-full dark:bg-indigo-900 dark:text-indigo-300"
+              *ngFor="let tag of post.roomServices"
+            >
+              <span class="tag">
+                {{ tag }}
+              </span>
+            </div>
+          </div>
+          <ng-template #noServicesBlock>
+            <p>Không có dịch vụ đi kèm.</p>
+          </ng-template>
+        </div>
+
+        <!-- Tiện ích -->
+        <div>
+          <p class="text-base font-medium">Tiện ích đi kèm</p>
+          <div
+            class="flex flex-row flex-wrap"
+            *ngIf="post.roomUtilities.length > 0; else noUltilitiesBlock"
+          >
+            <div
+              class="flex flex-row h-6 bg-indigo-100 text-indigo-800 text-xs font-medium me-2 px-2.5 py-0.5 mb-2 rounded-full dark:bg-indigo-900 dark:text-indigo-300"
+              *ngFor="let tag of post.roomUtilities"
+            >
+              <span class="tag">
+                {{ tag }}
+              </span>
+            </div>
+          </div>
+          <ng-template #noUltilitiesBlock>
+            <p>Không có tiện ích đi kèm.</p>
+          </ng-template>
+        </div>
+
+        <!-- Thông tin liên hệ -->
+        <div>
+          <p class="text-base font-medium">Thông tin liên hệ</p>
+          <p>
+            Chủ trọ:
+            <span>{{ post.authorFName }} {{ post.authorLName }}</span>
+          </p>
+          <p>
+            Số điện thoại: <span>{{ post.phoneNumber }}</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Image slider -->
+      <app-slider [sliderItems]="post._images"></app-slider>
+
+      <!-- Main content -->
+      <div
+        #contentToDisplay
+        class="mt-4"
+        [ngClass]="seeMore ? 'line-clamp-none' : 'line-clamp-4'"
+      ></div>
+      <span
+        *ngIf="!seeMore"
+        class="font-medium text-blue-500 cursor-pointer"
+        (click)="seeMoreContentClick()"
+      >
+        Xem thêm
+      </span>
+      <span
+        *ngIf="seeMore"
+        class="font-medium text-blue-500 cursor-pointer"
+        (click)="seeMoreContentClick()"
+      >
+        Ẩn bớt
+      </span>
+
+      <!-- Map -->
+      <!-- <div class="relative">
       <p class="text-base font-medium">Bản đồ</p>
       <google-map
         class="absolute left-1/2 -translate-x-1/2 max-w-full"
@@ -174,7 +187,6 @@
         ></map-marker>
       </google-map>
     </div> -->
-      </div>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions align="end">

@@ -104,6 +104,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   markAsReadAll() {
+    window.scrollTo(0, 0); // Scrolls the page to the top
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
       data: 'Bạn có chắc muốn đánh dấu đã đọc tất cả thông báo?',
@@ -195,6 +196,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
+    window.scrollTo(0, 0); // Scrolls the page to the top
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
       data: 'Bạn có chắc muốn đăng xuất?',
@@ -211,6 +213,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   updateAvatar() {
+    window.scrollTo(0, 0); // Scrolls the page to the top
     const dialogRef = this.dialog.open(UpdateAvatarDialogComponent, {
       width: '400px',
       data: this.user?._avatar,
