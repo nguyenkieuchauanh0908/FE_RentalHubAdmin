@@ -90,13 +90,21 @@
         <div class="mb-6">
           <label
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Giấy phép kinh doanh</label
+          >
+          <app-slider [sliderItems]="addressReqDetail._imgLicense"></app-slider>
+        </div>
+
+        <!-- <div class="mb-6">
+          <label
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             for="multiple_files"
             >Giấy phép kinh doanh</label
           >
           <div class="bg-white-background rounded-lg">
-            <div class="flex flex-row flex-wrap mt-4 w-100">
-              <!-- Image -->
-              <div
+            <div class="flex flex-row flex-wrap mt-4 w-100"> -->
+        <!-- Image -->
+        <!-- <div
                 *ngFor="
                   let preview of addressReqDetail._imgLicense;
                   index as index
@@ -111,7 +119,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </form>
       <notifier-container></notifier-container>
     </div>
