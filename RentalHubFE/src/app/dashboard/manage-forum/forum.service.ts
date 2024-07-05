@@ -25,6 +25,34 @@ export class ForumService {
       .pipe(catchError(handleError));
   }
 
+  getSocialPostStatus(status: number | null, page: number, limit: number) {
+    let queryParams = new HttpParams()
+      .append('page', page)
+      .append('limit', limit);
+    //Nếu không truyền status thì lấy tất cả post
+    if (status) {
+      queryParams = queryParams.append('status', status);
+    }
+    return this.http
+      .get<resDataDTO>(environment.baseUrl + 'social/get-social-posts-status', {
+        params: queryParams,
+      })
+      .pipe(catchError(handleError));
+  }
+
+  unlockReportedPost(postId: string) {
+    let queryParams = new HttpParams().append('postId', postId);
+    return this.http
+      .patch<resDataDTO>(
+        environment.baseUrl + 'social/admin/block-social-post',
+        {},
+        {
+          params: queryParams,
+        }
+      )
+      .pipe(catchError(handleError));
+  }
+
   lockReportedPost(reportId: string, status: number) {
     let queryParams = new HttpParams().append('reportedId', reportId);
     if (status === 2) {

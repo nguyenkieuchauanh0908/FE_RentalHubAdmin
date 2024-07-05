@@ -5,20 +5,9 @@
   <div class="mb-2 flex flex-row flex-nowrap justify-between">
     <!-- Tabs -->
     <mat-chip-listbox aria-label="post status selection">
-      <!-- <mat-chip-option
-        color="accent"
-        selected
-        (selectionChange)="toPosts('Chờ duyệt')"
-        >Chờ duyệt</mat-chip-option
+      <mat-chip-option color="accent" (selectionChange)="toPosts('Tất cả')"
+        >Tất cả</mat-chip-option
       >
-      <mat-chip-option color="accent" (selectionChange)="toPosts('Đã duyệt')"
-        >Đã duyệt</mat-chip-option
-      >
-      <mat-chip-option
-        color="warn"
-        (selectionChange)="toPosts('Không được duyệt')"
-        >Không được duyệt</mat-chip-option
-      > -->
       <mat-chip-option
         selected
         color="warn"
@@ -86,17 +75,18 @@
         *matHeaderCellDef
         style="border-radius: 8px !important"
       >
-        <p class="text-center" style="border-radius: 8px !important">#</p>
+        <p style="border-radius: 8px !important">#</p>
       </th>
       <td
         mat-cell
         *matCellDef="let element"
         (click)="seePost(element)"
+        style="border-radius: 8px !important"
         class="p-2"
       >
         <!-- <div class="max-w-16 max-h-16 p-2"> -->
         <img
-          src="{{ element._image }}"
+          src="{{ element._images }}"
           alt="room image"
           style="width: 24px; height: 18px"
           class="rounded-sm"
@@ -108,15 +98,7 @@
     <ng-container matColumnDef="title">
       <th mat-header-cell *matHeaderCellDef><p>Tiêu đề</p></th>
       <td mat-cell *matCellDef="let element" (click)="seePost(element)">
-        <p class="line-clamp-3">{{ element._title }}</p>
-      </td>
-    </ng-container>
-
-    <!-- Reasons Column -->
-    <ng-container matColumnDef="reasons">
-      <th mat-header-cell *matHeaderCellDef><p>Lý do bị báo cáo</p></th>
-      <td mat-cell *matCellDef="let element" (click)="seePost(element)">
-        <p class="line-clamp-1">{{ element._reason.toString() }}</p>
+        <p class="line-clamp-1">{{ element._title }}</p>
       </td>
     </ng-container>
 
@@ -149,12 +131,23 @@
       </td>
     </ng-container>
 
-    <!-- ReportersNumber Column -->
-    <ng-container matColumnDef="reportersNumber">
-      <th mat-header-cell *matHeaderCellDef><p>Số lượng báo cáo</p></th>
-      <td mat-cell *matCellDef="let element" (click)="seePost(element)">
-        <p class="relative text-center top-1 ml-1 line-clamp-1">
-          {{ element._uRequest }}
+    <!-- Time Column -->
+    <ng-container matColumnDef="time" style="border-radius: 8px !important">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        style="border-radius: 8px !important"
+      >
+        <p style="border-radius: 8px !important">Lần cập nhật cuối</p>
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let element"
+        style="border-radius: 8px !important"
+        (click)="seePost(element)"
+      >
+        <p class="relative top-1 ml-1 line-clamp-1">
+          {{ element._createdAtLocal }}
         </p>
       </td>
     </ng-container>

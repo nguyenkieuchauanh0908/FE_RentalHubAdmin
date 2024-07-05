@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 import { Validators, FormBuilder } from '@angular/forms';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { RichTextEditorComponent } from '@syncfusion/ej2-angular-richtexteditor';
 import { NotifierService } from 'angular-notifier';
 import { Subject, takeUntil } from 'rxjs';
 import { ForumService } from '../forum.service';
@@ -38,34 +37,6 @@ export class ForumPostSensorDialogComponent
   error: string = '';
   post: any | null = null;
   seeMore: boolean = false;
-  previews: string[] = [];
-
-  public customToolbar: Object = {
-    items: [
-      'Bold',
-      'Italic',
-      'Underline',
-      'FontColor',
-      'BackgroundColor',
-      'LowerCase',
-      'UpperCase',
-      'Alignments',
-      'OrderedList',
-      'UnorderedList',
-      'Outdent',
-      'Indent',
-      'Undo',
-      'Redo',
-    ],
-  };
-
-  postEditForm = this.formBuilder.group({
-    idInputControl: [{ value: '', disabled: true }],
-    titleInputControl: [{ value: '', disabled: true }, Validators.required],
-    contentInputControl: [{ value: '', disabled: true }, Validators.required],
-    addFilesInputControl: [],
-    updateFilesInputControl: [],
-  });
 
   constructor(
     private formBuilder: FormBuilder,
@@ -84,12 +55,6 @@ export class ForumPostSensorDialogComponent
     //Initite postEdit form value
     if (this.post) {
       this.title = 'Nội dung bài viết';
-      this.postEditForm.patchValue({
-        idInputControl: this.post._reportId,
-        titleInputControl: this.post._title,
-        contentInputControl: this.post._content,
-      });
-      this.previews.push(this.post._image);
     } else {
       this.title = 'Tạo bài viết';
     }
@@ -102,19 +67,46 @@ export class ForumPostSensorDialogComponent
     this.seeMore = !this.seeMore;
   }
 
+  unlockPost() {
+    window.scrollTo(0, 0); // Scrolls the page to the top
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: 'Xác nhận mở khóa?',
+    });
+    const sub = dialogRef.componentInstance.confirmYes.subscribe(() => {
+      this.isLoading = true;
+      this.forumService
+        .unlockReportedPost(this.post._id)
+        .pipe(takeUntil(this.$destroy))
+        .subscribe((res) => {
+          if (res.data) {
+            this.dialog.closeAll();
+            this.notifierService.notify(
+              'success',
+              'Mở khóa bài viết thành công!'
+            );
+          }
+        });
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      sub.unsubscribe();
+    });
+    this.isLoading = false;
+  }
+
   lockPost(status: number) {
     window.scrollTo(0, 0); // Scrolls the page to the top
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
-      data: 'Xác nhận duyệt?',
+      data: 'Xác nhận khóa?',
     });
     const sub = dialogRef.componentInstance.confirmYes.subscribe(() => {
       this.isLoading = true;
-      this.forumService.lockReportedPost(this.post._reportId, status).subscribe(
+      this.forumService.lockReportedPost(this.post._id, status).subscribe(
         (res) => {
           if (res.data) {
             this.isLoading = false;
-            this.postLocked.emit(this.data._reportId);
+            this.postLocked.emit(this.data._id);
             this.notifierService.hideAll();
             this.dialog.closeAll();
             this.notifierService.notify(

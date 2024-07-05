@@ -20,14 +20,7 @@ import { ForumPostSensorDialogComponent } from './forum-post-sensor-dialog/forum
 export class ManageForumComponent implements OnInit, OnDestroy {
   isLoading = false;
   $destroy: Subject<boolean> = new Subject<boolean>();
-  displayedColumns: string[] = [
-    'image',
-    'title',
-    'reasons',
-    'author',
-    'email',
-    'reportersNumber',
-  ];
+  displayedColumns: string[] = ['image', 'title', 'author', 'email', 'time'];
   dataSource!: any[];
   onSearching: boolean = false;
   searchKeyword: string | null = null;
@@ -40,6 +33,7 @@ export class ManageForumComponent implements OnInit, OnDestroy {
   myProfileSub = new Subscription();
   getTagSub = new Subscription();
   sourceTags: Set<Tags> = new Set();
+  currentPostStatus: number | null = 2;
 
   constructor(
     private accountService: AccountService,
@@ -56,12 +50,13 @@ export class ManageForumComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isLoading = true;
+    this.currentPostStatus = 2;
     this.currentPage = 1;
     if (this.currentUid) {
       this.myProfile = this.accountService.getProfile(this.currentUid);
     }
     if (!this.onSearching) {
-      this.loadData();
+      this.loadData(this.currentPostStatus);
     } else {
       // this.postService
       //   .findPostByIdAndStatus(
@@ -93,17 +88,35 @@ export class ManageForumComponent implements OnInit, OnDestroy {
     this.isLoading = false;
   }
 
-  loadData() {
-    this.forumService
-      .getReportedSocialPosts(this.currentPage, this.pageItemLimit)
-      .pipe(takeUntil(this.$destroy))
-      .subscribe((res) => {
-        if (res.data) {
-          this.dataSource = res.data;
-          this.totalPages = res.pagination.total;
-          this.isLoading = false;
-        }
-      });
+  loadData(postStatus: number | null) {
+    this.isLoading = true;
+    //Lấy post bị reported
+    if (postStatus === 2) {
+      this.forumService
+        .getReportedSocialPosts(this.currentPage, this.pageItemLimit)
+        .pipe(takeUntil(this.$destroy))
+        .subscribe((res) => {
+          if (res.data) {
+            this.dataSource = res.data;
+            this.totalPages = res.pagination.total;
+            this.isLoading = false;
+          }
+        });
+    }
+    //Lấy toàn bộ post
+    else {
+      this.forumService
+        .getSocialPostStatus(postStatus, this.currentPage, this.pageItemLimit)
+        .pipe(takeUntil(this.$destroy))
+        .subscribe((res) => {
+          if (res.data) {
+            this.dataSource = res.data;
+            this.totalPages = res.pagination.total;
+            this.isLoading = false;
+          }
+        });
+    }
+    this.isLoading = false;
   }
 
   seePost(post: any) {
@@ -111,13 +124,7 @@ export class ManageForumComponent implements OnInit, OnDestroy {
     // window.scrollTo(0, 0); // Scrolls the page to the top
     const dialogRef = this.dialog.open(ForumPostSensorDialogComponent, {
       width: '1000px',
-      data: {
-        _reportId: post._id,
-        _title: post._title,
-        _content: post._content,
-        _image: post._image,
-        _reason: post._reason,
-      },
+      data: post,
     });
     let sub = dialogRef.componentInstance.postLocked.subscribe((reportId) => {
       console.log('🚀 ~ ManageForumComponent ~ sub ~ reportId:', reportId);
@@ -156,8 +163,8 @@ export class ManageForumComponent implements OnInit, OnDestroy {
     } else if (toLastPage) {
       this.currentPage = this.totalPages;
     }
-    if (onSearching) {
-      this.loadData();
+    if (!onSearching) {
+      this.loadData(this.currentPostStatus);
     } else {
       // this.postService
       //   .findPostByIdAndStatus(
@@ -176,7 +183,7 @@ export class ManageForumComponent implements OnInit, OnDestroy {
       //         this.dataSource = res.data;
       //       }
       //       this.isLoading = false;
-      //     },
+      //     },C
       //     (err) => {
       //       this.isLoading = false;
       //       this.notifierService.notify(
@@ -189,21 +196,20 @@ export class ManageForumComponent implements OnInit, OnDestroy {
   }
 
   toPosts(type: string): void {
-    // switch (type) {
-    //   case 'Chờ duyệt':
-    //     this.router.navigate(['/dashboard/post-sensor']);
-    //     break;
-    //   case 'Đã duyệt':
-    //     this.router.navigate(['/dashboard/checked-posts']);
-    //     break;
-    //   case 'Không được duyệt':
-    //     this.router.navigate(['/dashboard/denied-posts']);
-    //     break;
-    //   case 'Bị báo cáo':
-    //     this.router.navigate(['/dashboard/reported-posts']);
-    //     break;
-    //   default:
-    // }
+    this.dataSource = [];
+    this.currentPage = 1;
+    this.totalPages = 0;
+    switch (type) {
+      case 'Tất cả':
+        this.currentPostStatus = null;
+        break;
+      case 'Bị báo cáo':
+        this.currentPostStatus = 2;
+        break;
+      default:
+        this.currentPostStatus = 2;
+    }
+    this.loadData(this.currentPostStatus);
   }
 
   reloadData() {
@@ -211,7 +217,7 @@ export class ManageForumComponent implements OnInit, OnDestroy {
     this.searchKeyword = null;
     this.onSearching = false;
     this.currentPage = 1;
-    this.loadData();
+    this.loadData(this.currentPostStatus);
   }
 
   search(form: any) {

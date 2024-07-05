@@ -12,6 +12,13 @@
       <div *ngIf="this.post">
         <!-- Post content -->
         <div class="flex flex-col text-justify mb-4">
+          <!-- Report number -->
+          <!-- Post bị báo cáo nhưng chưa duyệt thì status vẫn là 0 -->
+          <div *ngIf="this.post._uRequest > 0" class="flex flex-row flex-wrap">
+            <p class="font-normal text-sm">
+              Số lượng tài khoản báo cáo: {{ this.post._uRequest }}
+            </p>
+          </div>
           <!-- Reasons -->
           <div *ngIf="this.post._reason" class="flex flex-row flex-wrap">
             <p class="font-normal text-sm">Lý do bị báo cáo</p>
@@ -43,9 +50,9 @@
           >
             Ẩn bớt
           </span>
-          <div *ngIf="this.post._image">
+          <div *ngIf="this.post._images">
             <img
-              src="{{ this.post._image }}"
+              src="{{ this.post._images }}"
               class="max-w-full max-h-96 rounded-md block ml-auto mr-auto w-1/2"
             />
           </div>
@@ -56,16 +63,27 @@
   <mat-dialog-actions align="end">
     <!--Cancle -->
     <button mat-button mat-dialog-close>Hủy</button>
-    <!-- Hủy duyệt -->
+    <!-- Hủy duyệt (bài post vẫn tiếp tục được đăng) -->
     <button
+      *ngIf="this.post._status === 0 && this.post._reason"
       mat-button
       (click)="lockPost(0)"
       style="color: white; background-color: rgba(255, 0, 0, 0.8)"
     >
       Hủy duyệt
     </button>
-    <!-- Lưu -->
+    <!-- Mở Khóa -->
     <button
+      *ngIf="this.post._status === 2"
+      mat-button
+      (click)="unlockPost()"
+      style="color: white; background-color: #1a56db"
+    >
+      Mở khóa
+    </button>
+    <!-- Khóa -->
+    <button
+      *ngIf="this.post._status === 0 && this.post._reason"
       mat-button
       (click)="lockPost(2)"
       style="color: white; background-color: #1a56db"
