@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { thresholdScott } from 'd3';
 import { catchError } from 'rxjs';
 import { handleError } from 'src/app/shared/handle-errors';
 import { resDataDTO } from 'src/app/shared/resDataDTO';
@@ -76,5 +77,20 @@ export class ForumService {
         )
         .pipe(catchError(handleError));
     }
+  }
+
+  getByPostIdOrEmail(keyword: string, page: number, limit: number) {
+    let httpParams = new HttpParams()
+      .append('keyword', keyword)
+      .append('page', page)
+      .append('limit', limit);
+    return this.http
+      .get<resDataDTO>(
+        environment.baseUrl + 'social/search-social-posts-keyword',
+        {
+          params: httpParams,
+        }
+      )
+      .pipe(catchError(handleError));
   }
 }

@@ -57,64 +57,41 @@ export class ManageForumComponent implements OnInit, OnDestroy {
     }
     if (!this.onSearching) {
       this.loadData(this.currentPostStatus);
-    } else {
-      // this.postService
-      //   .findPostByIdAndStatus(
-      //     this.searchKeyword!,
-      //     '0',
-      //     this.currentPage,
-      //     this.pageItemLimit
-      //   )
-      //   .pipe(takeUntil(this.$destroy))
-      //   .subscribe(
-      //     (res) => {
-      //       if (res.data) {
-      //         this.isLoading = false;
-      //         this.dataSource = [];
-      //         this.totalPages = res.pagination.total;
-      //         this.dataSource = res.data;
-      //       }
-      //       this.isLoading = false;
-      //     },
-      //     (err) => {
-      //       this.isLoading = false;
-      //       this.notifierService.notify(
-      //         'error',
-      //         'Không có kết quả tìm kiếm trùng khớp!'
-      //       );
-      //     }
-      //   );
     }
     this.isLoading = false;
   }
 
+  //chỉ dùng khi không đang tìm kiếm
   loadData(postStatus: number | null) {
     this.isLoading = true;
-    //Lấy post bị reported
-    if (postStatus === 2) {
-      this.forumService
-        .getReportedSocialPosts(this.currentPage, this.pageItemLimit)
-        .pipe(takeUntil(this.$destroy))
-        .subscribe((res) => {
-          if (res.data) {
-            this.dataSource = res.data;
-            this.totalPages = res.pagination.total;
-            this.isLoading = false;
-          }
-        });
-    }
-    //Lấy toàn bộ post
-    else {
-      this.forumService
-        .getSocialPostStatus(postStatus, this.currentPage, this.pageItemLimit)
-        .pipe(takeUntil(this.$destroy))
-        .subscribe((res) => {
-          if (res.data) {
-            this.dataSource = res.data;
-            this.totalPages = res.pagination.total;
-            this.isLoading = false;
-          }
-        });
+    //Nếu không đang tìm kiếm
+    if (!this.onSearching) {
+      //Lấy post bị reported
+      if (postStatus === 2) {
+        this.forumService
+          .getReportedSocialPosts(this.currentPage, this.pageItemLimit)
+          .pipe(takeUntil(this.$destroy))
+          .subscribe((res) => {
+            if (res.data) {
+              this.dataSource = res.data;
+              this.totalPages = res.pagination.total;
+              this.isLoading = false;
+            }
+          });
+      }
+      //Lấy toàn bộ post
+      else {
+        this.forumService
+          .getSocialPostStatus(postStatus, this.currentPage, this.pageItemLimit)
+          .pipe(takeUntil(this.$destroy))
+          .subscribe((res) => {
+            if (res.data) {
+              this.dataSource = res.data;
+              this.totalPages = res.pagination.total;
+              this.isLoading = false;
+            }
+          });
+      }
     }
     this.isLoading = false;
   }
@@ -166,32 +143,11 @@ export class ManageForumComponent implements OnInit, OnDestroy {
     if (!onSearching) {
       this.loadData(this.currentPostStatus);
     } else {
-      // this.postService
-      //   .findPostByIdAndStatus(
-      //     this.searchKeyword!,
-      //     '0',
-      //     this.currentPage,
-      //     this.pageItemLimit
-      //   )
-      //   .pipe(takeUntil(this.$destroy))
-      //   .subscribe(
-      //     (res) => {
-      //       if (res.data) {
-      //         this.isLoading = false;
-      //         this.dataSource = [];
-      //         this.totalPages = res.pagination.total;
-      //         this.dataSource = res.data;
-      //       }
-      //       this.isLoading = false;
-      //     },C
-      //     (err) => {
-      //       this.isLoading = false;
-      //       this.notifierService.notify(
-      //         'error',
-      //         'Không có kết quả tìm kiếm trùng khớp!'
-      //       );
-      //     }
-      //   );
+      this.getPostByKeyword(
+        this.searchKeyword!,
+        this.currentPage,
+        this.pageItemLimit
+      );
     }
   }
 
@@ -209,7 +165,7 @@ export class ManageForumComponent implements OnInit, OnDestroy {
       default:
         this.currentPostStatus = 2;
     }
-    this.loadData(this.currentPostStatus);
+    this.reloadData();
   }
 
   reloadData() {
@@ -223,30 +179,43 @@ export class ManageForumComponent implements OnInit, OnDestroy {
   search(form: any) {
     this.isLoading = true;
     this.onSearching = true;
+    this.currentPage = 1;
     if (form.keyword) {
       this.searchKeyword = form.keyword;
-      // this.postService
-      //   .findPostByIdAndStatus(this.searchKeyword!, '0', 1, this.pageItemLimit)
-      //   .pipe(takeUntil(this.$destroy))
-      //   .subscribe(
-      //     (res) => {
-      //       if (res.data) {
-      //         this.isLoading = false;
-      //         this.dataSource = [];
-      //         this.currentPage = 1;
-      //         this.totalPages = res.pagination.total;
-      //         this.dataSource = res.data;
-      //       }
-      //       this.isLoading = false;
-      //     },
-      //     (err) => {
-      //       this.isLoading = false;
-      //       this.notifierService.notify(
-      //         'error',
-      //         'Không có kết quả tìm kiếm trùng khớp!'
-      //       );
-      //     }
-      //   );
+      this.getPostByKeyword(
+        this.searchKeyword!,
+        this.currentPage,
+        this.pageItemLimit
+      );
     }
+  }
+
+  getPostByKeyword(keyword: string, page: number, limit: number) {
+    this.forumService
+      .getByPostIdOrEmail(keyword, page, limit)
+      .pipe(takeUntil(this.$destroy))
+      .subscribe(
+        (res) => {
+          if (res.data) {
+            this.isLoading = false;
+            this.dataSource = [];
+            this.currentPage = res.pagination.page;
+            this.totalPages = res.pagination.total;
+            this.dataSource = res.data;
+            console.log(
+              '🚀 ~ ManageForumComponent ~ getPostByKeyword ~ this.dataSource:',
+              this.dataSource
+            );
+          }
+          this.isLoading = false;
+        },
+        (err) => {
+          this.isLoading = false;
+          this.notifierService.notify(
+            'error',
+            'Không có kết quả tìm kiếm trùng khớp!'
+          );
+        }
+      );
   }
 }
