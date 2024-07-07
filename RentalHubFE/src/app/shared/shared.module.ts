@@ -21,6 +21,7 @@ import { SendForgetPwEmailComponent } from './send-forget-pw-email/send-forget-p
 import { RichTextEditorModule } from '@syncfusion/ej2-angular-richtexteditor';
 import { SliderComponent } from './slider/slider.component';
 import { NgImageSliderModule } from 'ng-image-slider';
+import { ChatFilterPipe } from './pipe/chat-filter.pipe';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { NgImageSliderModule } from 'ng-image-slider';
     ChatUserComponent,
     SendForgetPwEmailComponent,
     SliderComponent,
+    ChatFilterPipe,
   ],
   imports: [
     CommonModule,
@@ -67,6 +69,7 @@ import { NgImageSliderModule } from 'ng-image-slider';
     RichTextEditorModule,
     SliderComponent,
     NgImageSliderModule,
+    ChatFilterPipe,
   ],
 })
 export class SharedModule {}
