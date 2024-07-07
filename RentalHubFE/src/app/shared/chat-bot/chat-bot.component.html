@@ -37,7 +37,10 @@
       </div>
       <!-- Chatbot -->
       <div *ngIf="!this.seeContactList; else contactList" class="h-[480px]">
-        <app-chat-with></app-chat-with>
+        <app-chat-with
+          [chat]="this.currentChat"
+          *ngIf="this.currentChat"
+        ></app-chat-with>
       </div>
       <!-- Contact list -->
       <ng-template
@@ -66,7 +69,7 @@
           </div>
         </div>
         <!-- Contact list -->
-        <div class="bg-white-background">
+        <div class="bg-white-background" *ngIf="this.currentChats">
           <!-- Chat n -->
           <div *ngFor="let chat of this.currentChats" (click)="toChatBot(chat)">
             <app-chat-user [chat]="chat"></app-chat-user>
