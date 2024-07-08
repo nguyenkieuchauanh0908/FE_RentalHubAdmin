@@ -12,6 +12,7 @@ import { resDataDTO } from '../resDataDTO';
 import { MatDialog } from '@angular/material/dialog';
 import { UpdateAvatarDialogComponent } from 'src/app/dashboard/update-avatar-dialog/update-avatar-dialog.component';
 import { DisplayNotiDialogComponent } from '../display-noti-dialog/display-noti-dialog.component';
+import { Pagination } from '../pagination/pagination.service';
 
 @Component({
   selector: 'app-header',
@@ -32,7 +33,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   fullName!: string;
   isAuthenticatedUser: boolean = false;
   seenNotiList!: any;
+  seenNotiPagination: Pagination = { page: 0, total: 1, limit: 10 };
   unseenNotificaionList!: any;
+  unseenNotiPagination: Pagination = { page: 0, total: 1, limit: 10 };
   notificationTotals!: number;
 
   $destroy: Subject<boolean> = new Subject<boolean>();
@@ -60,28 +63,47 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.fullName = this.user?._fname + ' ' + this.user._lname;
         }
       });
-
     if (this.isAuthenticatedUser) {
       //Lấy các noti đã xem
-      this.notificationService.getCurrentSeenNotifications.subscribe(
-        (notifications) => {
-          this.seenNotiList = notifications;
-        }
-      );
+      this.notificationService.getCurrentSeenNotifications
+        .pipe(takeUntil(this.$destroy))
+        .subscribe((notifications) => {
+          if (notifications) {
+            this.seenNotiList = notifications;
+          } else {
+            this.seenNotiList = [];
+          }
+        });
+      //Lấy pagination của các noti đã xem
+      this.notificationService.getSeenNotificationsPagination
+        .pipe(takeUntil(this.$destroy))
+        .subscribe((seenNotiPagination: any) => {
+          this.seenNotiPagination = seenNotiPagination;
+        });
 
       //Lấy các noti chưa xem
-      this.notificationService.getCurrentUnseenNotifications.subscribe(
-        (unseenNotifications) => {
-          this.unseenNotificaionList = unseenNotifications;
-        }
-      );
+      this.notificationService.getCurrentUnseenNotifications
+        .pipe(takeUntil(this.$destroy))
+        .subscribe((unseenNotifications) => {
+          if (unseenNotifications) {
+            this.unseenNotificaionList = unseenNotifications;
+          } else {
+            this.unseenNotificaionList = [];
+          }
+        });
+      //Lấy pagination của các noti chưa xem
+      this.notificationService.getUnseenNotificationspagination
+        .pipe(takeUntil(this.$destroy))
+        .subscribe((unseenNotiPagination: Pagination) => {
+          this.unseenNotiPagination = unseenNotiPagination;
+        });
 
       //Lấy tổng các noti chưa xem
-      this.notificationService.getTotalNotifications.subscribe(
-        (notificationTotal) => {
+      this.notificationService.getTotalNotifications
+        .pipe(takeUntil(this.$destroy))
+        .subscribe((notificationTotal) => {
           this.notificationTotals = notificationTotal;
-        }
-      );
+        });
     } else {
       this.notificationTotals = 0;
       this.notificationService.setCurrentSeenNotifications([]);
@@ -133,6 +155,44 @@ export class HeaderComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(() => {
       sub.unsubscribe();
     });
+  }
+
+  markAsRead(noti: any) {
+    this.notificationService.markNotiFicationAsReadById(noti._id).subscribe();
+  }
+
+  seeMoreNoti(type: string) {
+    switch (type) {
+      case 'unseen':
+        console.log('Getting more unseen notifications...');
+        this.notificationService
+          .getUnseenNotifications(
+            this.unseenNotiPagination!.page + 1,
+            this.unseenNotiPagination!.limit
+          )
+          .pipe(takeUntil(this.$destroy))
+          .subscribe();
+        break;
+      case 'seen':
+        console.log('Getting more seen notifications...');
+        this.notificationService
+          .getSeenNotifications(
+            this.seenNotiPagination!.page + 1,
+            this.seenNotiPagination!.limit
+          )
+          .pipe(takeUntil(this.$destroy))
+          .subscribe();
+
+        break;
+      default:
+        this.notificationService
+          .getUnseenNotifications(
+            this.seenNotiPagination!.page,
+            this.seenNotiPagination!.limit
+          )
+          .pipe(takeUntil(this.$destroy))
+          .subscribe();
+    }
   }
 
   readNotiDetail(noti: any) {

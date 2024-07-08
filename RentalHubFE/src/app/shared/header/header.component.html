@@ -65,6 +65,7 @@
                       unseenNotificaionList.length > 0;
                       else noUnseenNotifications
                     "
+                    class="flex flex-col"
                   >
                     <div
                       *ngFor="let noti of unseenNotificaionList; index as i"
@@ -74,10 +75,30 @@
                       <p class="text-primary-text-color font-medium mb-0">
                         {{ noti._title }}
                       </p>
-                      <p class="text-sub-text-color line-clamp-2">
+                      <p
+                        mat-raised-button
+                        class="text-sub-text-color line-clamp-2"
+                        [matTooltip]="noti._message"
+                        [matTooltipPosition]="'left'"
+                        [matTooltipClass]="'mr-3'"
+                        matTooltipHideDelay="400"
+                      >
                         {{ noti._message }}
                       </p>
                     </div>
+                  </div>
+                  <div
+                    (click)="seeMoreNoti('unseen')"
+                    *ngIf="
+                      this.unseenNotiPagination!.page <
+                      this.unseenNotiPagination!.total
+                    "
+                  >
+                    <p
+                      class="text-sm text-center text-blue-500 hover:text-blue-700 cursor-pointer"
+                    >
+                      Xem thêm
+                    </p>
                   </div>
                   <ng-template #noUnseenNotifications>
                     <p class="py-3 text-sm text-sub-text-color text-center">
@@ -97,6 +118,7 @@
                       this.seenNotiList.length > 0;
                       else noSeenNotifications
                     "
+                    class="flex flex-col"
                   >
                     <div
                       *ngFor="let noti of seenNotiList; index as i"
@@ -116,6 +138,19 @@
                         {{ noti._message }}
                       </p>
                     </div>
+                  </div>
+                  <div
+                    (click)="seeMoreNoti('seen')"
+                    *ngIf="
+                      this.seenNotiPagination!.page <
+                      this.seenNotiPagination!.total
+                    "
+                  >
+                    <p
+                      class="text-sm text-center text-blue-500 hover:text-blue-700 cursor-pointer"
+                    >
+                      Xem thêm
+                    </p>
                   </div>
                 </mat-tab>
               </mat-tab-group>
