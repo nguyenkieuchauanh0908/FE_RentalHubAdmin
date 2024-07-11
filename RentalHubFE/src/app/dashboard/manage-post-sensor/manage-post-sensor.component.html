@@ -22,6 +22,9 @@
       <mat-chip-option color="warn" (selectionChange)="toPosts('Bị báo cáo')"
         >Bị báo cáo</mat-chip-option
       >
+      <mat-chip-option color="warn" (selectionChange)="toPosts('Bị khóa')"
+        >Bị khóa</mat-chip-option
+      >
     </mat-chip-listbox>
     <div *ngIf="this.dataSource" class="flex justify-around -my-4">
       <!-- Reload data -->

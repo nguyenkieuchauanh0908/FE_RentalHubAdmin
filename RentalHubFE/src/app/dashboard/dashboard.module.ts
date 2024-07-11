@@ -28,6 +28,7 @@ import { EmployeesStatisticsComponent } from './statistics/employees-statistics/
 import { ManageUsersComponent } from './manage-users/manage-users.component';
 import { ManageForumComponent } from './manage-forum/manage-forum.component';
 import { ForumPostSensorDialogComponent } from './manage-forum/forum-post-sensor-dialog/forum-post-sensor-dialog.component';
+import { ManageBlockedPostsComponent } from './manage-blocked-posts/manage-blocked-posts.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { ForumPostSensorDialogComponent } from './manage-forum/forum-post-sensor
     ManageUsersComponent,
     ManageForumComponent,
     ForumPostSensorDialogComponent,
+    ManageBlockedPostsComponent,
   ],
   imports: [CommonModule, FormsModule, DashboardRoutingModule, SharedModule],
   providers: [],

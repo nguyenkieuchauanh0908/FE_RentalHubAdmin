@@ -208,7 +208,9 @@
     <!-- Duyệt những bài viết Chờ duyệt hoặc Không được duyệt (status = 0 || 3) -->
     <button
       *ngIf="
-        (this.data._status === 0 || this.data._status === 3) &&
+        (this.data._status === 0 ||
+          this.data._status === 3 ||
+          this.data._status === 4) &&
         !this.data._contentPost
       "
       (click)="sensor()"

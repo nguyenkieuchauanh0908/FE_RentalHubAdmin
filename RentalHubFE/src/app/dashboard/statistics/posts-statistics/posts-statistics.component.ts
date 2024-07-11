@@ -116,6 +116,6 @@ export class PostsStatisticsComponent {
     }
   }
   toPostManage() {
-    this.router.navigate(['dashboard/manage-posts']);
+    this.router.navigate(['dashboard/post-sensor']);
   }
 }

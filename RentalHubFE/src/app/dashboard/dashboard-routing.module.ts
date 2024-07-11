@@ -12,6 +12,7 @@ import { ManageHostsComponent } from './manage-hosts/manage-hosts.component';
 import { ManageAddressesComponent } from './manage-addresses/manage-addresses.component';
 import { ManageUsersComponent } from './manage-users/manage-users.component';
 import { ManageForumComponent } from './manage-forum/manage-forum.component';
+import { ManageBlockedPostsComponent } from './manage-blocked-posts/manage-blocked-posts.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,11 @@ const routes: Routes = [
       {
         path: 'reported-posts',
         component: ManageReportedPostsComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'blocked-posts',
+        component: ManageBlockedPostsComponent,
         canActivate: [AuthGuard],
       },
       {

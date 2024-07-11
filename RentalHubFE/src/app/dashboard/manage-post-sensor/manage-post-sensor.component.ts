@@ -206,6 +206,9 @@ export class ManagePostSensorComponent implements OnInit, OnDestroy {
       case 'Bị báo cáo':
         this.router.navigate(['/dashboard/reported-posts']);
         break;
+      case 'Bị khóa':
+        this.router.navigate(['/dashboard/blocked-posts']);
+        break;
       default:
     }
   }
