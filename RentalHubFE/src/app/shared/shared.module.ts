@@ -22,6 +22,7 @@ import { RichTextEditorModule } from '@syncfusion/ej2-angular-richtexteditor';
 import { SliderComponent } from './slider/slider.component';
 import { NgImageSliderModule } from 'ng-image-slider';
 import { ChatFilterPipe } from './pipe/chat-filter.pipe';
+import { LinkyModule } from 'ngx-linky';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { ChatFilterPipe } from './pipe/chat-filter.pipe';
     NgxChartsModule,
     RichTextEditorModule,
     NgImageSliderModule,
+    LinkyModule,
   ],
   exports: [
     CommonModule,
@@ -70,6 +72,7 @@ import { ChatFilterPipe } from './pipe/chat-filter.pipe';
     SliderComponent,
     NgImageSliderModule,
     ChatFilterPipe,
+    LinkyModule,
   ],
 })
 export class SharedModule {}
