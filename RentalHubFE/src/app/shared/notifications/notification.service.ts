@@ -242,7 +242,7 @@ export class NotificationService {
   markAsReadAll() {
     return this.http
       .get<resDataDTO>(
-        environment.baseUrl + 'notification/read-all-notification',
+        environment.baseUrl + 'notification/read-all-notification-inspector',
         {}
       )
       .pipe(
