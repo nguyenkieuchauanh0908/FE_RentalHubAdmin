@@ -63,7 +63,9 @@ export class ChatBotService {
   private currentSocket = new BehaviorSubject<Socket | null>(null); //Socket
   getCurrentSocket = this.currentSocket.asObservable();
   setCurrentSocket(socket: Socket | null) {
-    this.currentSocket.next(null);
+    if (socket) {
+      socket.connect();
+    }
     this.currentSocket.next(socket);
   }
 
@@ -178,20 +180,28 @@ export class ChatBotService {
   initiateSocket() {
     console.log('Connecting to socket...');
     this.setCurrentSocket(this.socket);
-
-    return () => {
-      this.socket.disconnect();
-    };
+    this.accountService.getCurrentUser.subscribe((user) => {
+      if (user) {
+        this.emittingAddingMeToOnlineUsers(user);
+        // this.onReceivingChatMessageToUpdate();
+        this.onGettingOnlineUsers();
+        // this.onGettingUnreadMessage();
+      }
+    });
+    // return () => {
+    //   this.socket.disconnect();
+    // };
   }
 
   //Disconnects the socket
   disconnectToSocket(): void {
-    this.getCurrentSocket.subscribe((socket) => {
-      if (socket) {
-        socket.disconnect();
-        console.log('socket disconnected!');
-      }
-    });
+    // this.getCurrentSocket.subscribe((socket) => {
+    //   if (socket) {
+    //     socket.disconnect();
+    //     console.log('socket disconnected!');
+    //   }
+    // });
+    this.socket.close();
   }
 
   //destroy
