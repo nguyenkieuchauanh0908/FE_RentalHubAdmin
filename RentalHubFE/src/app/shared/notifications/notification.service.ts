@@ -291,7 +291,7 @@ export class NotificationService {
 
           if (newNotiComing) {
             if (unseenNotificaionList) {
-              unseenNotificaionList.push(newNotiComing);
+              unseenNotificaionList.unshift(newNotiComing);
             } else {
               unseenNotificaionList = [newNotiComing];
             }
