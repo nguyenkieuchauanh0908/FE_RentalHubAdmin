@@ -112,6 +112,7 @@ export class PostSensorDialogComponent
             this.denySensorResult.emit(this.data._id);
             this.notifierService.hideAll();
             this.notifierService.notify('success', 'Từ chối duyệt thành công!');
+            this.dialog.closeAll();
           }
         },
         (errMsg) => {
@@ -142,6 +143,7 @@ export class PostSensorDialogComponent
               'success',
               'Duyệt bài viết thành công!'
             );
+            this.dialog.closeAll();
           }
         },
         (errMsg) => {
@@ -173,6 +175,7 @@ export class PostSensorDialogComponent
                 'success',
                 'Khóa bài viết thành công!'
               );
+              this.dialog.closeAll();
             }
           },
           (errMsg) => {
@@ -194,6 +197,7 @@ export class PostSensorDialogComponent
               'success',
               'Duyệt bài viết thành công!'
             );
+            this.dialog.closeAll();
           }
         },
         (errMsg) => {
