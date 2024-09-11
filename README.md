@@ -44,7 +44,7 @@
 
 2. Login
    
-    <img src='./images/image.png'>
+    <img src='./images/login.png'>
 
 3. Manage Users
    
